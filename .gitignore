@@ -1,1 +1,14 @@
 # add directory according to your need
+
+### server  ##############################
+
+server/Database/
+server/bin/
+server/obj/
+server/*.o
+server/*.exe
+server/*.layout
+server/*.depend
+server/*.cbp
+
+##########################################
