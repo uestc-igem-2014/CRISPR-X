@@ -1,0 +1,34 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.example.crispr_x.SubmitActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView_key"
+            android:layout_width="100px"
+            android:layout_height="wrap_content"
+            android:text="Text" />
+
+        <TextView
+            android:id="@+id/textView_grna"
+            android:layout_width="300px"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+        
+        <TextView
+            android:id="@+id/textView_total_score"
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+    </LinearLayout>
+
+</FrameLayout>

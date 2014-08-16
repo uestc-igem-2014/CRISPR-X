@@ -1,0 +1,171 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.crispr_x.SubmitActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/head" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/foot"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Spinner
+                        android:id="@+id/spinner_targetgenome"
+                        android:layout_width="310dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dip"
+                        android:layout_weight="1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Spinner
+                        android:id="@+id/spinner_pam"
+                        android:layout_width="310dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="50dip"
+                        android:layout_weight="1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/button_locustag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="55dip"
+                        android:background="@drawable/deep"
+                        android:text="Locus Tag"
+                        android:textColor="#ffffff" />
+
+                    <Button
+                        android:id="@+id/button_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/button_locustag"
+                        android:background="@drawable/deep"
+                        android:text="Position"
+                        android:textColor="#ffffff" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/editText_postag"
+                        android:layout_width="305dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="55dip"
+                        android:ems="10"
+                        android:hint="eg:thrA" >
+
+                    </EditText>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dip" >
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/button_default"
+                        android:layout_width="70dip"
+                        android:layout_height="35dip"
+                        android:layout_alignBaseline="@+id/button_submit"
+                        android:layout_alignBottom="@+id/button_submit"
+                        android:layout_marginLeft="20dip"
+                        android:layout_toRightOf="@+id/button_advanced"
+                        android:background="@drawable/de1" />
+
+                    <Button
+                        android:id="@+id/button_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="17dp"
+                        android:layout_toRightOf="@+id/button_default"
+                        android:background="@drawable/sub" />
+
+                    <Button
+                        android:id="@+id/button_advanced"
+                        android:layout_width="70dip"
+                        android:layout_height="35dip"
+                        android:layout_alignBaseline="@+id/button_default"
+                        android:layout_alignBottom="@+id/button_default"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="52dp"
+                        android:text="Advanced" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:text="URL:" />
+
+                <EditText
+                    android:id="@+id/editText_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="eg:192.168.10.103:8080/get" >
+                </EditText>
+
+                <Button
+                    android:id="@+id/button_save"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SAVE" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
