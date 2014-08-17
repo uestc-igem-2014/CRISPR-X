@@ -19,7 +19,7 @@ On Android, provide a form to submit model organism, RFC, target gene. Communica
 
 Manually test passed.
 
-# Desktop
+## Desktop
 
 Java program to support multiple desktop platforms. Provide the same functions as Android version.
 
