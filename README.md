@@ -2,10 +2,10 @@
 
 ## structure
 
-Android/ 			The Android project of CRISPR-X
-desktop/			The desktop version of CRISPR-X
-server/				The back-end of CRISPR-X, mainly calculation core written in C/C++
-.travis.yml         Provide [Travis CI](https://travis-ci.org/) automatically build and [Coveralls](https://coveralls.io/) auto-test.
+	Android/ 			The Android project of CRISPR-X
+	desktop/			The desktop version of CRISPR-X
+	server/				The back-end of CRISPR-X, mainly calculation core written in C/C++
+	.travis.yml         Provide Travis CI automatically build and Coveralls auto-test.
 
 ## server
 [![Build Status](https://travis-ci.org/uestc-igem-2014/CRISPR-X.svg?branch=master)](https://travis-ci.org/uestc-igem-2014/CRISPR-X)
