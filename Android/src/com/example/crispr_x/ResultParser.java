@@ -21,9 +21,9 @@ public class ResultParser {
 
 		Map<String, Object> map; // Ìí¼Ómap
 		map = new HashMap<String, Object>();
-		map.put("key", "Count");
+		map.put("key", "Rank");
 		map.put("grna", "gRNA");
-		map.put("total_score", "TotalScore");
+		map.put("total_score", "Score");
 		//listÇ¶Ì×list
 		map.put("offtarget", "Offtarget");
 		
@@ -63,12 +63,12 @@ public class ResultParser {
 
 		Map<String, Object> map; // Ìí¼Ómap
 		map = new HashMap<String, Object>();
-		map.put("sequence", "Sequence");
-		map.put("score", "Score");
+		map.put("sequence", "Off Target Sequence");
 		map.put("mms", "Mms");
 		map.put("str", "Strand");
 		map.put("position", "Position");
 		map.put("region", "Region");
+		map.put("score", "Score");
 		
 		
 		list.add(map);
@@ -98,11 +98,11 @@ public class ResultParser {
 
 				map = new HashMap<String, Object>();
 				map.put("sequence", joSequence);
-				map.put("score", joScore);
 				map.put("mms", joMms);
 				map.put("strand", joStrand);
 				map.put("position", joPosition);
 				map.put("region", joRegion);
+				map.put("score", joScore);
 				
 				list.add(map);
 			}
@@ -113,4 +113,5 @@ public class ResultParser {
 		}
 		return list;
 	}
+	
 }

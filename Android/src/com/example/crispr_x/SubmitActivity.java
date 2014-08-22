@@ -3,6 +3,10 @@ package com.example.crispr_x;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -34,6 +38,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,11 +54,14 @@ public class SubmitActivity extends Activity {
 	private Button btnLocusTag; // locus tag按钮
 	private Button btnDefault; // default按钮
 	private Button btnAdvanced; // advance按钮
+	private Button btnHelp; //help按钮
 	private Button btnSubmit; // submit按钮
 	private Button btnSaveURL; // URL按钮
 
 	private CheckBox cb10, cb12, cb12a, cb21, cb23, cb25; // RFC CheckBox
 	private RadioGroup group;
+	private TextView tvWeight;
+	private SeekBar sbWeight;
 
 	private String strPosTag = null;// Position LocusTag字串
 	private String strTargetGenome = null;// TargetGenome字串
@@ -70,6 +79,8 @@ public class SubmitActivity extends Activity {
 	private long timeInterval = 2 * 60 * 1000; // 登录超时时间
 	private int SCREEN_WIDTH, SCREEN_HEIGHT; // 屏幕高宽
 	private boolean tpFalg = true;
+	private boolean isStatus = false;
+	private int weightR1 = 65;
 
 	HttpThread myHttpThread;
 	static Handler handler;
@@ -99,6 +110,7 @@ public class SubmitActivity extends Activity {
 		btnPosition = (Button) findViewById(R.id.button_position);
 		btnDefault = (Button) findViewById(R.id.button_default);
 		btnAdvanced = (Button) findViewById(R.id.button_advanced);
+		btnHelp = (Button) findViewById(R.id.button_help);
 		btnSaveURL = (Button) findViewById(R.id.button_save);
 		btnSubmit = (Button) findViewById(R.id.button_submit);
 
@@ -127,18 +139,15 @@ public class SubmitActivity extends Activity {
 					System.out.println("进入hanlder");
 					String result = (String) msg.obj;
 
-					Context ctx = SubmitActivity.this;
-					SharedPreferences info = ctx.getSharedPreferences("BUFF",
-							MODE_PRIVATE);
-					Editor editor = info.edit();
-					editor.putString("SPECIE", strTargetGenome);
-					editor.putString("GENE", strPosTag);
-					editor.putString("LOCATION", strPosTag);
-					editor.putString("JSON", result);
-					editor.commit();
-					Intent intent = new Intent(SubmitActivity.this,
-							ResultActivity.class); // 启动Activity
-					startActivity(intent);
+					if (getStatus(result)) {
+						saveMessage(result);
+						Intent intent = new Intent(SubmitActivity.this,
+								ResultActivity.class); // 启动Activity
+						startActivity(intent);
+					} else {
+						debugDialog(getErrorMessage(result));
+					}
+
 
 					// debugDialog(result);
 					System.out.println(result);
@@ -183,8 +192,9 @@ public class SubmitActivity extends Activity {
 		List<Dict> dict_pam = new ArrayList<Dict>();
 		dict_pam.add(new Dict("0", "PAM"));
 		dict_pam.add(new Dict("NGG", "NGG"));
-		dict_pam.add(new Dict("NNNNGATT", "NNNNGATT"));
-		dict_pam.add(new Dict("NNAGAA", "NNAGAA"));
+		dict_pam.add(new Dict("NNNNGMTT", "NNNNGMTT"));
+		dict_pam.add(new Dict("NNAGAAW", "NNAGAAW"));
+		dict_pam.add(new Dict("NRG", "NRG"));
 		dict_pam.add(new Dict("NAAAAC", "NAAAAC"));
 		ArrayAdapter<Dict> adapter_pam = new ArrayAdapter<Dict>(this,
 				R.layout.my_spinner, dict_pam);
@@ -244,10 +254,45 @@ public class SubmitActivity extends Activity {
 		btnAdvanced.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+
 				advancedDialog();
 			}
 		});
 
+		btnAdvanced.setOnTouchListener(new Button.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					v.setBackgroundResource(R.drawable.ad1);
+					// advancedDialog();
+				} else {
+					v.setBackgroundResource(R.drawable.adv);
+				}
+				return false;
+			}
+		});
+		
+		/************************* 帮助信息按钮 **************************/
+		
+		btnHelp.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		btnHelp.setOnTouchListener(new Button.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					v.setBackgroundResource(R.drawable.help1);
+					// advancedDialog();
+				} else {
+					v.setBackgroundResource(R.drawable.help);
+				}
+				return false;
+			}
+		});
+		
 		/************************* 填写默认信息按钮 **************************/
 
 		btnDefault.setOnClickListener(new OnClickListener() {
@@ -265,6 +310,18 @@ public class SubmitActivity extends Activity {
 					btnPosition.setBackgroundResource(R.drawable.deep);
 				}
 				etPosTag.setHint("eg:1:200..3566");
+			}
+		});
+
+		btnDefault.setOnTouchListener(new Button.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					v.setBackgroundResource(R.drawable.def1);
+				} else {
+					v.setBackgroundResource(R.drawable.def);
+				}
+				return false;
 			}
 		});
 
@@ -310,6 +367,18 @@ public class SubmitActivity extends Activity {
 			}
 		});
 
+		btnSubmit.setOnTouchListener(new Button.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					v.setBackgroundResource(R.drawable.sub1);
+				} else {
+					v.setBackgroundResource(R.drawable.sub);
+				}
+				return false;
+			}
+		});
+
 	}
 
 	/*********************** 主程序提交请求GET **********************/
@@ -318,7 +387,7 @@ public class SubmitActivity extends Activity {
 		System.out.println("进入MainSubmitPost");
 		// 添加参数
 		String strRequest = "?specie=" + strTargetGenome + "&pam=" + strPam
-				+ "&rfc=" + strRFC + "&listcount=" + strCount + "&key=" + "123";
+				+ "&rfc=" + strRFC + "&listcount=" + strCount + "&key=" + "123"+ "&r1=" + String.valueOf(weightR1);
 		if (tpFalg) {
 			strRequest = strRequest + "&gene=" + strPosTag;
 		} else {
@@ -369,9 +438,35 @@ public class SubmitActivity extends Activity {
 		cb21 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc21);
 		cb23 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc23);
 		cb25 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc25);
-		
-		RadioGroup group = (RadioGroup)DialogView.findViewById(R.id.radioGroup1);
+		RadioGroup group = (RadioGroup) DialogView.findViewById(R.id.radioGroup1);
+		tvWeight = (TextView) DialogView.findViewById(R.id.textView_weightT);
+		sbWeight = (SeekBar) DialogView.findViewById(R.id.seekBar_weight);
 
+		sbWeight.setMax(100);
+		tvWeight.setText("Specificity " + String.valueOf(weightR1) + "  Active" + String.valueOf(100-weightR1));
+		sbWeight.setProgress(weightR1);
+		
+		sbWeight.setOnSeekBarChangeListener(new OnSeekBarChangeListener() //调音监听器  
+        {  
+            public void onProgressChanged(SeekBar arg0,int progress,boolean fromUser)  
+            {  
+            	weightR1 = sbWeight.getProgress();
+            	tvWeight.setText("Specificity " + String.valueOf(weightR1) + "  Active" + String.valueOf(100-weightR1));
+            }
+
+			@Override
+			public void onStartTrackingTouch(SeekBar arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        });
+		
 		if (strRFC10.equals("1")) {
 			cb10.setChecked(true);
 		} else {
@@ -402,7 +497,7 @@ public class SubmitActivity extends Activity {
 		} else {
 			cb25.setChecked(false);
 		}
-		
+
 		if (strCount.equals("20")) {
 			group.check(R.id.radio_20);
 		}
@@ -415,7 +510,6 @@ public class SubmitActivity extends Activity {
 		if (strCount.equals("100")) {
 			group.check(R.id.radio_100);
 		}
-		
 
 		cb10.setOnClickListener(new OnClickListener() {
 
@@ -496,7 +590,7 @@ public class SubmitActivity extends Activity {
 
 		});
 
-		 group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
@@ -518,8 +612,8 @@ public class SubmitActivity extends Activity {
 					break;
 				}
 			}
-			 
-		 });
+
+		});
 
 		builder.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
@@ -531,10 +625,67 @@ public class SubmitActivity extends Activity {
 		alertDialog = builder.create();
 		alertDialog.show();
 		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-		lp.width = (int) (SCREEN_WIDTH);// 定义宽度
+		lp.width = (int) (SCREEN_WIDTH * 0.5);// 定义宽度
 		lp.height = (int) (SCREEN_HEIGHT * 0.9);// 定义高度
 		alertDialog.getWindow().setAttributes(lp);
 
+	}
+
+	/************************** 获取结果状态 *************************/
+	
+	private boolean getStatus(String json) {
+		String strStatus = "";
+		try {
+			strStatus = new JSONObject(json).getString("status");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (strStatus.equals("0")) {
+			return true;
+		} else
+			return false;
+	}
+
+	/************************** 获取错误信息 *************************/
+	
+	private String getErrorMessage(String json) {
+		String errorMessage = null;
+		try {
+			errorMessage = new JSONObject(json).getString("message");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return errorMessage;
+	}
+
+	/************************** 保存参数信息 *************************/
+	
+	private void saveMessage(String json) {
+		String saveMessage = null;
+		String saveSPECIE = null;
+		String saveGENE = null;
+		String saveLOCATION = null;
+		try {
+			saveMessage = new JSONObject(json).getString("message");
+			JSONObject jsonObj = new JSONObject(saveMessage);
+			saveSPECIE = jsonObj.getString("specie");
+			saveGENE = jsonObj.getString("gene");
+			saveLOCATION = jsonObj.getString("location");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// 保存json与一些信息
+		Context ctx = SubmitActivity.this;
+		SharedPreferences info = ctx.getSharedPreferences("BUFF", MODE_PRIVATE);
+		Editor editor = info.edit();
+		editor.putString("SPECIE", saveSPECIE);
+		editor.putString("GENE", saveGENE);
+		editor.putString("LOCATION", saveLOCATION);
+		editor.putString("JSON", json);
+		editor.commit();
 	}
 
 	@Override

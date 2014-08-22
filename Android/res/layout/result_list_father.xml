@@ -7,28 +7,30 @@
     tools:ignore="MergeRootFrame" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/textView_key"
-            android:layout_width="100px"
+            android:layout_width="40dip"
             android:layout_height="wrap_content"
-            android:text="Text" />
+            android:text="Rank"
+            android:textColor="#f2f2f2" />
 
         <TextView
             android:id="@+id/textView_grna"
-            android:layout_width="300px"
+            android:layout_width="220dip"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-        
+            android:text="ACGTACGTACGTACGTACGTACGTACGT"
+            android:textColor="#f2f2f2" />
+
         <TextView
             android:id="@+id/textView_total_score"
-            android:layout_width="200px"
+            android:layout_width="40dip"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-
+            android:text="Score"
+            android:textColor="#f2f2f2" />
     </LinearLayout>
 
 </FrameLayout>
