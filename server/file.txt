@@ -1,0 +1,16 @@
+0	folder	iGEM2014		Home of iGem2014
+1	helper	Help		This Help Page
+1	file	getMain.php - Main function page	getMain.php?specie=Saccharomyces-cerevisiae&location=NC_001134-chromosome2:200..2873&pam=NGG&rfc=100010	See <a href='json.txt'>json.txt</a> for more infomation. 
+1	file	getResult - Get the result, using a request id. 	getResult.php	POST: id<br>Return: Result in json style, with status=0, 1, 2 means ok, error and not finished respectively. 
+1	helper	checkResult - Check the result of your request on web! 	checkResult.php	 
+1	file	getHistory - Get request history, <font color="white">not available for unregisterd user. </font>	getHistory.php	POST: token<br>Return: Top ten records, orderd by time, in json array style
+1	folder	Login Folder	login/	Login folder
+2	file	Login - Login page	login/	POST: name(username), pswd(password)<br>Return: 32 byte token when login succeed, or '-' otherwise. 
+2	file	Log Out - Log out page	login/logout.php	POST: token<br>Return: nothing
+2	file	Sign Up - Sign up page	login/signup.php	POST: name(username, unique), pswd(password, encrypt using md5), email(unique). <br>Return: "Sign In Succeed" or error infomation. 
+2	file	Change Info - Change your password and/or email address	login/changeinfo.php	POST: name(username), pswd(old password), newpswd(new password *), newemail(new email *), * means not necessary<br>Return: '+': ok, '-': failed. 
+2	helper	WebLogin - Login on web!	login/login.php	Using unencrypted password please. 
+-1	helper	json_login.txt	login/json_login.txt	json_login
+1	folder	Blast	blast/	Blast! 
+2	file	Blast	blast/?PATH=Saccharomycetes/NC_001133-chromosome1.fna&SEQ=CACCACATGCC	GET: PATH, SEQ<br>Return: Blast output file. 
+1	helper	json.txt	json.txt	JSON file, UTF-8 is better. <br><a href="json.txt" download="json.txt">Download it! </a>

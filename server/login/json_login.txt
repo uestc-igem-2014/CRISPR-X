@@ -1,0 +1,32 @@
+LOGIN: 
+url: http://192.168.10.100/iGEM2014/login
+POST: name(username), pswd(password)
+return: token(login succeed) or "-"(login denied)
+
+CHECK(Check token's validity): 
+url: http://192.168.10.100/iGEM2014/login/check_token.php
+POST: name(username), token
+return: Token infomation
+
+Web sign in test: 
+Http://192.168.10.100/iGEM2014/login/login.php
+
+Help(This page): 
+Http://192.168.10.100/iGEM2014/login/json_login.txt
+
+Log out: 
+url: http://192.168.10.100/iGEM2014/login/logout.php
+POST: token
+no return. 
+
+Sign up: 
+url: http://192.168.10.100/iGEM2014/login/signup.php
+POST: name(username), pswd(password), email
+return: "Sign In Succeed" or error_info
+
+Guest login(automaticly sign up): 
+url: http://192.168.10.100/iGEM2014/login/guestlogin.php
+return: token
+postscript: use logout.php to exit
+
+
