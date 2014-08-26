@@ -3,6 +3,6 @@ compiler:
   - gcc
   - clang
 before_script:
-  cd ./server/
+  cd ./server/b
 script:
   make
