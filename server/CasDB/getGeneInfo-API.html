@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module getGeneInfo</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>getGeneInfo</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/billxue/Code/repos/CRISPR-X/server/CasDB/getGeneInfo.py">/home/billxue/Code/repos/CRISPR-X/server/CasDB/getGeneInfo.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;How&nbsp;To<br>
+##&nbsp;1.&nbsp;get&nbsp;gene_table&nbsp;<br>
+(chromoesome_name,&nbsp;gene_name,&nbsp;start,&nbsp;end,&nbsp;strand,&nbsp;UTR_location)<br>
+&nbsp;<br>
+##&nbsp;2.&nbsp;get&nbsp;intergenic_table<br>
+(chromoesome_name,&nbsp;start,&nbsp;end)<br>
+&nbsp;<br>
+##&nbsp;3.&nbsp;get&nbsp;exon_table<br>
+(chromoesome_name,&nbsp;gene_name,&nbsp;start,&nbsp;end,&nbsp;strand,&nbsp;length,&nbsp;PID)<br>
+&nbsp;<br>
+##&nbsp;4.&nbsp;get&nbsp;intron_table<br>
+(chromoesome_name,&nbsp;gene_name,&nbsp;start,&nbsp;end,&nbsp;strand)<br>
+&gt;&nbsp;??&nbsp;for&nbsp;intron,&nbsp;how&nbsp;to&nbsp;get&nbsp;strand<br>
+&nbsp;<br>
+&gt;&nbsp;First,&nbsp;get&nbsp;the&nbsp;total&nbsp;length&nbsp;of&nbsp;the&nbsp;chromoesome&nbsp;from&nbsp;fna<br>
+&gt;&nbsp;Read&nbsp;ffn&nbsp;and&nbsp;ptt&nbsp;accordingly.<br>
+&gt;&nbsp;from&nbsp;ptt,&nbsp;get&nbsp;the&nbsp;gene_table&nbsp;item,&nbsp;the&nbsp;intergenic_table&nbsp;item&nbsp;and&nbsp;record&nbsp;the&nbsp;gnen_id<br>
+&gt;&nbsp;from&nbsp;ffn,&nbsp;get&nbsp;serveral&nbsp;exon_table&nbsp;item&nbsp;and&nbsp;deduce&nbsp;the&nbsp;intron_table&nbsp;item<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;Attention!<br>
+consider&nbsp;the&nbsp;the&nbsp;ptt&nbsp;and&nbsp;ffn&nbsp;are&nbsp;in&nbsp;same&nbsp;order,&nbsp;so&nbsp;<br>
+we&nbsp;can&nbsp;read&nbsp;these&nbsp;two&nbsp;files&nbsp;accordingly</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="MySQLdb.html">MySQLdb</a><br>
+</td><td width="25%" valign=top><a href="linecache.html">linecache</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-checkCorresponding"><strong>checkCorresponding</strong></a>(info_locs, gene_start, gene_end)</dt><dd><tt>check&nbsp;whether&nbsp;information&nbsp;in&nbsp;ffn&nbsp;file&nbsp;is&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;information&nbsp;in&nbsp;ptt&nbsp;file<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info_locs,&nbsp;the&nbsp;locals&nbsp;information&nbsp;in&nbsp;ffn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene_start&nbsp;&amp;&nbsp;gene_end,&nbsp;the&nbsp;locals&nbsp;information&nbsp;in&nbsp;ptt<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;it&nbsp;is&nbsp;corresponding,&nbsp;return&nbsp;True,&nbsp;else&nbsp;return&nbsp;False<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-fillTables"><strong>fillTables</strong></a>(chr_id, chromoesome_name, chromoesome_length, db, db_cursor)</dt><dd><tt>fill&nbsp;the&nbsp;calculated&nbsp;consequence&nbsp;into&nbsp;the&nbsp;corresponding&nbsp;tables<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chr_id,&nbsp;the&nbsp;chromoesome&nbsp;ID&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chromoesome_name,&nbsp;the&nbsp;chromoesome&nbsp;name<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chromoesome_length,&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;chromoesome<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db,&nbsp;the&nbsp;MySQL&nbsp;entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_cursor,&nbsp;the&nbsp;MySQL&nbsp;cursor&nbsp;using&nbsp;to&nbsp;commit&nbsp;or&nbsp;rollback<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-findNonzeroMin"><strong>findNonzeroMin</strong></a>(num_list)</dt><dd><tt>find&nbsp;the&nbsp;minimum&nbsp;nonzero&nbsp;number&nbsp;in&nbsp;a&nbsp;list<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num_list,&nbsp;a&nbsp;list&nbsp;of&nbsp;number<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;minimum&nbsp;nonzero&nbsp;number<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-findUTREnd"><strong>findUTREnd</strong></a>(seq, seq_len)</dt><dd><tt>get&nbsp;the&nbsp;end&nbsp;UTR&nbsp;location&nbsp;of&nbsp;the&nbsp;sequence<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq,&nbsp;the&nbsp;target&nbsp;sequence,&nbsp;a&nbsp;string<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq_len,&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;whole&nbsp;gene&nbsp;sequence<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;begin&nbsp;location&nbsp;of&nbsp;the&nbsp;end&nbsp;UTR<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-findUTRFont"><strong>findUTRFont</strong></a>(seq)</dt><dd><tt>get&nbsp;the&nbsp;font&nbsp;UTR&nbsp;location&nbsp;of&nbsp;the&nbsp;sequence<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq,&nbsp;the&nbsp;target&nbsp;sequence,&nbsp;a&nbsp;string<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;end&nbsp;location&nbsp;of&nbsp;the&nbsp;font&nbsp;UTR,&nbsp;if&nbsp;no&nbsp;font&nbsp;UTR,&nbsp;return&nbsp;0<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-getChrLength"><strong>getChrLength</strong></a>(chromoesome_name)</dt><dd><tt>get&nbsp;the&nbsp;chromoesome&nbsp;length<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chromoesome_name,&nbsp;the&nbsp;name&nbsp;of&nbsp;target&nbsp;chromoesome<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;chromoesome<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-getChromoesomeList"><strong>getChromoesomeList</strong></a>(file_list)</dt><dd><tt>get&nbsp;all&nbsp;chromoesomes&nbsp;from&nbsp;the&nbsp;species&nbsp;directory<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_list,&nbsp;the&nbsp;filename&nbsp;list&nbsp;of&nbsp;a&nbsp;certainty&nbsp;species<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;list&nbsp;representing&nbsp;the&nbsp;chromoesomes&nbsp;of&nbsp;the&nbsp;certainty&nbsp;species<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-getNegStrandIE"><strong>getNegStrandIE</strong></a>(elist)</dt><dd><tt>get&nbsp;the&nbsp;inner&nbsp;region&nbsp;information&nbsp;of&nbsp;gene&nbsp;on&nbsp;negative&nbsp;strand<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elist,&nbsp;a&nbsp;string&nbsp;from&nbsp;corresponding&nbsp;ffn&nbsp;file,&nbsp;showing&nbsp;the&nbsp;regional&nbsp;information<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exon_list,&nbsp;a&nbsp;list&nbsp;representing&nbsp;the&nbsp;information&nbsp;of&nbsp;exons,&nbsp;e.g.&nbsp;[(begin_1,&nbsp;end_1),&nbsp;(..),&nbsp;..]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intron_list,&nbsp;a&nbsp;list&nbsp;representing&nbsp;the&nbsp;information&nbsp;of&nbsp;introns<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-getPosStrandIE"><strong>getPosStrandIE</strong></a>(elist)</dt><dd><tt>get&nbsp;the&nbsp;inner&nbsp;region&nbsp;information&nbsp;of&nbsp;gene&nbsp;on&nbsp;positive&nbsp;strand<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elist,&nbsp;a&nbsp;string&nbsp;from&nbsp;corresponding&nbsp;ffn&nbsp;file,&nbsp;showing&nbsp;the&nbsp;regional&nbsp;information<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exon_list,&nbsp;a&nbsp;list&nbsp;representing&nbsp;the&nbsp;information&nbsp;of&nbsp;exons,&nbsp;e.g.&nbsp;[(begin_1,&nbsp;end_1),&nbsp;(..),&nbsp;..]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intron_list,&nbsp;a&nbsp;list&nbsp;representing&nbsp;the&nbsp;information&nbsp;of&nbsp;introns<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-insertChrTable"><strong>insertChrTable</strong></a>(species_id, species_name, chromoesome_name, db, db_cursor)</dt><dd><tt>insert&nbsp;a&nbsp;chromoesome&nbsp;information&nbsp;into&nbsp;Table_chromosome<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;species_id,&nbsp;the&nbsp;ID&nbsp;of&nbsp;the&nbsp;species&nbsp;in&nbsp;Table_Specie<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;species_name,&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;species&nbsp;in&nbsp;Table_Specie<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chromoesome_name,&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;chromoesome<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db,&nbsp;the&nbsp;MySQL&nbsp;entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_cursor,&nbsp;the&nbsp;MySQL&nbsp;cursor&nbsp;using&nbsp;to&nbsp;commit&nbsp;or&nbsp;rollback<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-insertGeneTable"><strong>insertGeneTable</strong></a>(Chr_No, gene_info, db, db_cursor)</dt><dd><tt>insert&nbsp;gene&nbsp;information&nbsp;into&nbsp;Table_gene<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chr_No,&nbsp;the&nbsp;chromoesome&nbsp;No.&nbsp;that&nbsp;this&nbsp;gene&nbsp;belongs&nbsp;to&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene_info,&nbsp;the&nbsp;detailed&nbsp;gene&nbsp;information,&nbsp;containing&nbsp;gene&nbsp;name,&nbsp;gene&nbsp;start&nbsp;position,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene&nbsp;end&nbsp;position,&nbsp;gene&nbsp;strand.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db,&nbsp;the&nbsp;MySQL&nbsp;entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_cursor,&nbsp;the&nbsp;MySQL&nbsp;cursor&nbsp;using&nbsp;to&nbsp;commit&nbsp;or&nbsp;rollback<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-insertRegionTable"><strong>insertRegionTable</strong></a>(gene_ID, rtd, region, db, db_cursor)</dt><dd><tt>insert&nbsp;regional&nbsp;information&nbsp;(exon&nbsp;or&nbsp;intron)&nbsp;into&nbsp;Table_region<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene_ID,&nbsp;the&nbsp;ID&nbsp;of&nbsp;the&nbsp;gene&nbsp;in&nbsp;Table_gene<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rtd,&nbsp;the&nbsp;regional&nbsp;type&nbsp;ID,&nbsp;for&nbsp;exon,&nbsp;it's&nbsp;1,&nbsp;for&nbsp;intron,&nbsp;it's&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;region,&nbsp;a&nbsp;list,&nbsp;the&nbsp;detailed&nbsp;information,&nbsp;containing&nbsp;start&nbsp;position,&nbsp;end&nbsp;position,&nbsp;strand,&nbsp;length<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db,&nbsp;the&nbsp;MySQL&nbsp;entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_cursor,&nbsp;the&nbsp;MySQL&nbsp;cursor&nbsp;using&nbsp;to&nbsp;commit&nbsp;or&nbsp;rollback<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-insertUTR"><strong>insertUTR</strong></a>(gene_ID, UTR_loc_Front, UTR_loc_End, db, db_cursor)</dt><dd><tt>insert&nbsp;UTR&nbsp;information&nbsp;of&nbsp;a&nbsp;gene&nbsp;into&nbsp;Table_region<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene_ID,&nbsp;the&nbsp;ID&nbsp;of&nbsp;the&nbsp;gene&nbsp;in&nbsp;Table_gene<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UTR_loc_Front,&nbsp;the&nbsp;end&nbsp;position&nbsp;of&nbsp;the&nbsp;font&nbsp;UTR&nbsp;in&nbsp;the&nbsp;gene<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UTR_loc_End,&nbsp;the&nbsp;begin&nbsp;position&nbsp;of&nbsp;the&nbsp;end&nbsp;UTR&nbsp;in&nbsp;the&nbsp;gene<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db,&nbsp;the&nbsp;MySQL&nbsp;entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db_cursor,&nbsp;the&nbsp;MySQL&nbsp;cursor&nbsp;using&nbsp;to&nbsp;commit&nbsp;or&nbsp;rollback<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+</td></tr></table>
+</body></html>
