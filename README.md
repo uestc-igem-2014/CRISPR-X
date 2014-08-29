@@ -20,6 +20,8 @@ On Android, provide a form to submit model organism, RFC, target gene. Communica
 Update:
 * Update UI, more friendly.
 * Visualize the sgRNA target site.
+* Add user register system.
+* Enable security transmission. 
 
 Manually test passed.
 
