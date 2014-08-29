@@ -1,4 +1,4 @@
-# CRISPR-X V.2.0.0
+# CRISPR-X V.1.1.0
 
 ## structure
 
