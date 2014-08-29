@@ -36,6 +36,7 @@ public class ResultActivity extends Activity {
 	private String strPosition = null;// Position×Ö´®
 	private String strLocusTag = null;// LocusTag×Ö´®
 	private String strTargetGenome = null;// TargetGenome×Ö´®
+	private String strRegion = null;// Region×Ö´®
 	private String jsonString;
 	private int SCREEN_WIDTH, SCREEN_HEIGHT; // ÆÁÄ»¸ß¿í
 	private String jGrna, jPosition, jTotalScore, jSspe, jSeff, jStrand,fGrna, fPosition, fTotalScore;	//¸¸¼¶¹Ø¼ü×Ö
@@ -76,6 +77,7 @@ public class ResultActivity extends Activity {
 		strPosition = info.getString("LOCATION", ""); // ¸üÐÂ
 		strLocusTag = info.getString("GENE", "");
 		strTargetGenome = info.getString("SPECIE", "");
+		strRegion = info.getString("REGION", "");
 		jsonString = info.getString("JSON", "");
 		
 		tvTargetGenomeT.setText(strTargetGenome);
