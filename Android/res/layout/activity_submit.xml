@@ -21,14 +21,46 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/head" >
 
-                <Button
-                    android:id="@+id/button_help"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="40dip"
-                    android:background="@drawable/help" />
+                    android:layout_marginRight="15dp" >
+
+                    <EditText
+                        android:id="@+id/editText_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="username" />
+
+                    <EditText
+                        android:id="@+id/editText_pswd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="password"
+                        android:inputType="textPassword" />
+
+                    <Button
+                        android:id="@+id/button_login"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff"
+                        
+                        android:text="Login" />
+
+                    <Button
+                        android:id="@+id/button_logon"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logon"
+                        android:textColor="#ffffff" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -38,10 +70,33 @@
                 android:background="@drawable/foot"
                 android:orientation="vertical" >
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dip" >
-                </LinearLayout>
+                    android:layout_height="100dip" >
+
+                    <Button
+                        android:id="@+id/button_knockout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="55dp"
+                        android:background="@drawable/deep"
+                        android:text="Knockout"
+                        android:textColor="#ffffff" />
+
+                    <Button
+                        android:id="@+id/button_interference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/button_knockout"
+                        android:layout_alignBottom="@+id/button_knockout"
+                        android:layout_toRightOf="@+id/button_knockout"
+                        android:background="@drawable/deep"
+                        android:text="Interference"
+                        android:textColor="#ffffff" />
+                    
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -71,15 +126,15 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="60dip" >
 
                     <Button
                         android:id="@+id/button_locustag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="55dip"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="56dp"
                         android:background="@drawable/deep"
                         android:text="Locus Tag"
                         android:textColor="#ffffff" />
@@ -88,11 +143,13 @@
                         android:id="@+id/button_position"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
+                        android:layout_alignBaseline="@+id/button_locustag"
+                        android:layout_alignBottom="@+id/button_locustag"
                         android:layout_toRightOf="@+id/button_locustag"
                         android:background="@drawable/deep"
                         android:text="Position"
                         android:textColor="#ffffff" />
+
                 </RelativeLayout>
 
                 <RelativeLayout
