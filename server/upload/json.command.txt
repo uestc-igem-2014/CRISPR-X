@@ -1,0 +1,20 @@
+This is a help document for import command. 
+
+{
+files			array				该物种所有文件 ID
+[
+	file_ID		char				文件 ID
+	chromosomeName	varchar(100)	染色体名
+]
+PAM				varchar(20)			PAM
+}
+
+Example:
+
+{"files":[{"file_ID":"5", "chromosomeName":"testchr"}],"PAM":"NGG"}
+
+IMPORTANT! 
+Due to the out-of-date file in this server, result are not 100% correct. 
+And for the safety of out database, import.php will actually not import data into database. 
+Please check import sql file tmp/out.sql
+

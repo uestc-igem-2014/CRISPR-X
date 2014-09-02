@@ -1,9 +1,8 @@
 cc = g++
-main = ../main
-obj = main.o score.o cJSON.o region.o localresult.o util.o
+main = ../import
+obj = main.o cJSON.o
 x = -I/home/hj/immunet/www/iGEM2014/mysql-connector/include
 y = -L/home/hj/immunet/www/iGEM2014/mysql-connector/lib -Wl,-dn -lmysqlclient -Wl,-dy -lm -lz -lcrypt -lpthread -ldl -lrt
-util = util.h main.h cJSON/cJSON.h
 
 all: $(obj)
 	$(cc) -o $(main) $(obj) $(y)
@@ -11,20 +10,8 @@ all: $(obj)
 cJSON.o : cJSON/cJSON.c cJSON/cJSON.h
 	$(cc) -c cJSON/cJSON.c $(x)
 
-util.o : util.cpp $(util)
-	$(cc) -c util.cpp &(x)
-
-main.o: main.cpp $(util)
+main.o: main.cpp
 	$(cc) -c main.cpp $(x)
-
-score.o : score.cpp $(util)
-	$(cc) -c score.cpp $(x)
-
-region.o : region.cpp $(util)
-	$(cc) -c region.cpp $(x)
-
-localresult.o : localresult.cpp $(util)
-	$(cc) -c localresult.cpp $(x)
 
 .PHONY : clean
 clean :
@@ -32,5 +19,5 @@ clean :
 
 .PHONY : cleanall
 cleanall :
-	rm $(obj) ../main
+	rm $(obj) $(main)
 

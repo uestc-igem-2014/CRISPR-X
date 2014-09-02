@@ -11,6 +11,13 @@
 2	file	Change Info - Change your password and/or email address	login/changeinfo.php	POST: name(username), pswd(old password), newpswd(new password *), newemail(new email *), * means not necessary<br>Return: '+': ok, '-': failed. 
 2	helper	WebLogin - Login on web!	login/login.php	Using unencrypted password please. 
 -1	helper	json_login.txt	login/json_login.txt	json_login
+1	folder	upload		Upload your special specie
+2	helper	Readme - Read Me First!	upload/readme.txt	
+2	file	Check - Check if this token can upload files	upload/check.php	POST: token<br>Return: status=0(Yes)/1(No) and message if status=1 in JSON. Example: {"status":1, "message":"Authentication failed"}
+2	file	Upload - Upload your file	upload/	POST: token, note(no longer than 100), file<br>Return: A(Upload succeed) or N(Something goes wrong)
+2	file	Viewmyfiles - View all my files	upload/viewmyfiles.php	POST: token<br>Return: All my file in JSON Array Style
+2	file	Import - Import data from file(s)	upload/import.php	POST: token, command(in json, see json.command.txt)<br>Return: New specie ID, or 'N' for 'Something goes wrong'
+2	helper	json.command.txt	upload/json.command.txt	You know what it is. 
 1	folder	Blast	blast/	Blast! 
 2	file	Blast	blast/?PATH=Saccharomycetes/NC_001133-chromosome1.fna&SEQ=CACCACATGCC	GET: PATH, SEQ<br>Return: Blast output file. 
 1	helper	json.txt	json.txt	JSON file, UTF-8 is better. <br><a href="json.txt" download="json.txt">Download it! </a>

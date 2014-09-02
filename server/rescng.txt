@@ -1,2 +1,2 @@
 <h2>Recently Change</h2>
-<h3>Add new feature: Change your infomation!</h3>
+<h3>Add new feature: Upload your own species!</h3>

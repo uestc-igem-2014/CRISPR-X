@@ -1,80 +1,53 @@
 #include "main.h"
 
 const double M[]={0,0,0.014,0,0,0.395,0.317,0,0.389,0.079,0.445,0.508,0.613,0.851,0.732,0.828,0.615,0.804,0.685,0.583};
-const double eM[]={1,1,1.014098459,1,1,1.484384191,1.373002572,1,1.475504551,1.082204322,1.560490196,1.661963941,1.845960983,2.341987669,2.079234922,2.288736686,1.8496566,2.23446092,1.983771836,1.791404591};
+const double eM[]={2.718281828,2.718281828,2.680491036,2.718281828,2.718281828,1.831252209,1.979808257,2.718281828,1.842272751,2.511800935,1.741940985,1.635584119,1.472556491,1.160672989,1.30734714,1.187677833,1.469614321,1.216526905,1.370259311,1.517402513};
 
-int check_rfc(int i){
-    char str[LEN+PAM_LEN+3];
-    strcpy(str,psb_site[i].nt);
-    strcat(str,psb_site[i].pam);
-    if(req_restrict.rfc10){
-        if(strstr(str,"GAATTC")) return 0;
-        if(strstr(str,"TCTAGA")) return 0;
-        if(strstr(str,"ACTAGT")) return 0;
-        if(strstr(str,"CTGCAG")) return 0;
-        if(strstr(str,"GCGGCCGC")) return 0;
-    }
-    if(req_restrict.rfc12){
-        if(strstr(str,"GAATTC")) return 0;
-        if(strstr(str,"ACTAGT")) return 0;
-        if(strstr(str,"GCTAGC")) return 0;
-        if(strstr(str,"CTGCAG")) return 0;
-        if(strstr(str,"GCGGCCGC")) return 0;
-    }
-    if(req_restrict.rfc12a){
-        if(strstr(str,"CAGCTG")) return 0;
-        if(strstr(str,"CTCGAG")) return 0;
-        if(strstr(str,"CCTAGG")) return 0;
-        if(strstr(str,"TCTAGA")) return 0;
-        if(strstr(str,"GCTCTTC")) return 0;
-        if(strstr(str,"GAAGAGC")) return 0;
-    }
-    if(req_restrict.rfc21){
-        if(strstr(str,"GAATTC")) return 0;
-        if(strstr(str,"AGATCT")) return 0;
-        if(strstr(str,"GGATCC")) return 0;
-        if(strstr(str,"CTCGAG")) return 0;
-    }
-    if(req_restrict.rfc23){
-        if(strstr(str,"GAATTC")) return 0;
-        if(strstr(str,"TCTAGA")) return 0;
-        if(strstr(str,"ACTAGT")) return 0;
-        if(strstr(str,"CTGCAG")) return 0;
-        if(strstr(str,"GCGGCCGC")) return 0;
-    }
-    if(req_restrict.rfc25){
-        if(strstr(str,"GAATTC")) return 0;
-        if(strstr(str,"TCTAGA")) return 0;
-        if(strstr(str,"GCCGGC")) return 0;
-        if(strstr(str,"ACCGGT")) return 0;
-        if(strstr(str,"ACTAGT")) return 0;
-        if(strstr(str,"CTGCAG")) return 0;
-        if(strstr(str,"GCGGCCGC")) return 0;
-    }
-    return 1;
+bool cmp(cJSON *a,cJSON *b){
+    double as=cJSON_GetObjectItem(a,"oscore")->valuedouble;
+    double bs=cJSON_GetObjectItem(b,"oscore")->valuedouble;
+    return as>bs;
 }
 
-double subscore(int ini,int j,int *Nph,int type){
+//MYSQL_ROW row :  0:sgrna_start, 1:sgrna_end, 2:sgrna_strand, 3:sgrna_seq, 4:sgrna_PAM, 5:Chr_Name, 6:sgrna_ID, 7:Chr_No
+cJSON *cJSON_otj(int ini,localrow *lr,double oscore,int omms){
+    char buffer[4096];
+    cJSON *root=cJSON_CreateObject();
+    sprintf(buffer,"%s%s",lr->row[3],lr->row[4]);
+    cJSON_AddStringToObject(root,"osequence",buffer);
+    sprintf(buffer,"%.2f",oscore);
+    cJSON_AddStringToObject(root,"oscore",buffer);
+    cJSON_AddNumberToObject(root,"omms",omms);
+    sprintf(buffer,"%s:%s",lr->row[5],lr->row[0]);
+    cJSON_AddStringToObject(root,"oposition",buffer);
+    cJSON_AddStringToObject(root,"ostrand",lr->row[2]);
+    mos_pthread_mutex_lock(&mutex_mysql_conn);
+    cJSON_AddStringToObject(root,"oregion",region_info[getRegion(atoi(lr->row[6]),atoi(lr->row[7]),atoi(lr->row[0]),atoi(lr->row[1]))]);
+    mos_pthread_mutex_unlock(&mutex_mysql_conn);
+    return root;
+}
+
+double subscore(int ini,localrow *lr,int *Nph,int type){
     int nmm=0;
     int d0=0;
     double smm=0;
     int nph=0;
     int i;
     for(i=0;i<LEN;i++){
-        if(in_site[ini].nt[i]!=psb_site[j].nt[i]){
+        if(in_site[ini].nt[i]!=lr->row[3][i]){
             smm+=eM[i];
-            d0+=19-i;
+            d0+=i;
             nmm++;
         }
     }
     if(nmm==0){
         nph++;
-        if(type==1) in_site[ini].ot.push_back(j);
         smm=25.0;
+        if(type==1) in_site[ini].ot.push_back(cJSON_otj(ini,lr,smm,nmm));
     }else{
         if(nmm<=NUM_NO){
-            smm=2.0*smm/(double)nmm/(double)nmm/(4.0*d0/19.0/(double)nmm+1);
-            if(type==1) in_site[ini].ot.push_back(j);
+            smm=4.0*smm/(double)nmm/(double)nmm/(4.0*d0/19.0/(double)nmm+1);
+            if(type==1) in_site[ini].ot.push_back(cJSON_otj(ini,lr,smm,nmm));
         }else{
             smm=0.0;
         }
@@ -84,73 +57,100 @@ double subscore(int ini,int j,int *Nph,int type){
     return smm;
 }
 
-return_struct score(int ii,int *pini,int type,double r1){
+void score(localrow *lr,localrow row,int ini,int type,double r1){
     double r2=1.0-r1;
-    int ini=*pini;
     int Sgc=0,S20=0;
     int Nph=0;
     double sum=0;
     int gc=0;
     int i;
-    return_struct rs;
+    char buffer[9182];
 
-    in_site[ini]=psb_site[ii];
-    in_site[ini].ot.clear();
-
-    if(check_rfc(ini)==0){
-        rs.dou[0]=-1.0;
-        rs.dou[1]=0.0;
-        rs.dou[2]=0.0;
-        dc_put(0,ini);
-        return rs;
-    }
-
-    cJSON *cache=dc_get(in_site[ini].chromosome,in_site[ini].index,in_site[ini].strand);
-    if(cache!=NULL){
-        //in_site[ini].score=cJSON_GetObjectItem(cache,"score")->valuedouble;
-        in_site[ini].Sspe_nor=rs.dou[1]=cJSON_GetObjectItem(cache,"Sspe")->valuedouble;
-        in_site[ini].Seff_nor=rs.dou[2]=cJSON_GetObjectItem(cache,"Seff")->valuedouble;
-        in_site[ini].score=rs.dou[0]=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
-        in_site[ini].count=cJSON_GetObjectItem(cache,"count")->valuedouble;
-        in_site[ini].otj=cJSON_GetObjectItem(cache,"offtarget");
-        (*pini)++;
-        return rs;
-    }
-
+    mos_pthread_mutex_unlock(&mutex);
     for(i=0;i<LEN;i++) if(in_site[ini].nt[i]=='C' || in_site[ini].nt[i]=='G') gc++;
     if((double)gc/(double)LEN<0.4 || (double)gc/(double)LEN>0.8) Sgc=65;
     else if((double)gc/(double)LEN>0.5 && (double)gc/(double)LEN<0.7) Sgc=0;
     else Sgc=35;
     if(in_site[ini].nt[19]!='G') S20=35;
 
-    for(int j=0;j<pi;j++) if(in_site[ini].index!=psb_site[j].index){
-        double smm=subscore(ini,j,&Nph,1);
-        sum+=smm;
+    while(lr){
+    //printf("12.1\n");
+        int start=atoi(lr->row[0]);
+        if(in_site[ini].index!=start){
+            double smm=subscore(ini,lr,&Nph,1);
+            sum+=smm;
+        }
+        lr=lr->next;
     }
     //sum=sigma+S1
     if(type==1 && Nph>3){
-        in_site[ini].Sspe_nor=rs.dou[1]=max(100-sum,0.0);
-        in_site[ini].Seff_nor=rs.dou[2]=100-Sgc-S20;
-        in_site[ini].score=rs.dou[0]=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
+        in_site[ini].Sspe_nor=max(100-sum,0.0);
+        in_site[ini].Seff_nor=100-Sgc-S20;
+        in_site[ini].score=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
         in_site[ini].count=in_site[ini].ot.size();
-        (*pini)++;
-        rs.dou[0]=0.0;
     }else if(type==1){
-        in_site[ini].Sspe_nor=rs.dou[1]=max(100-sum,0.0);
-        in_site[ini].Seff_nor=rs.dou[2]=100-Sgc-S20;
-        in_site[ini].score=rs.dou[0]=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
+        in_site[ini].Sspe_nor=max(100-sum,0.0);
+        in_site[ini].Seff_nor=100-Sgc-S20;
+        in_site[ini].score=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
         in_site[ini].count=in_site[ini].ot.size();
-        (*pini)++;
     }else{
         sum=sum-Sgc-S20+7;
-        in_site[ini].Sspe_nor=rs.dou[1]=sum;
-        in_site[ini].Seff_nor=rs.dou[2]=100-Sgc-S20;
-        in_site[ini].score=rs.dou[0]=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
+        in_site[ini].Sspe_nor=sum;
+        in_site[ini].Seff_nor=100-Sgc-S20;
+        in_site[ini].score=r1*in_site[ini].Sspe_nor+r2*in_site[ini].Seff_nor;
         in_site[ini].count=in_site[ini].ot.size();
-        (*pini)++;
     }
 
-    in_site[ini].otj=dc_put(1,ini);
+    int len=in_site[ini].ot.size();
+    sort(&(in_site[ini].ot[0]),&(in_site[ini].ot[0])+len,cmp);
+    cJSON *otj=Create_array_of_anything(&(in_site[ini].ot[0]),min(20,len));
+    sprintf(buffer,"update Table_sgRNA set sgrna_Sspe=%.2f, sgrna_Seff=%.2f, sgrna_count=%d, sgrna_offtarget='%s' where sgrna_ID=%s; ",in_site[ini].Sspe_nor,in_site[ini].Seff_nor,in_site[ini].count,NomoreSpace(cJSON_Print(otj)),row.row[6]);
+    mos_pthread_mutex_lock(&mutex_mysql_conn);
+    int res=mysql_query(my_conn,buffer);
+    mos_pthread_mutex_unlock(&mutex_mysql_conn);
+    if(res){
+        printf("%s\n\n",buffer);
+        printf("%s\n",mysql_error(my_conn));
+        system("pause");
+    }
+    in_site[ini].otj=otj;
+    in_site[ini].ot.clear();
+}
 
-    return rs;
+struct thread_share_variables{
+    localrow *lr;
+    localrow row;
+    int ini;
+    int type;
+    double r1;
+}thread_share_variables;
+
+void *new_thread(void *args){
+    int ini=thread_share_variables.ini;
+    score(thread_share_variables.lr,thread_share_variables.row,thread_share_variables.ini,thread_share_variables.type,thread_share_variables.r1);
+    mos_pthread_mutex_unlock(&mutex);
+    mos_sem_post(&sem_thread);
+    in_site[ini].ntid=0;
+    mos_pthread_detach(mos_pthread_self());
+    return NULL;
+}
+
+void create_thread_socre(localrow *lr,localrow row,int ini,int type,double r1){
+    mos_pthread_t ntid;
+    mos_pthread_mutex_lock(&mutex);
+    thread_share_variables.lr=lr;
+    thread_share_variables.row=row;
+    thread_share_variables.ini=ini;
+    thread_share_variables.type=type;
+    thread_share_variables.r1=r1;
+
+    int err=mos_pthread_create(&ntid, NULL, new_thread, NULL);
+    if(err){
+        printf("Pthread_create error: %s\n",strerror(err));
+        mos_pthread_mutex_unlock(&mutex);
+        mos_sem_post(&sem_thread);
+        return ;
+    }
+
+    in_site[ini].ntid=ntid;
 }

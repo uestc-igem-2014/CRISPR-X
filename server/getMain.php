@@ -4,8 +4,8 @@ set_time_limit(60*60*2);
 ob_end_clean();
 
 if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene']) || isset($_GET['blast']) ) && isset($_GET['pam']) && isset($_GET['rfc'])){
-    $conn=mysql_connect("YOUR_SERVER","YOUR_MYSQL_USER","YOUR_MYSQL_PASSWD");
-    $mysql_database="YOUR_DB_NAME";
+    $conn=mysql_connect("localhost","igem","uestc2014!");
+    $mysql_database="CasDB";
     
     $user_id=2;
     if(isset($_GET['token'])){
@@ -73,11 +73,11 @@ if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene'])
 	$last_line = exec($Prog_name, $output, $returnvalue);
 
 	if($returnvalue!=0){
-	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request_txt='{\"status\":1,\"message\":\"run time error\"}' WHERE request_ID=".$row[0].";", $conn);
+	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='{\"status\":1,\"message\":\"run time error\"}' WHERE request_ID=".$row[0].";", $conn);
 	    return ;
 	}
 
-	$result=mysql_db_query($mysql_database, "UPDATE user_request SET request_txt='".$output[0]."' WHERE request_ID=".$row[0].";", $conn);
+	$result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='".$output[0]."' WHERE request_ID=".$row[0].";", $conn);
 	if(!$result){
 		print mysql_error();
 		return ;
