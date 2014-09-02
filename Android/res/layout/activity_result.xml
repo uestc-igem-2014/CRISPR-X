@@ -149,7 +149,7 @@
                         android:orientation="vertical" >
 
                         <LinearLayout
-                            android:layout_width="650dp"
+                            android:layout_width="680dip"
                             android:layout_height="wrap_content"
                                 android:background="@drawable/rhead_right" >
 

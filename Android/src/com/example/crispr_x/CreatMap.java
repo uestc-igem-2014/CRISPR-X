@@ -1,5 +1,7 @@
 package com.example.crispr_x;
 
+import java.util.ArrayList;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +10,16 @@ import android.graphics.Bitmap.Config;
 
 public class CreatMap {
 
+	static ArrayList<Integer> ListEndpoint = new ArrayList<Integer>(); 
+	static ArrayList<String> ListDescription = new ArrayList<String>(); 
+	
+	public CreatMap(){};
+	
+	public CreatMap(ArrayList<Integer> cListEndpoint, ArrayList<String> cListDescription){
+		CreatMap.ListEndpoint = cListEndpoint;
+		CreatMap.ListDescription = cListDescription;
+	};
+	
 	public Bitmap canvasParse(String allPos, String selcetPos, String dir, int SCREEN_WIDTH) {
 		Bitmap chromeMap = Bitmap.createBitmap( SCREEN_WIDTH, 80, Config.ARGB_8888 );
 		String chromeID;
@@ -28,10 +40,34 @@ public class CreatMap {
 		int x1 = SCREEN_WIDTH/20*19;
 		int y0 = 50;
 		int y1 = y0+10;
+		
+		int x0temp = SCREEN_WIDTH/20;
+		int x1temp = SCREEN_WIDTH/20;
+		
 		Canvas canvas = new Canvas(chromeMap);
 		Paint pen = new Paint();
+		
 		pen.setColor(Color.GRAY);
 		canvas.drawRect(x0, y0, x1, y1, pen);	//画总序列
+		
+		for(int i=0; i<ListEndpoint.size(); i++){
+			if(ListDescription.get(i).equals("INTERGENIC")) {
+				pen.setColor(Color.GRAY);
+			} if(ListDescription.get(i).equals("UTR")) {
+				pen.setColor(Color.YELLOW);
+			} if(ListDescription.get(i).equals("INTRON")) {
+				pen.setColor(Color.RED);
+			} if(ListDescription.get(i).equals("EXON")) {
+				pen.setColor(Color.GREEN);
+			}
+			x1temp = (int) (SCREEN_WIDTH/20 + (ListEndpoint.get(i))/lenUnit);
+			if(x1temp > x1) {
+				x1temp = x1;
+			}
+			canvas.drawRect(x0temp, y0, x1temp, y1, pen);	//画总序列
+			x0temp = x1temp;
+		}
+		
 		
 		pen.setColor(Color.BLACK);
 		canvas.drawText(x[1], x0-10, y1+10, pen);

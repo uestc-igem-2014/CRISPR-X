@@ -21,7 +21,7 @@ public class HttpThreadGet extends Thread {
 
 	public void run() {
 		HttpRunner jsonParser = new HttpRunner();
-		String json = jsonParser.makeHttpGET(httpUrl);
+		String json = jsonParser.makeMainHttpGET(httpUrl);
 		Message msg = new Message();
 		switch (type) {
 		case MAIN_SUBMIT: // 主程序提交

@@ -6,10 +6,6 @@
     tools:context="com.example.crispr_x.SubmitActivity"
     tools:ignore="MergeRootFrame" >
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,10 +14,11 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/head" >
 
                 <LinearLayout
+                    android:id="@+id/linearLayout_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -32,6 +29,7 @@
                         android:id="@+id/editText_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="qq"
                         android:layout_weight="1"
                         android:hint="username" />
 
@@ -40,175 +38,220 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:text="123"
                         android:hint="password"
                         android:inputType="textPassword" />
 
                     <Button
                         android:id="@+id/button_login"
                         style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#ffffff"
-                        
-                        android:text="Login" />
+                        android:layout_width="60dip"
+                        android:layout_height="40dip"
+                        android:background="@drawable/shallow"
+                        android:text="Login"
+                        android:textColor="#ffffff" />
 
                     <Button
                         android:id="@+id/button_logon"
                         style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dip"
+                        android:layout_height="40dip"
+                        android:background="@drawable/shallow"
                         android:text="Logon"
                         android:textColor="#ffffff" />
-
                 </LinearLayout>
-
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/foot"
-                android:orientation="vertical" >
+                android:background="@drawable/foot" >
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dip" >
+                <ScrollView
+                    android:id="@+id/scrollView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" >
+                    <LinearLayout
+                    android:layout_width="400dip"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
 
-                    <Button
-                        android:id="@+id/button_knockout"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dip" >
+
+                        <Button
+                            android:id="@+id/button_knockout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="55dp"
+                            android:background="@drawable/deep"
+                            android:text="Knockout"
+                            android:textColor="#ffffff" />
+
+                        <Button
+                            android:id="@+id/button_interference"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/button_knockout"
+                            android:layout_alignBottom="@+id/button_knockout"
+                            android:layout_toRightOf="@+id/button_knockout"
+                            android:background="@drawable/deep"
+                            android:text="Interference"
+                            android:textColor="#ffffff" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <Spinner
+                            android:id="@+id/spinner_targetgenome"
+                            android:layout_width="310dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="52dip"
+                            android:layout_weight="1" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <Spinner
+                            android:id="@+id/spinner_pam"
+                            android:layout_width="310dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="52dip"
+                            android:layout_weight="1" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dip" >
+
+                        <Button
+                            android:id="@+id/button_locustag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="56dp"
+                            android:background="@drawable/deep"
+                            android:text="Locus Tag"
+                            android:textColor="#ffffff" />
+
+                        <Button
+                            android:id="@+id/button_position"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/button_locustag"
+                            android:layout_alignBottom="@+id/button_locustag"
+                            android:layout_toRightOf="@+id/button_locustag"
+                            android:background="@drawable/deep"
+                            android:text="Position"
+                            android:textColor="#ffffff" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <EditText
+                            android:id="@+id/editText_postag"
+                            android:layout_width="305dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="55dip"
+                            android:ems="10"
+                            android:hint="eg:thrA" >
+
+                            <requestFocus />
+                        </EditText>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="55dp"
-                        android:background="@drawable/deep"
-                        android:text="Knockout"
-                        android:textColor="#ffffff" />
+                        android:orientation="horizontal" >
 
-                    <Button
-                        android:id="@+id/button_interference"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/button_knockout"
-                        android:layout_alignBottom="@+id/button_knockout"
-                        android:layout_toRightOf="@+id/button_knockout"
-                        android:background="@drawable/deep"
-                        android:text="Interference"
-                        android:textColor="#ffffff" />
-                    
-                </RelativeLayout>
+                        <Button
+                            android:id="@+id/button_advanced"
+                            android:layout_width="80dip"
+                            android:layout_height="35dip"
+                            android:layout_marginLeft="55dip"
+                            android:text="Adv"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/shallow" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                        <Button
+                            android:id="@+id/button_default"
+                            android:layout_width="80dip"
+                            android:layout_height="35dip"
+                            android:layout_marginLeft="10dip"
+                            android:text="Def"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/shallow" />
 
-                    <Spinner
-                        android:id="@+id/spinner_targetgenome"
-                        android:layout_width="310dip"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="52dip"
-                        android:layout_weight="1" />
-                </RelativeLayout>
+                        <Button
+                            android:id="@+id/button_submit"
+                            android:layout_width="130dip"
+                            android:layout_height="50dip"
+                            android:layout_marginLeft="10dip"
+                            android:text="Submit"
+                            android:textColor="#ffffff"
+                            android:textSize="30sp
+                            "
+                            android:background="@drawable/shallow" />
+                    </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dip" >
+                    </RelativeLayout>
 
-                    <Spinner
-                        android:id="@+id/spinner_pam"
-                        android:layout_width="310dip"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="52dip"
-                        android:layout_weight="1" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dip" >
-
-                    <Button
-                        android:id="@+id/button_locustag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="56dp"
-                        android:background="@drawable/deep"
-                        android:text="Locus Tag"
-                        android:textColor="#ffffff" />
-
-                    <Button
-                        android:id="@+id/button_position"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/button_locustag"
-                        android:layout_alignBottom="@+id/button_locustag"
-                        android:layout_toRightOf="@+id/button_locustag"
-                        android:background="@drawable/deep"
-                        android:text="Position"
-                        android:textColor="#ffffff" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <EditText
-                        android:id="@+id/editText_postag"
-                        android:layout_width="305dip"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="55dip"
-                        android:ems="10"
-                        android:hint="eg:thrA" >
-                    </EditText>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dip" >
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <Button
-                        android:id="@+id/button_default"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dip"
-                        android:layout_alignBaseline="@+id/button_submit"
-                        android:layout_alignBottom="@+id/button_submit"
-                        android:layout_marginLeft="20dip"
-                        android:layout_toRightOf="@+id/button_advanced"
-                        android:background="@drawable/def" />
-
-                    <Button
-                        android:id="@+id/button_submit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="35dp"
-                        android:layout_toRightOf="@+id/button_default"
-                        android:background="@drawable/sub" />
-
-                    <Button
-                        android:id="@+id/button_advanced"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dip"
-                        android:layout_alignBaseline="@+id/button_default"
-                        android:layout_alignBottom="@+id/button_default"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="52dp"
-                        android:background="@drawable/adv" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dip" >
                 </LinearLayout>
+                </ScrollView>
+
+                
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" >
+
+                    <SlidingDrawer
+                        android:id="@+id/slidingDrawer1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:content="@+id/content"
+                        android:handle="@+id/handle" >
+
+                        <Button
+                            android:id="@+id/handle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                                android:background="@drawable/shallow"
+                            android:text="Menu" />
+
+                        <LinearLayout
+                            android:id="@+id/content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <ListView
+                                android:id="@+id/listView_menu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" >
+                            </ListView>
+
+                        </LinearLayout>
+                    </SlidingDrawer>
+
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -238,8 +281,6 @@
                     android:layout_height="wrap_content"
                     android:text="SAVE" />
             </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
 
 </FrameLayout>
