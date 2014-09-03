@@ -1,8 +1,8 @@
 cc = g++
 main = ../import
 obj = main.o cJSON.o
-x = -I../mysql-connector/include
-y = -L../mysql-connector/lib -Wl,-dn -lmysqlclient -Wl,-dy -lm -lz -lcrypt -lpthread -ldl -lrt
+x = -I ../mysql-connector/include
+y = -L ../mysql-connector/lib -Wl,-dn -lmysqlclient -Wl,-dy -lm -lz -lcrypt -lpthread -ldl -lrt
 
 all: $(obj)
 	$(cc) -o $(main) $(obj) $(y)
