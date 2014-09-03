@@ -1,8 +1,8 @@
 cc = g++
 main = ../main
 obj = main.o score.o cJSON.o region.o localresult.o util.o
-x = -I/home/hj/immunet/www/iGEM2014/mysql-connector/include
-y = -L/home/hj/immunet/www/iGEM2014/mysql-connector/lib -Wl,-dn -lmysqlclient -Wl,-dy -lm -lz -lcrypt -lpthread -ldl -lrt
+x = -I../mysql-connector/include
+y = -L../mysql-connector/lib -Wl,-dn -lmysqlclient -Wl,-dy -lm -lz -lcrypt -lpthread -ldl -lrt
 util = util.h main.h cJSON/cJSON.h
 
 all: $(obj)

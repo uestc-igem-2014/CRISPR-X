@@ -3,6 +3,16 @@ compiler:
   - gcc
   - clang
 before_script:
-  cd ./server/b
+  cd server
+  wget http://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.5-linux-glibc2.5-x86_64.tar.gz
+  tar -zxvf mysql-connector-c-6.1.5-linux-glibc2.5-x86_64.tar.gz
+  mv mysql-connector-c-6.1.5-linux-glibc2.5-x86_64 mysql-connector
+  cd a
 script:
   make
+  cd ../b
+  make
+
+os:
+ - linux
+ - osx
