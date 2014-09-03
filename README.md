@@ -1,4 +1,4 @@
-# CRISPR-X V.1.1.0
+# CRISPR-X V1.2.0
 
 ## structure
 
@@ -18,10 +18,11 @@ Find potential CRISPR/Cas9 sgRNAs and give a genome-wide evaluation.
 On Android, provide a form to submit model organism, RFC, target gene. Communicate with the server through JSON to get the result.
 
 Update:
-* Update UI, more friendly.
-* Visualize the sgRNA target site.
-* Add user register system.
-* Enable security transmission. 
+* add wiki page link.
+* add history recording.
+* beautify the UI design.
+* Enhance the task push service.
+* optimize some logic operation, more efficient.
 
 Manually test passed.
 
