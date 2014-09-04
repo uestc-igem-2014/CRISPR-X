@@ -6,8 +6,7 @@ class node{
 }
 $ns=array();
 
-$conn=mysql_connect("localhost","igem","uestc2014!");
-$mysql_database="CasDB";
+require_once("config.php");
 
 $user_id=2;
 $max=10;

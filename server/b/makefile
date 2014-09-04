@@ -12,7 +12,7 @@ cJSON.o : cJSON/cJSON.c cJSON/cJSON.h
 	$(cc) -c cJSON/cJSON.c $(x)
 
 util.o : util.cpp $(util)
-	$(cc) -c util.cpp &(x)
+	$(cc) -c util.cpp $(x)
 
 main.o: main.cpp $(util)
 	$(cc) -c main.cpp $(x)

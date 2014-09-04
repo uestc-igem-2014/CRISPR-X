@@ -131,6 +131,7 @@ int main(int args, char *argv[]){
         int req_pam_len=strlen(pam);
         
         cJSON *files=cJSON_GetObjectItem(root,"files");
+        FILE *fout=fopen("tmp/out.sql","w");
         int len=cJSON_GetArraySize(files);
         for(int k=0;k<len;k++){
             char Chr_No[15];
@@ -142,10 +143,6 @@ int main(int args, char *argv[]){
             sql_row=mysql_fetch_row(result);
             strcpy(Chr_No,sql_row[0]);
             mysql_free_result(result);
-            
-            
-                FILE *fout=fopen("tmp/out.sql","w");
-                
             
                 sprintf(buffer,"uploaddata/%s",cJSON_GetObjectItem(node,"file_ID")->valuestring);
                 FILE *ff=fopen(buffer,"r");

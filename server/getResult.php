@@ -1,6 +1,5 @@
 <?php
-$conn=mysql_connect("localhost","igem","uestc2014!");
-$mysql_database="CasDB";
+require_once("config.php");
 
 $result=mysql_db_query($mysql_database, "SELECT request_txt FROM user_request WHERE request_ID=".$_POST["id"]." and request_txt is not null;", $conn);
 if($row=mysql_fetch_row($result)){

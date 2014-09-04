@@ -5,8 +5,7 @@ function ip2int($ip){
     return (16777216*$ip1)+(65536*$ip2)+(256*$ip3)+($ip4); 
 }
 
-$conn=mysql_connect("localhost","igem","uestc2014!");
-$mysql_database="CasDB";
+require_once("../config.php");
 
 $strsql="SELECT user_id FROM `user_info` WHERE uld_id<=2 and user_name='".$_POST['name']."' and user_password='".$_POST['pswd']."'";
 $result=mysql_db_query($mysql_database, $strsql, $conn);

@@ -5,8 +5,7 @@ function ip2int($ip){
     return (16777216*$ip1)+(65536*$ip2)+(256*$ip3)+($ip4); 
 }
 
-$conn=mysql_connect("localhost","igem","uestc2014!");
-$mysql_database="CasDB";
+require_once("../config.php");
 
 echo "name: ".$_COOKIE["user"]."<br>";
 echo "token: ".$_COOKIE["token"]."<br>";

@@ -1,6 +1,5 @@
 <?php
-    $conn=mysql_connect("localhost","igem","uestc2014!");
-    $mysql_database="CasDB";
+    require_once("../config.php");
     
     $strsql="DELETE FROM user_token WHERE token_str='".$_COOKIE["token"]."';";
     mysql_db_query($mysql_database, $strsql, $conn);

@@ -4,8 +4,7 @@ set_time_limit(60*60*2);
 ob_end_clean();
 
 if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene']) || isset($_GET['blast']) ) && isset($_GET['pam']) && isset($_GET['rfc'])){
-    $conn=mysql_connect("localhost","igem","uestc2014!");
-    $mysql_database="CasDB";
+    require_once("config.php");
     
     $user_id=2;
     if(isset($_GET['token'])){

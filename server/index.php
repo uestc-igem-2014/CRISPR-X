@@ -59,8 +59,8 @@ while (!feof($fp)){
     echo "<div class=".$path[1]." style='margin-left:".($path[0]*4)."em;'>";
     echo $path[2];
     echo "<br><br>";
-    if($path[1]=="file") echo "<a href='http://immunet.cn/iGEM2014/".$path[3]."'>http://immunet.cn/iGEM2014/".$path[3]."</a><br>";
-    if($path[1]=="helper") echo "<a href='http://immunet.cn/iGEM2014/".$path[3]."'>http://immunet.cn/iGEM2014/".$path[3]."</a><br>";
+    if($path[1]=="file") echo "<a href='".$path[3]."'>".$path[3]."</a><br>";
+    if($path[1]=="helper") echo "<a href='".$path[3]."'>".$path[3]."</a><br>";
     echo $path[4];
     echo "</div>";
 }
@@ -74,7 +74,7 @@ while (!feof($fp)){
   </tr>
 </table>
 
-<p>You can use this page either: <a href="http://immunet.cn/iGEM2014/index_nonAnimation.php">http://immunet.cn/iGEM2014/index_nonAnimation.php</a>
+<p>You can use this page either: <a href="index_nonAnimation.php">index_nonAnimation.php</a>
 
   </body>
 </html>
