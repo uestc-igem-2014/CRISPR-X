@@ -4,6 +4,7 @@ import sys
 import linecache
 import json
 from Bio.Seq import Seq
+from Bio.SeqUtils import GC
 
 def readEnzyme(the_dataset_file):
 	""" read the enzyme dataset file from rebase """
@@ -113,4 +114,5 @@ if __name__ == "__main__":
 	resJson["enzyme"] = matched_list[:6]
 	resJson["RNAfold-res"] = linecache.getline(seq+"_res.txt", 3)[:-1]
 	resJson["RNAfold-img"] = seq+".jpg"
+	resJson["GC-ratio"] = GC(seq)
 	print json.dumps(resJson)
