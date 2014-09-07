@@ -62,8 +62,11 @@ if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene'])
 	if(isset($_GET['r1'])){
 	    $Prog_arg=$Prog_arg.',"r1":'.$_GET['r1'];
 	}
+	if(isset($_GET['length'])){
+	    $Prog_arg=$Prog_arg.',"length":'.$_GET['length'];
+	}
 	if(isset($_GET['region'])){
-	    $Prog_arg=$Prog_arg.',"region":"'.$_GET['r1'].'"';
+	    $Prog_arg=$Prog_arg.',"region":"'.$_GET['region'].'"';
 	}
 	$Prog_arg=$Prog_arg."}";
 	
@@ -72,7 +75,7 @@ if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene'])
 	$last_line = exec($Prog_name, $output, $returnvalue);
 
 	if($returnvalue!=0){
-	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='{\"status\":1,\"message\":\"run time error\"}' WHERE request_ID=".$row[0].";", $conn);
+	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='{\"status\":1,\"message\":\"run time error\",\"output\":\"'.$output[0].'\"}' WHERE request_ID=".$row[0].";", $conn);
 	    return ;
 	}
 
@@ -81,7 +84,7 @@ if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene'])
 		print mysql_error();
 		return ;
 	}
-    mysql_close($conn);
+	mysql_close($conn);
 
 }
 else{
