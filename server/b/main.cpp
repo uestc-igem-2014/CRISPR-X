@@ -1,6 +1,11 @@
+/** @file
+@brief Main function and some assistant functions.
+@author Yi Zhao
+*/
+
 #include "main.h"
 
-//req_GobalParameter
+///brief. hehe
 restrict req_restrict;
 
 int ini;
@@ -162,7 +167,7 @@ void onError(const char *msg){
     free(p);
 }
 
-char argv_default[]="{\"specie\":\"Saccharomyces-cerevisiae\",\"length\":20,\"location\":\"NC_001144-chromosome12:1..500\",\"pam\":\"NGG\",\"rfc\":\"100010\"}";
+char argv_default[]="{\"specie\":\"Saccharomyces-cerevisiae\",\"length\":17,\"location\":\"NC_001144-chromosome12:1..500\",\"pam\":\"NGG\",\"rfc\":\"100010\"}";
 const char *region_info[]={"","EXON","INTRON","UTR","INTERGENIC"};
 
 localrow *localresult;
@@ -171,6 +176,9 @@ mos_pthread_mutex_t mutex;
 mos_pthread_mutex_t mutex_mysql_conn;
 mos_sem_t sem_thread;
 
+/**
+Main function. Include Input, output and Database create connect.
+*/
 int main(int args,char *argv[]){
     int i;
     cJSON *root;
@@ -215,26 +223,26 @@ int main(int args,char *argv[]){
     strcpy(req_pam,cJSON_GetObjectItem(request,"pam")->valuestring);
     char req_specie[30];
     strcpy(req_specie,cJSON_GetObjectItem(request,"specie")->valuestring);
-
     double req_r1=0.65;
     cJSON_temp=cJSON_GetObjectItem(request,"r1");
-    if(cJSON_temp){
-        req_r1=cJSON_GetObjectItem(request,"r1")->valuedouble;
-    }
+    if(cJSON_temp) req_r1=cJSON_temp->valuedouble;
 
     cJSON_temp=cJSON_GetObjectItem(request,"gene");
     int req_gene_start,req_gene_end;
-    char req_id[100];
+    char req_chromosome[100];
     if(cJSON_temp){
-        onError("temporary not available");
-        return -1;
+        int res=get_gene_info(buffer,req_specie,cJSON_temp->valuestring);
+        if(res){
+            onError("Invaild Gene! ");
+            return -1;
+        }
     }else{
         strcpy(buffer,cJSON_GetObjectItem(request,"location")->valuestring);
-        for(i=0;buffer[i]!=':' && buffer[i]!=0;i++){
-            req_id[i]=buffer[i];
-        }req_id[i]=0;
-        sscanf(buffer+i+1,"%d..%d",&req_gene_start,&req_gene_end);
     }
+    for(i=0;buffer[i]!=':' && buffer[i]!=0;i++){
+        req_chromosome[i]=buffer[i];
+    }req_chromosome[i]=0;
+    sscanf(buffer+i+1,"%d..%d",&req_gene_start,&req_gene_end);
 
     cJSON_temp=cJSON_GetObjectItem(request,"region");
     if(cJSON_temp){
@@ -275,7 +283,12 @@ int main(int args,char *argv[]){
 
     my_bool mb=false;
     mysql_options(my_conn,MYSQL_SECURE_AUTH,&mb);
-    if(mysql_real_connect(my_conn,"YOUR-DB-ADDRESS","YOUR-DB-USERNAME","YOUR-DB-PASSWORD","YOUR-DB-NAME",YOUR-DB-PORT,NULL,0)){
+#ifdef  _WIN32
+    if(mysql_real_connect(my_conn,"127.0.0.1","root","zy19930108","CasDB",3306,NULL,0)){
+#endif
+#ifdef  __linux
+    if(mysql_real_connect(my_conn,"127.0.0.1","igem","uestc2014!","CasDB",3306,NULL,0)){
+#endif
     }else{
         sprintf(buffer,"database connect error\n$%s",mysql_error(my_conn));
         onError(buffer);
@@ -283,7 +296,7 @@ int main(int args,char *argv[]){
     }
 
     int res;
-    sprintf(buffer,"SELECT Sno FROM Table_specie WHERE SName=\"%s\";",req_specie);
+    sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
     if(res){
         onError("database select error1");
@@ -297,7 +310,7 @@ int main(int args,char *argv[]){
     }
     mysql_free_result(result);
 
-    sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_getsgrna WHERE SName='%s' and pam_PAM='%s';",req_specie,req_pam);
+    sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s';",req_specie,req_pam);
     res=mysql_query(my_conn,buffer);
     if(res){
         onError("database select error2");
@@ -308,7 +321,7 @@ int main(int args,char *argv[]){
     localres_count(localresult);
     mysql_free_result(result_t);
 
-    sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_getsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_id,req_gene_start,req_gene_end);
+    sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
         onError("database select error1");
@@ -339,7 +352,7 @@ int main(int args,char *argv[]){
             strcpy(lr.row[i],sql_row[i]);
         }
 
-        sprintf(buffer,"SELECT result_Sspe, result_Seff, result_count, result_offtarget FROM Table_sgRNA as r JOIN Table_result as t ON r.sgrna_ID=t.sgrna_ID WHERE result_ntlength=%d and r.sgrna_ID=%s and result_offtarget IS NOT NULL",req_restrict.ntlength,lr.row[6]);
+        sprintf(buffer,"SELECT result_Sspe, result_Seff, result_count, result_offtarget, result_gc FROM Table_sgRNA as r JOIN Table_result as t ON r.sgrna_ID=t.sgrna_ID WHERE result_ntlength=%d and r.sgrna_ID=%s and result_offtarget IS NOT NULL",req_restrict.ntlength,lr.row[6]);
         mos_pthread_mutex_lock(&mutex_mysql_conn);
         int res=mysql_query(my_conn,buffer);
         if(res){
@@ -352,6 +365,7 @@ int main(int args,char *argv[]){
             sscanf(sql_row[1],"%lf",&in_site[ini].Seff_nor);
             in_site[ini].score=req_r1*in_site[ini].Sspe_nor+(1-req_r1)*in_site[ini].Seff_nor;
             sscanf(sql_row[2],"%d",&in_site[ini].count);
+            sscanf(sql_row[4],"%lf",&in_site[ini].gc);
             in_site[ini].otj=cJSON_Parse(sql_row[3]);
         }else{
             mos_sem_wait(&sem_thread);
@@ -373,9 +387,9 @@ int main(int args,char *argv[]){
 
     cJSON_AddStringToObject(root,"specie",req_specie);
     cJSON_AddStringToObject(root,"gene",req_gene);
-    sprintf(buffer,"%s:%d..%d",req_id,req_gene_start,req_gene_end);
+    sprintf(buffer,"%s:%d..%d",req_chromosome,req_gene_start,req_gene_end);
     cJSON_AddStringToObject(root,"location",buffer);
-    cJSON_temp=getlineregion(get_Chr_No(req_specie,req_id),req_gene_start,req_gene_end);    //temporary change
+    cJSON_temp=getlineregion(get_Chr_No(req_specie,req_chromosome),req_gene_start,req_gene_end);    //temporary change
     if(cJSON_temp) cJSON_AddItemToObject(root,"region",cJSON_temp);
 
     vector<cJSON*> list;
@@ -384,7 +398,7 @@ int main(int args,char *argv[]){
         cJSON *ans=cJSON_CreateObject();
         sprintf(buffer,"#%d",i+1);
         cJSON_AddStringToObject(ans,"key",buffer);
-        sprintf(buffer,"%s%s",in_site[i].nt,in_site[i].pam);
+        sprintf(buffer,"%s%s",in_site[i].nt+(LEN-req_restrict.ntlength),in_site[i].pam);
         cJSON_AddStringToObject(ans,"grna",buffer);
         sprintf(buffer,"%s:%d",in_site[i].chromosome,in_site[i].index);
         cJSON_AddStringToObject(ans,"position",buffer);
@@ -394,6 +408,7 @@ int main(int args,char *argv[]){
         cJSON_AddStringToObject(ans,"strand",xs);
         cJSON_AddStringToObject(ans,"region",region_info[in_site[i].region]);
         cJSON_AddNumberToObject(ans,"total_score",(int)in_site[i].score);
+        cJSON_AddNumberToObject(ans,"GC",in_site[i].gc);
         cJSON_AddNumberToObject(ans,"Sspe",(int)(req_r1*in_site[i].Sspe_nor));
         cJSON_AddNumberToObject(ans,"Seff",(int)((1.0-req_r1)*in_site[i].Seff_nor));
         cJSON_AddNumberToObject(ans,"count",in_site[i].count);
@@ -405,7 +420,7 @@ int main(int args,char *argv[]){
 
 #ifdef  _WIN32
     fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
-    //printf("%d\n",strlen(NomoreSpace(argv[0])));
+    printf("%s\n",NomoreSpace(argv[0]));
 #endif // _WIN32
 #ifdef  __linux
     //printf("{\"status\":1,\"message\":\"System in maintenance\"}");

@@ -1,18 +1,28 @@
+/** @file
+@brief Get region infomation.
+@author Yi Zhao
+*/
 #include "main.h"
 
+///Local structure in getlineregion
 typedef struct node{
     int s,t;
     int type;
 }node;
 
-int nt;
-node ns[NODE_SIZE];
-
+/**
+@brief Compare to node by node.s, node.type.
+@see node
+*/
 bool cmp2(node a,node b){
     if(a.s==b.s) return a.type>b.type;
     return a.s<b.s;
 }
 
+/**
+@brief Get chromosome's Number(Chr_No) by specie's name and chromosome's name.
+@return -1 means failed. Otherwise return Chr_No.
+*/
 int get_Chr_No(const char *specie,const char *chr_name){
     int res;
     MYSQL_RES *result;
@@ -28,13 +38,24 @@ int get_Chr_No(const char *specie,const char *chr_name){
     return -1;
 }
 
+/**
+@brief Compare two type of region.
+@note priority:\nGENE 0\nUTR 1\nEXON 2\nINTRON 3\nINTERGENIC 4.
+@see REGION_EXON, REGION_INTRON, REGION_UTR, REGION_INTERGENIC, REGION_GENE
+*/
 int region_wmin(int a,int b){
     const int region_cw[]={0,2,3,1,4,0};
     return region_cw[a]<region_cw[b]?a:b;
 }
 
-int region_str[GENE_LEN];
+int nt;///<Local variables in getlineregion
+node ns[NODE_SIZE];///<Local variables in getlineregion
+int region_str[GENE_LEN];///<Local variables in getlineregion
 
+/**
+@brief Get region infomation for part of a chromosome.
+@return region infomation in json style.
+*/
 cJSON *getlineregion(int Chr_No,int start,int end){
     cJSON *root=cJSON_CreateArray();
     nt=0;
@@ -108,6 +129,11 @@ cJSON *getlineregion(int Chr_No,int start,int end){
     return root;
 }
 
+/**
+@brief Get region infomation of an sgRNA.
+@return region type of the sgRNA
+@see REGION_EXON, REGION_INTRON, REGION_UTR, REGION_INTERGENIC, REGION_GENE
+*/
 int getRegion(int sgrna_ID,int Chr_No,int sgrna_start,int sgrna_end){
     char buffer[1000];
     sprintf(buffer,"SELECT rtd_id FROM Table_sgRNA WHERE sgrna_ID=%d; ",sgrna_ID);

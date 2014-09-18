@@ -1,3 +1,9 @@
+/** @file
+@brief Head file for whole system.
+@author Yi Zhao
+@note
+Include all necessary files, most definitions and structure definitions, as well as global variables.
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -30,6 +36,10 @@ using namespace std;
 #define DCFILE_LEN 8000000
 #define NODE_SIZE 1000000
 #define LOCALROW_LEN 120
+#define MAX_SEM_THREAD 80
+
+#define RETUEN_ERROR -1
+#define RETURN_SUCCEED 0
 
 typedef struct site{
     char nt[LEN+1];
@@ -39,6 +49,7 @@ typedef struct site{
     char chromosome[100];
     int region;
     char strand;
+    double gc;
     double score,Sspe_nor,Seff_nor;
     vector <cJSON*> ot;
     cJSON *otj;
@@ -89,6 +100,8 @@ void create_thread_socre(localrow *lr,localrow row,int ini,int type,double r1);
 
 char *NomoreSpace(char *str);
 char *_NomoreSpace(char *str);
+
+int get_gene_info(char*,const char*,const char*);
 
 int get_Chr_No(const char*,const char*);
 cJSON *getlineregion(int,int,int);

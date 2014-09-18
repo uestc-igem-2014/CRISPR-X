@@ -1,3 +1,8 @@
+/** @file
+@brief Macros for compiling in both linux and windows.
+@author Yi Zhao
+@note Document are gathered in PREDEFINED __linux
+*/
 #ifdef  _WIN32
 #endif // _WIN32
 #ifdef  __linux

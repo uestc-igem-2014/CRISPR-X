@@ -72,10 +72,10 @@ if (isset($_GET['specie']) && ( isset($_GET['location']) || isset($_GET['gene'])
 	
 	$Prog_name = "./main";
 	$Prog = $Prog_name." '".$Prog_arg."'";
-	$last_line = exec($Prog_name, $output, $returnvalue);
+	$last_line = exec($Prog, $output, $returnvalue);
 
 	if($returnvalue!=0){
-	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='{\"status\":1,\"message\":\"run time error\",\"output\":\"'.$output[0].'\"}' WHERE request_ID=".$row[0].";", $conn);
+	    $result=mysql_db_query($mysql_database, "UPDATE user_request SET request='".$Prog_arg."', request_txt='{\"status\":1,\"message\":\"run time error\"}' WHERE request_ID=".$row[0].";", $conn);
 	    return ;
 	}
 
