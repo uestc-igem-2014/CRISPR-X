@@ -2,10 +2,10 @@ package com.example.crispr_x;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,29 +32,24 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SubmitActivity extends Activity {
 
-	public static final String URL = "http://192.168.10.100/iGEM2014/";
-
 	private EditText etPosTag; // postag编辑框
-	// private EditText etSaveURL; // URL编辑框
+	private EditText etSaveURL; // URL编辑框
 	private EditText etUserName; // username编辑框
 	private EditText etPassword; // password编辑框
 	private Spinner spTargetGenome; // targetgenome下拉框
@@ -65,27 +60,16 @@ public class SubmitActivity extends Activity {
 	private Button btnAdvanced; // advance按钮
 	private Button btnKnockout; // Knockout按钮
 	private Button btnInterference; // Interference按钮
-	private Button btnHelp; // help按钮
-	private Button btnLogin; // login按钮
-	private Button btnLogon; // logon按钮
+	private Button btnHelp; //help按钮
+	private Button btnLogin; //login按钮
+	private Button btnLogon; //logon按钮
 	private Button btnSubmit; // submit按钮
-	// private Button btnSaveURL; // URL按钮
-	private LinearLayout llLogin; // login布局
-	private ListView lvMenu;
-
-	private EditText etLogonUserName;
-	private EditText etLogonPassword;
-	private EditText etLogonPassword2;
-	private EditText etLogonEmail;
-	private Button btnLogonLogon;
+	private Button btnSaveURL; // URL按钮
 
 	private CheckBox cb10, cb12, cb12a, cb21, cb23, cb25; // RFC CheckBox
 	private RadioGroup group;
 	private TextView tvWeight;
 	private SeekBar sbWeight;
-	
-	private EditText etCheck; // check编辑框
-	private Button btnCheck; // check按钮
 
 	private String strType = "1";// 1=针对基因敲除，2=针对基因干扰，暂时默认1
 	private String strPosTag = null;// Position LocusTag字串
@@ -99,25 +83,19 @@ public class SubmitActivity extends Activity {
 	private String strRFC21 = "1";// RFC字串
 	private String strRFC23 = "1";// RFC字串
 	private String strRFC25 = "1";// RFC字串
+	private static String URL = "192.168.10.100/iGEM2014/";
 	private long timeInterval = 2 * 60 * 1000; // 登录超时时间
 	private int SCREEN_WIDTH, SCREEN_HEIGHT; // 屏幕高宽
 	private boolean tpFalg = true;
 	private boolean kiFalg = true;
 	private boolean isStatus = false;
-	private boolean isLogin = false;
 	private int weightR1 = 65;
-
-	private String token = null;
-	private String userName = null;
-	
 
 	HttpThreadGet myHttpThreadGet;
 	HttpThreadPost myHttpThreadPost;
 	static Handler handler;
 	ProgressDialog pDialog;
 	AlertDialog alertDialog;
-	SimpleAdapter listItemAdapter;
-	MD5 md5 = new MD5();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +113,7 @@ public class SubmitActivity extends Activity {
 		setContentView(R.layout.activity_submit);
 
 		etPosTag = (EditText) findViewById(R.id.editText_postag);
-		// etSaveURL = (EditText) findViewById(R.id.editText_url);
+		etSaveURL = (EditText) findViewById(R.id.editText_url);
 		etUserName = (EditText) findViewById(R.id.editText_username);
 		etPassword = (EditText) findViewById(R.id.editText_pswd);
 		spTargetGenome = (Spinner) findViewById(R.id.spinner_targetgenome);
@@ -144,73 +122,18 @@ public class SubmitActivity extends Activity {
 		btnPosition = (Button) findViewById(R.id.button_position);
 		btnDefault = (Button) findViewById(R.id.button_default);
 		btnAdvanced = (Button) findViewById(R.id.button_advanced);
-		// btnHelp = (Button) findViewById(R.id.button_help);
-		// btnSaveURL = (Button) findViewById(R.id.button_save);
+		//btnHelp = (Button) findViewById(R.id.button_help);
+		btnSaveURL = (Button) findViewById(R.id.button_save);
 		btnLogin = (Button) findViewById(R.id.button_login);
 		btnLogon = (Button) findViewById(R.id.button_logon);
 		btnSubmit = (Button) findViewById(R.id.button_submit);
 		btnKnockout = (Button) findViewById(R.id.button_knockout);
 		btnInterference = (Button) findViewById(R.id.button_interference);
-		// llLogin = (LinearLayout) findViewById(R.id.linearLayout_login);
-		lvMenu = (ListView) findViewById(R.id.listView_menu);
 
-		isLogin = new BackGroundService().getIsLogin();
-		token = new BackGroundService().getToken();
-		if(isLogin){
-			startService();
-			userName = new BackGroundService().getUserName();
-			etUserName.setVisibility(View.GONE);
-			etPassword.setVisibility(View.GONE);
-			btnLogin.setBackgroundResource(R.drawable.ic_launcher);
-			btnLogin.setText("");
-			btnLogon.setText("Logout");
-		} else {
-			stopService();
-		}
-		CreatList menuList = new CreatList();
-		List<Map<String, Object>> list = menuList.creatMenu();
-		// 生成适配器的Item和动态数组对应的元素
-		listItemAdapter = new SimpleAdapter(this, list, R.layout.menu_list,
-				new String[] { "icon", "menu" }, new int[] {
-						R.id.imageView_icon, R.id.textView_menu });
-
-		// 添加并且显示
-		lvMenu.setAdapter(listItemAdapter);
-
-		// 添加点击
-		lvMenu.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Intent intent;
-				switch (arg2) {
-				case 0:
-					
-					break;
-				case 1:
-					checkIdDialog("");
-					break;
-				case 2:
-					if(isLogin){
-						intent = new Intent(SubmitActivity.this,HistoryActivity.class); // 启动Activity
-						startActivity(intent);
-						finish();
-					} else {
-						Toast.makeText(getApplicationContext(), "Please login !",
-								Toast.LENGTH_SHORT).show();
-					}
-					break;
-				case 3:
-					intent = new Intent(SubmitActivity.this,WebActivity.class); // 启动Activity
-					startActivity(intent);
-					finish();
-					break;
-				case 4:
-					break;
-				case 5:
-					break;
-				}
-			}
-		});
+		Context ctx = SubmitActivity.this;
+		SharedPreferences info = ctx.getSharedPreferences("INFO", MODE_PRIVATE);
+		URL = info.getString("URL", "192.168.10.100/iGEM2014/"); // 更新
+		etSaveURL.setText(URL);
 
 		if (tpFalg) {
 			btnLocusTag.setBackgroundResource(R.drawable.deep);
@@ -219,7 +142,7 @@ public class SubmitActivity extends Activity {
 			btnLocusTag.setBackgroundResource(R.drawable.shallow);
 			btnPosition.setBackgroundResource(R.drawable.deep);
 		}
-
+		
 		if (kiFalg) {
 			btnKnockout.setBackgroundResource(R.drawable.deep);
 			btnInterference.setBackgroundResource(R.drawable.shallow);
@@ -227,6 +150,7 @@ public class SubmitActivity extends Activity {
 			btnKnockout.setBackgroundResource(R.drawable.shallow);
 			btnInterference.setBackgroundResource(R.drawable.deep);
 		}
+
 
 		/************************** msg接收 *************************/
 
@@ -238,51 +162,28 @@ public class SubmitActivity extends Activity {
 				case HttpThreadGet.MAIN_SUBMIT:
 					pDialog.dismiss();
 					timeHandler.removeCallbacks(runnable1);
-					System.out.println("进入MAIN_SUBMIT");
+					System.out.println("进入hanlder");
 					result = (String) msg.obj;
-					checkIdDialog(result);
-					startService();
-					//debugDialog(result);
-					//System.out.println(result);
+
+					if (getStatus(result)) {
+						saveMessage(result);
+						Intent intent = new Intent(SubmitActivity.this,
+								ResultActivity.class); // 启动Activity
+						startActivity(intent);
+					} else {
+						debugDialog(getErrorMessage(result));
+					}
+
+
+					// debugDialog(result);
+					System.out.println(result);
 					break;
 				case HttpThreadPost.LOGIN:
 					pDialog.dismiss();
 					timeHandler.removeCallbacks(runnable1);
-					System.out.println("进入LOGIN");
+					System.out.println("进入hanlder");
 					result = (String) msg.obj;
-					//System.out.println(result);
-					getLoginMessage(result);
-					break;
-				case HttpThreadPost.LOGON:
-					pDialog.dismiss();
-					timeHandler.removeCallbacks(runnable1);
-					System.out.println("进入LOGON");
-					result = (String) msg.obj;
-					//System.out.println(result);
-					getLogonMessage(result);
-					break;
-				case HttpThreadPost.LOGOUT:
-					pDialog.dismiss();
-					timeHandler.removeCallbacks(runnable1);
-					System.out.println("进入LOGOUT");
-					result = (String) msg.obj;
-					//System.out.println(result);
-					getLogoutMessage(result);
-					break;
-				case HttpThreadPost.CHECKID:
-					pDialog.dismiss();
-					timeHandler.removeCallbacks(runnable1);
-					System.out.println("进入CHECKID");
-					result = (String) msg.obj;
-					startService();
-
-					if (getStatus(result)) {
-						saveMessage(result);
-						Intent intent = new Intent(SubmitActivity.this,ResultActivity.class); // 启动Activity
-						startActivity(intent);
-					} else {
-						debugDialog(result);
-					}
+					System.out.println(result);
 					break;
 				default:
 					break;
@@ -301,7 +202,7 @@ public class SubmitActivity extends Activity {
 		List<Dict> dict_tg = new ArrayList<Dict>();
 		dict_tg.add(new Dict("0", "Target Genome"));
 		dict_tg.add(new Dict("E.coli", "E.coli"));
-		dict_tg.add(new Dict("Saccharomyces-cerevisiae", "Saccharomyces"));
+		dict_tg.add(new Dict("Saccharomyces_cerevisiae", "Saccharomyces"));
 		ArrayAdapter<Dict> adapter_tg = new ArrayAdapter<Dict>(this,
 				R.layout.my_spinner, dict_tg);
 		spTargetGenome.setAdapter(adapter_tg);
@@ -349,7 +250,7 @@ public class SubmitActivity extends Activity {
 
 		btnInterference.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				kiFalg = false;
 				strType = "2";
 				if (kiFalg) {
@@ -366,7 +267,7 @@ public class SubmitActivity extends Activity {
 
 		btnKnockout.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				kiFalg = true;
 				strType = "1";
 				if (kiFalg) {
@@ -378,12 +279,12 @@ public class SubmitActivity extends Activity {
 				}
 			}
 		});
-
+		
 		/************************* position按钮 **************************/
 
 		btnPosition.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				tpFalg = false;
 				if (tpFalg) {
 					btnLocusTag.setBackgroundResource(R.drawable.deep);
@@ -401,7 +302,7 @@ public class SubmitActivity extends Activity {
 
 		btnLocusTag.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				tpFalg = true;
 				if (tpFalg) {
 					btnLocusTag.setBackgroundResource(R.drawable.deep);
@@ -419,6 +320,7 @@ public class SubmitActivity extends Activity {
 
 		btnAdvanced.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				// TODO Auto-generated method stub
 
 				advancedDialog();
 			}
@@ -428,41 +330,41 @@ public class SubmitActivity extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setBackgroundResource(R.drawable.deep);
+					v.setBackgroundResource(R.drawable.ad1);
 					// advancedDialog();
 				} else {
-					v.setBackgroundResource(R.drawable.shallow);
+					v.setBackgroundResource(R.drawable.adv);
 				}
 				return false;
 			}
 		});
-
-		// /************************* 帮助信息按钮 **************************/
-		//
-		// btnHelp.setOnClickListener(new OnClickListener() {
-		// public void onClick(View v) {
-		//
-		//
-		// }
-		// });
-		// btnHelp.setOnTouchListener(new Button.OnTouchListener() {
-		// @Override
-		// public boolean onTouch(View v, MotionEvent event) {
-		// if (event.getAction() == MotionEvent.ACTION_DOWN) {
-		// v.setBackgroundResource(R.drawable.help1);
-		// // advancedDialog();
-		// } else {
-		// v.setBackgroundResource(R.drawable.help);
-		// }
-		// return false;
-		// }
-		// });
-
+		
+//		/************************* 帮助信息按钮 **************************/
+//		
+//		btnHelp.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//		});
+//		btnHelp.setOnTouchListener(new Button.OnTouchListener() {
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//					v.setBackgroundResource(R.drawable.help1);
+//					// advancedDialog();
+//				} else {
+//					v.setBackgroundResource(R.drawable.help);
+//				}
+//				return false;
+//			}
+//		});
+		
 		/************************* 填写默认信息按钮 **************************/
 
 		btnDefault.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				etPosTag.setText("NC_001134-chromosome2:200..2873");
 				spTargetGenome.setSelection(2, true);
 				spPam.setSelection(1, true);
@@ -482,67 +384,54 @@ public class SubmitActivity extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setBackgroundResource(R.drawable.deep);
+					v.setBackgroundResource(R.drawable.def1);
 				} else {
-					v.setBackgroundResource(R.drawable.shallow);
+					v.setBackgroundResource(R.drawable.def);
 				}
 				return false;
 			}
 		});
 
-		// /************************* 保存URL按钮 **************************/
-		//
-		// btnSaveURL.setOnClickListener(new OnClickListener() {
-		// public void onClick(View v) {
-		//
-		// Context ctx = SubmitActivity.this;
-		// SharedPreferences info = ctx.getSharedPreferences("INFO",
-		// MODE_PRIVATE);
-		// Editor editor = info.edit();
-		// editor.putString("URL", etSaveURL.getText().toString());
-		// editor.commit();
-		// URL = info.getString("URL", "null"); // 更新
-		// Toast.makeText(SubmitActivity.this, "保存成功 IP:" + URL,
-		// Toast.LENGTH_SHORT).show();
-		// }
-		//
-		// });
+		/************************* 保存URL按钮 **************************/
+
+		btnSaveURL.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Context ctx = SubmitActivity.this;
+				SharedPreferences info = ctx.getSharedPreferences("INFO",
+						MODE_PRIVATE);
+				Editor editor = info.edit();
+				editor.putString("URL", etSaveURL.getText().toString());
+				editor.commit();
+				URL = info.getString("URL", "null"); // 更新
+				Toast.makeText(SubmitActivity.this, "保存成功 IP:" + URL,
+						Toast.LENGTH_SHORT).show();
+			}
+
+		});
 
 		/************************* 提交登陆按钮 **************************/
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				// TODO Auto-generated method stub
 
-				if (isLogin) {
-
-				} else {
-					if (etUserName.getText().toString().isEmpty()
-							|| etPassword.getText().toString().isEmpty()) {
-						Toast.makeText(getApplicationContext(),
-								"Please fill in the user information",
-								Toast.LENGTH_SHORT).show();
-						return;
-					}
-					;
-
-					String pswd = null;
-					pswd = MD5.getMd5Value(etPassword.getText().toString()
-							.trim());
-					userName = etUserName.getText().toString();
-					timeHandler.postDelayed(runnable1, timeInterval);
-					List<NameValuePair> params = new ArrayList<NameValuePair>();
-					params.add(new BasicNameValuePair("name", userName));
-					params.add(new BasicNameValuePair("pswd", pswd));
-
-					System.out.println(etUserName.getText().toString());
-					System.out.println(pswd);
-
-					myHttpThreadPost = new HttpThreadPost(URL + "login/",
-							params, HttpThreadPost.LOGIN, handler);
-					myHttpThreadPost.start();
-					pDialog.setMessage("Login...");
-					pDialog.show();
+				if (etUserName.getText().toString().isEmpty()
+						|| etPassword.getText().toString().isEmpty()) {
+					Toast.makeText(getApplicationContext(),
+							"Please fill in the user information",
+							Toast.LENGTH_SHORT).show();
+					return;
 				}
+				;
+				timeHandler.postDelayed(runnable1, timeInterval);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("name", etUserName.getText().toString().trim()));
+				params.add(new BasicNameValuePair("pswd", etPassword.getText().toString().trim()));
+				myHttpThreadPost = new HttpThreadPost(URL+"login", params, HttpThreadPost.LOGIN, handler);
+				myHttpThreadPost.start();
+				pDialog.setMessage("Login...");
+				pDialog.show();
 			}
 		});
 
@@ -557,28 +446,14 @@ public class SubmitActivity extends Activity {
 				return false;
 			}
 		});
-
+		
 		/************************* 提交注册按钮 **************************/
 
 		btnLogon.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
-				if (isLogin) {
-					timeHandler.postDelayed(runnable1, timeInterval);
-					List<NameValuePair> params = new ArrayList<NameValuePair>();
-					params.add(new BasicNameValuePair("token", token));
-					System.out.println(token);
-
-					myHttpThreadPost = new HttpThreadPost(URL
-							+ "login/logout.php", params,
-							HttpThreadPost.LOGOUT, handler);
-					myHttpThreadPost.start();
-					pDialog.setMessage("Logout...");
-					pDialog.show();
-				} else {
-					logonDialog();
-				}
-
+				// TODO Auto-generated method stub
+				logonDialog();
+				
 			}
 		});
 
@@ -593,11 +468,12 @@ public class SubmitActivity extends Activity {
 				return false;
 			}
 		});
-
+		
 		/************************* 提交主程序按钮 **************************/
 
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				// TODO Auto-generated method stub
 
 				strPosTag = etPosTag.getText().toString();
 				strTargetGenome = ((Dict) spTargetGenome.getSelectedItem())
@@ -613,7 +489,7 @@ public class SubmitActivity extends Activity {
 				}
 				;
 				timeHandler.postDelayed(runnable1, timeInterval);
-				MainSubmitPost(URL + "getMain.php");
+				MainSubmitPost("http://" + URL+"getMain.php");
 			}
 		});
 
@@ -621,9 +497,9 @@ public class SubmitActivity extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setBackgroundResource(R.drawable.deep);
+					v.setBackgroundResource(R.drawable.sub1);
 				} else {
-					v.setBackgroundResource(R.drawable.shallow);
+					v.setBackgroundResource(R.drawable.sub);
 				}
 				return false;
 			}
@@ -636,20 +512,15 @@ public class SubmitActivity extends Activity {
 	private void MainSubmitPost(String URL) {
 		System.out.println("进入MainSubmitPost");
 		// 添加参数
-		String strRequest = "?specie=" + strTargetGenome + "&pam=" + strPam
-				+ "&type=" + strType + "&rfc=" + strRFC + "&r1="
-				+ String.valueOf((double) weightR1 / 100.0);
+		String strRequest = "?specie=" + strTargetGenome + "&pam=" + strPam + "&type=" + strType 
+				+ "&rfc=" + strRFC + "&r1=" + String.valueOf(weightR1);
 		if (tpFalg) {
 			strRequest = strRequest + "&gene=" + strPosTag;
 		} else {
 			strRequest = strRequest + "&location=" + strPosTag;
 		}
-		if (isLogin) {
-			strRequest = strRequest + "&token=" + token;
-		}
 		URL = URL + strRequest;
-		myHttpThreadGet = new HttpThreadGet(URL, HttpThreadGet.MAIN_SUBMIT,
-				handler);
+		myHttpThreadGet = new HttpThreadGet(URL, HttpThreadGet.MAIN_SUBMIT, handler);
 		myHttpThreadGet.start();
 		pDialog.setMessage("Program is running...");
 		pDialog.show();
@@ -673,13 +544,14 @@ public class SubmitActivity extends Activity {
 	protected void debugDialog(String message) {
 		AlertDialog.Builder builder = new Builder(SubmitActivity.this);
 		builder.setMessage(message);
-		builder.setTitle("ErrorInfo");
+		builder.setTitle("DebugInfo");
 		builder.setCancelable(true);
 		builder.create().show();
-
+		
+		
 	}
 
-	/************************** 注册对话框 *************************/
+	/************************** 注册对话框  *************************/
 
 	protected void logonDialog() {
 		LayoutInflater inflater = LayoutInflater.from(this);
@@ -687,30 +559,22 @@ public class SubmitActivity extends Activity {
 		DialogView = inflater.inflate(R.layout.logon_dialog, null);
 		AlertDialog.Builder builder = new Builder(SubmitActivity.this);
 		builder.setView(DialogView);
-
-		etLogonUserName = (EditText) DialogView
-				.findViewById(R.id.editText_logon_username);
-		etLogonPassword = (EditText) DialogView
-				.findViewById(R.id.editText_logon_password);
-		etLogonPassword2 = (EditText) DialogView
-				.findViewById(R.id.editText_logon_password2);
-		etLogonEmail = (EditText) DialogView
-				.findViewById(R.id.editText_logon_email);
-		btnLogonLogon = (Button) DialogView
-				.findViewById(R.id.button_logon_logon);
+		
+		final EditText etLogonUserName = (EditText) DialogView.findViewById(R.id.editText_logon_username);
+		final EditText etLogonPassword = (EditText) DialogView.findViewById(R.id.editText_logon_password);
+		final EditText etLogonPassword2 = (EditText) DialogView.findViewById(R.id.editText_logon_password2);
+		final EditText etLogonEmail = (EditText) DialogView.findViewById(R.id.editText_logon_email);
+		final Button btnLogonLogon = (Button) DialogView.findViewById(R.id.button_logon_logon);
 
 		btnLogonLogon.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				// TODO Auto-generated method stub
 				if (etLogonUserName.getText().toString().isEmpty()
-						|| etLogonPassword.getText().toString().isEmpty()
-						|| etLogonPassword2.getText().toString().isEmpty()
-						|| etLogonEmail.getText().toString().isEmpty()) {
+						|| etLogonPassword.getText().toString().isEmpty()|| etLogonPassword2.getText().toString().isEmpty()|| etLogonEmail.getText().toString().isEmpty()) {
 					Toast.makeText(getApplicationContext(),
 							"Please fill in the user information",
 							Toast.LENGTH_SHORT).show();
-					if (!(etLogonPassword.getText().toString()
-							.equals(etLogonPassword2.getText().toString()))) {
+					if(! (etLogonPassword.getText().toString().matches(etLogonPassword2.getText().toString()))) {
 						Toast.makeText(getApplicationContext(),
 								"Please unified the password",
 								Toast.LENGTH_SHORT).show();
@@ -718,43 +582,19 @@ public class SubmitActivity extends Activity {
 					return;
 				}
 				;
-
-				String pswd = null;
-				pswd = MD5.getMd5Value(etLogonPassword.getText().toString()
-						.trim());
 				timeHandler.postDelayed(runnable1, timeInterval);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("name", etLogonUserName
-						.getText().toString().trim()));
-				params.add(new BasicNameValuePair("pswd", pswd));
-				params.add(new BasicNameValuePair("email", etLogonEmail
-						.getText().toString().trim()));
-				System.out.println(pswd);
-				myHttpThreadPost = new HttpThreadPost(URL + "login/signup.php",
-						params, HttpThreadPost.LOGON, handler);
+				params.add(new BasicNameValuePair("name", etLogonUserName.getText().toString().trim()));
+				params.add(new BasicNameValuePair("pswd", etLogonPassword.getText().toString().trim()));
+				params.add(new BasicNameValuePair("email", etLogonEmail.getText().toString().trim()));
+				myHttpThreadPost = new HttpThreadPost(URL+"login/signup.php", params, HttpThreadPost.LOGON, handler);
 				myHttpThreadPost.start();
 				pDialog.setMessage("LogOn...");
 				pDialog.show();
 			}
 
 		});
-		btnLogonLogon.setOnTouchListener(new Button.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setBackgroundResource(R.drawable.deep);
-				} else {
-					v.setBackgroundResource(R.drawable.shallow);
-				}
-				return false;
-			}
-		});
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
+		
 		alertDialog = builder.create();
 		alertDialog.show();
 		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
@@ -762,7 +602,7 @@ public class SubmitActivity extends Activity {
 		lp.height = (int) (SCREEN_HEIGHT * 0.9);// 定义高度
 		alertDialog.getWindow().setAttributes(lp);
 	}
-
+	
 	/************************** 高级选项框 *************************/
 
 	protected void advancedDialog() {
@@ -778,36 +618,35 @@ public class SubmitActivity extends Activity {
 		cb21 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc21);
 		cb23 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc23);
 		cb25 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc25);
-		RadioGroup group = (RadioGroup) DialogView
-				.findViewById(R.id.radioGroup1);
+		RadioGroup group = (RadioGroup) DialogView.findViewById(R.id.radioGroup1);
 		tvWeight = (TextView) DialogView.findViewById(R.id.textView_weightT);
 		sbWeight = (SeekBar) DialogView.findViewById(R.id.seekBar_weight);
 
 		sbWeight.setMax(100);
-		tvWeight.setText("Specificity " + String.valueOf(weightR1) + "  Active"
-				+ String.valueOf(100 - weightR1));
+		tvWeight.setText("Specificity " + String.valueOf(weightR1) + "  Active" + String.valueOf(100-weightR1));
 		sbWeight.setProgress(weightR1);
-
-		sbWeight.setOnSeekBarChangeListener(new OnSeekBarChangeListener() // 调音监听器
-		{
-			public void onProgressChanged(SeekBar arg0, int progress,
-					boolean fromUser) {
-				weightR1 = sbWeight.getProgress();
-				tvWeight.setText("Specificity " + String.valueOf(weightR1)
-						+ "  Active" + String.valueOf(100 - weightR1));
-			}
+		
+		sbWeight.setOnSeekBarChangeListener(new OnSeekBarChangeListener() //调音监听器  
+        {  
+            public void onProgressChanged(SeekBar arg0,int progress,boolean fromUser)  
+            {  
+            	weightR1 = sbWeight.getProgress();
+            	tvWeight.setText("Specificity " + String.valueOf(weightR1) + "  Active" + String.valueOf(100-weightR1));
+            }
 
 			@Override
 			public void onStartTrackingTouch(SeekBar arg0) {
-
+				// TODO Auto-generated method stub
+				
 			}
 
 			@Override
 			public void onStopTrackingTouch(SeekBar arg0) {
-
+				// TODO Auto-generated method stub
+				
 			}
-		});
-
+        });
+		
 		if (strRFC10.equals("1")) {
 			cb10.setChecked(true);
 		} else {
@@ -856,6 +695,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
 				if (cb10.isChecked()) {
 					strRFC10 = "1";
 				} else {
@@ -868,7 +708,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-
+				// TODO Auto-generated method stub
 				if (cb12.isChecked()) {
 					strRFC12 = "1";
 				} else {
@@ -881,7 +721,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-
+				// TODO Auto-generated method stub
 				if (cb12a.isChecked()) {
 					strRFC12a = "1";
 				} else {
@@ -894,7 +734,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-
+				// TODO Auto-generated method stub
 				if (cb21.isChecked()) {
 					strRFC21 = "1";
 				} else {
@@ -907,7 +747,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-
+				// TODO Auto-generated method stub
 				if (cb23.isChecked()) {
 					strRFC23 = "1";
 				} else {
@@ -920,7 +760,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-
+				// TODO Auto-generated method stub
 				if (cb25.isChecked()) {
 					strRFC25 = "1";
 				} else {
@@ -934,7 +774,7 @@ public class SubmitActivity extends Activity {
 
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
-
+				// TODO Auto-generated method stub
 				switch (arg1) {
 				case R.id.radio_20:
 					strCount = "20";
@@ -955,12 +795,12 @@ public class SubmitActivity extends Activity {
 
 		});
 
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
+		builder.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						alertDialog.dismiss();
+					}
+				});
 
 		alertDialog = builder.create();
 		alertDialog.show();
@@ -971,76 +811,14 @@ public class SubmitActivity extends Activity {
 
 	}
 
-	/************************** 查询对话框 *************************/
-
-	protected void checkIdDialog(String checkid) {
-		LayoutInflater inflater = LayoutInflater.from(this);
-		View DialogView = null;
-		DialogView = inflater.inflate(R.layout.checkid_dialog, null);
-		AlertDialog.Builder builder = new Builder(SubmitActivity.this);
-		builder.setView(DialogView);
-
-		etCheck = (EditText) DialogView
-				.findViewById(R.id.editText_checkid);
-		
-		btnCheck = (Button) DialogView
-				.findViewById(R.id.button_check);
-
-		etCheck.setText(checkid);
-		
-		btnCheck.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-
-				if (etCheck.getText().toString().isEmpty()) {
-					Toast.makeText(getApplicationContext(),
-							"Please fill in the ID",
-							Toast.LENGTH_SHORT).show();
-					return;
-					}
-				stopService();
-
-				timeHandler.postDelayed(runnable1, timeInterval);
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("id", etCheck.getText().toString()));
-				myHttpThreadPost = new HttpThreadPost(SubmitActivity.URL + "getResult.php",
-						params, HttpThreadPost.CHECKID, handler);
-				myHttpThreadPost.start();
-				pDialog.setMessage("Check Result...");
-				pDialog.show();
-			}
-		});
-		btnCheck.setOnTouchListener(new Button.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setBackgroundResource(R.drawable.deep);
-				} else {
-					v.setBackgroundResource(R.drawable.shallow);
-				}
-				return false;
-			}
-		});
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
-		alertDialog = builder.create();
-		alertDialog.show();
-		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-		lp.width = (int) (SCREEN_WIDTH * 0.8);// 定义宽度
-		lp.height = (int) (SCREEN_HEIGHT * 0.8);// 定义高度
-		alertDialog.getWindow().setAttributes(lp);
-	}
-		
 	/************************** 获取结果状态 *************************/
-
-	public boolean getStatus(String json) {
+	
+	private boolean getStatus(String json) {
 		String strStatus = "";
 		try {
 			strStatus = new JSONObject(json).getString("status");
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (strStatus.equals("0")) {
@@ -1050,21 +828,21 @@ public class SubmitActivity extends Activity {
 	}
 
 	/************************** 获取错误信息 *************************/
-
-	public String getErrorMessage(String json) {
+	
+	private String getErrorMessage(String json) {
 		String errorMessage = null;
 		try {
 			errorMessage = new JSONObject(json).getString("message");
 		} catch (JSONException e) {
-
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return errorMessage;
 	}
 
 	/************************** 保存参数信息 *************************/
-
-	public void saveMessage(String json) {
+	
+	private void saveMessage(String json) {
 		String saveMessage = null;
 		String saveSPECIE = null;
 		String saveGENE = null;
@@ -1077,7 +855,7 @@ public class SubmitActivity extends Activity {
 			saveLOCATION = jsonObj.getString("location");
 			saveREGION = jsonObj.getString("region");
 		} catch (JSONException e) {
-
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// 保存json与一些信息
@@ -1090,67 +868,6 @@ public class SubmitActivity extends Activity {
 		editor.putString("REGION", saveREGION);
 		editor.putString("JSON", json);
 		editor.commit();
-	}
-
-	/************************** 获取登录信息 *************************/
-
-	private void getLoginMessage(String message) {
-		if (message.trim().equals("-")) {
-			Toast.makeText(getApplicationContext(), "Login error",
-					Toast.LENGTH_SHORT).show();
-		} else {
-			token = message; // 获取密钥
-			Toast.makeText(getApplicationContext(), "Login succeed",
-					Toast.LENGTH_SHORT).show();
-			etUserName.setVisibility(View.GONE);
-			etPassword.setVisibility(View.GONE);
-			btnLogin.setBackgroundResource(R.drawable.ic_launcher);
-			btnLogin.setText("");
-			btnLogon.setText("Logout");
-			isLogin = true;
-			new BackGroundService(userName, token, true);
-			startService();
-		}
-	}
-
-	/************************** 获取退出登录信息 *************************/
-
-	private void getLogoutMessage(String message) {
-
-		Toast.makeText(getApplicationContext(), "Logout succeed",
-				Toast.LENGTH_SHORT).show();
-		etUserName.setVisibility(View.VISIBLE);
-		etPassword.setVisibility(View.VISIBLE);
-		btnLogin.setBackgroundResource(R.drawable.shallow);
-		btnLogin.setText("Login");
-		btnLogon.setText("Logon");
-		isLogin = false;
-		new BackGroundService(userName,token, false);
-		stopService();
-	}
-
-	/************************** 获取注册信息 *************************/
-
-	private void getLogonMessage(String message) {
-		if (message.equals("Sign In Succeed")) {
-			Toast.makeText(getApplicationContext(), "Logon succeed",
-					Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(getApplicationContext(), "Logon fail:" + message,
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	// 启动服务
-	private void startService() {
-		Intent intent = new Intent(this, BackGroundService.class);
-		startService(intent);
-	}
-
-	// 关闭服务
-	private void stopService() {
-		Intent intent = new Intent(this, BackGroundService.class);
-		stopService(intent);
 	}
 
 	@Override
@@ -1188,7 +905,6 @@ public class SubmitActivity extends Activity {
 		if (null != pDialog) {
 			pDialog.dismiss();
 		}
-		//stopService();
 		// //销毁线程通信
 		// myHttpThread.interrupt();
 	}

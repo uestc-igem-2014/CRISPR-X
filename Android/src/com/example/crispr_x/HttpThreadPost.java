@@ -11,9 +11,6 @@ import android.os.Message;
 public class HttpThreadPost extends Thread {
 	public static final int LOGIN = 1; // 用户登陆
 	public static final int LOGON = 2; // 用户注册
-	public static final int LOGOUT = 3; // 退出登录
-	public static final int HISTORY = 4; // 获取历史
-	public static final int CHECKID = 5; // 查询ID
 
 	List<NameValuePair> params;
 	String httpUrl;
@@ -39,15 +36,6 @@ public class HttpThreadPost extends Thread {
 			break;
 		case LOGON: // 用户注册
 			msg.what = LOGON;
-			break;
-		case LOGOUT: // 退出登录
-			msg.what = LOGOUT;
-			break;
-		case HISTORY: // 获取历史
-			msg.what = HISTORY;
-			break;
-		case CHECKID: // 查询ID
-			msg.what = CHECKID;
 			break;
 		default:
 			break;
