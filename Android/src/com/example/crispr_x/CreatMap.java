@@ -22,14 +22,11 @@ public class CreatMap {
 	
 	public Bitmap canvasParse(String allPos, String selcetPos, String dir, int SCREEN_WIDTH) {
 		Bitmap chromeMap = Bitmap.createBitmap( SCREEN_WIDTH, 80, Config.ARGB_8888 );
-		String chromeID;
 		int startPos, endPos;
 		int len;		//总序列长度,单位像素的序列长度
 		float lenUnit;
-		int tempLen;
 		int onPos;
 		String x[]=allPos.split("[:..]");
-		chromeID = x[0];		//染色体编号
 		startPos = Integer.parseInt(x[1]);		//开始位点
 		endPos = Integer.parseInt(x[3]);		//终止位点
 		

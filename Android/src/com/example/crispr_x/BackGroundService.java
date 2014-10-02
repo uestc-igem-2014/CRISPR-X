@@ -1,11 +1,7 @@
 package com.example.crispr_x;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -41,9 +37,9 @@ public class BackGroundService extends Service {
 	NotificationCompat.Builder mBuilder;
 
 	BackGroundService(String muser, String mytoken, boolean islogin) {
-		this.user = muser;
-		this.token = mytoken;
-		this.isLogin = islogin;
+		BackGroundService.user = muser;
+		BackGroundService.token = mytoken;
+		BackGroundService.isLogin = islogin;
 	}
 
 	public String getUserName (){

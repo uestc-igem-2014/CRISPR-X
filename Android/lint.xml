@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="ClickableViewAccessibility" severity="ignore" />
+    <issue id="ContentDescription">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
+    <issue id="DisableBaselineAlignment" severity="ignore">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
+    <issue id="HandlerLeak" severity="ignore" />
+    <issue id="HardcodedText" severity="ignore" />
+    <issue id="InefficientWeight">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
+    <issue id="InflateParams" severity="ignore" />
     <issue id="InlinedApi" severity="ignore" />
     <issue id="NewApi" severity="ignore" />
+    <issue id="ScrollViewSize">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
     <issue id="SetJavaScriptEnabled" severity="ignore" />
+    <issue id="UselessLeaf" severity="ignore">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
+    <issue id="UselessParent" severity="ignore">
+        <ignore path="res/layout/activity_about.xml" />
+    </issue>
 </lint>
