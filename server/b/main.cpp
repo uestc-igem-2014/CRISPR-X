@@ -284,10 +284,10 @@ int main(int args,char *argv[]){
     my_bool mb=false;
     mysql_options(my_conn,MYSQL_SECURE_AUTH,&mb);
 #ifdef  _WIN32
-    if(mysql_real_connect(my_conn,"127.0.0.1","root","zy19930108","CasDB",3306,NULL,0)){
+    if(mysql_real_connect(my_conn,MYSQL_CONF_HOST,MYSQL_CONF_USERNAME,"",MYSQL_CONF_DB,3306,NULL,0)){
 #endif
 #ifdef  __linux
-    if(mysql_real_connect(my_conn,"127.0.0.1","igem","uestc2014!","CasDB",3306,NULL,0)){
+    if(mysql_real_connect(my_conn,MYSQL_CONF_HOST,MYSQL_CONF_USERNAME,MYSQL_CONF_PASSWD,MYSQL_CONF_DB,3306,NULL,0)){
 #endif
     }else{
         sprintf(buffer,"database connect error\n$%s",mysql_error(my_conn));

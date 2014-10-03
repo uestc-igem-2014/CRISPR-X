@@ -41,6 +41,11 @@ using namespace std;
 #define RETUEN_ERROR -1
 #define RETURN_SUCCEED 0
 
+#define MYSQL_CONF_HOST "127.0.0.1"
+#define MYSQL_CONF_USERNAME "root"
+#define MYSQL_CONF_DB "CasDB"
+#define MYSQL_CONF_PASSWD ""
+
 typedef struct site{
     char nt[LEN+1];
     char pam[PAM_LEN+1];
