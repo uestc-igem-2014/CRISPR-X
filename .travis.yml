@@ -27,6 +27,6 @@ script:
   # automated test
   - make test
 after_success:
-  - coveralls --exclude cJSON --gcov-options '\-lp' -r b/
+  - coveralls --exclude cJSON --gcov-options '../main'
 os:
  - linux
