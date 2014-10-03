@@ -1,9 +1,20 @@
 language: cpp
+services: mysql
 compiler:
   - gcc
-  - clang
 before_script:
-  - cd server
+  # install cpp-coveralls help submit test coverage to coveralls
+  - sudo pip install cpp-coveralls
+  # setup CasDB
+  - mysql -e "CREATE database CasDB;" -u root
+  - cd server/CasDB
+  - tar -zxvf CasDB.tar.gz
+  - mysql -u root CasDB < CasDB_part1.sql
+  - mysql -u root CasDB < CasDB_part2.sql
+  - mysql -u root CasDB < CasDB_part3.sql
+  - mysql -u root CasDB < CasDB_part4.sql
+  # setup MySQL driver
+  - cd ../
   - wget http://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.5-linux-glibc2.5-x86_64.tar.gz
   - tar -zxvf mysql-connector-c-6.1.5-linux-glibc2.5-x86_64.tar.gz
   - mv mysql-connector-c-6.1.5-linux-glibc2.5-x86_64 mysql-connector
@@ -12,7 +23,9 @@ script:
   - make
   - cd ../b 
   - make
-
+  # automated test
+  - make test
+after_success:
+  - coveralls --exclude cJSON --gcov-options '\-lp' -r b/
 os:
  - linux
- - osx
