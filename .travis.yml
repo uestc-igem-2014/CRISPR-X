@@ -13,8 +13,7 @@ before_script:
   - mysql -u root CasDB < CasDB_part2.sql
   - mysql -u root CasDB < CasDB_part3.sql
   - mysql -u root CasDB < CasDB_part4.sql
-  - mysql -e "CREATE VIEW `view_allsgrna` AS select `s`.`SName` AS `SName`,`c`.`Chr_Name` AS `Chr_Name`,`c`.`Chr_No` AS `Chr_No`,`r`.`sgrna_ID` AS `sgrna_ID`,`r`.`sgrna_start` AS `sgrna_start`,`r`.`sgrna_end` AS `sgrna_end`,`r`.`sgrna_strand` AS `sgrna_strand`,`r`.`sgrna_seq` AS `sgrna_seq`,`r`.`sgrna_PAM` AS `sgrna_PAM`,`p`.`pam_PAM` AS `pam_PAM` from (((`Table_sgRNA` `r` join `Table_chromosome` `c` on((`c`.`Chr_No` = `r`.`Chr_No`))) join `Table_Specie` `s` on((`s`.`Sno` = `c`.`Sno`))) join `Table_PAM` `p` on((`p`.`pam_id` = `r`.`pam_id`)))" -u root CasDB
-  - mysql -e "CREATE VIEW `view_getsgrna` AS select `s`.`SName` AS `SName`,`c`.`Chr_Name` AS `Chr_Name`,`c`.`Chr_No` AS `Chr_No`,`r`.`sgrna_ID` AS `sgrna_ID`,`r`.`sgrna_start` AS `sgrna_start`,`r`.`sgrna_end` AS `sgrna_end`,`r`.`sgrna_strand` AS `sgrna_strand`,`r`.`sgrna_seq` AS `sgrna_seq`,`r`.`sgrna_PAM` AS `sgrna_PAM`,`p`.`pam_PAM` AS `pam_PAM`,`t`.`result_ntlength` AS `result_ntlength`,`t`.`result_Sspe` AS `result_Sspe`,`t`.`result_Seff` AS `result_Seff`,`t`.`result_offtarget` AS `result_offtarget` from ((((`Table_sgRNA` `r` left join `Table_result` `t` on((`r`.`sgrna_ID` = `t`.`sgrna_ID`))) join `Table_chromosome` `c` on((`c`.`Chr_No` = `r`.`Chr_No`))) join `Table_Specie` `s` on((`s`.`Sno` = `c`.`Sno`))) join `Table_PAM` `p` on((`p`.`pam_id` = `r`.`pam_id`)))" -u root CasDB
+  - mysql -u root CasDB < views.sql
   # setup MySQL driver
   - cd ../
   - wget http://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.5-linux-glibc2.5-x86_64.tar.gz
