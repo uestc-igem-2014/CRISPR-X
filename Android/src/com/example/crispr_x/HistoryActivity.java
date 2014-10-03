@@ -46,9 +46,9 @@ public class HistoryActivity extends Activity {
 
 	private long timeInterval = 60 * 1000;
 	private int SCREEN_WIDTH, SCREEN_HEIGHT; // 屏幕高宽
-	private boolean isLogin = false;
-	private String userName = null;
-	private String token = null;
+	boolean isLogin = false;
+	String userName = null;
+	String token = null;
 	SimpleAdapter listItemAdapter,listItemAdapter2;
 	ProgressDialog pDialog;
 	AlertDialog alertDialog;
@@ -162,6 +162,10 @@ public class HistoryActivity extends Activity {
 				case 4:
 					break;
 				case 5:
+					intent = new Intent(HistoryActivity.this,
+							AboutActivity.class); // 启动Activity
+					startActivity(intent);
+					finish();
 					break;
 				}
 			}
@@ -286,7 +290,6 @@ public class HistoryActivity extends Activity {
 	/************************** 保存参数信息 *************************/
 
 	public void saveMessage(String json) {
-		String saveMessage = null;
 		String saveSPECIE = null;
 		String saveGENE = null;
 		String saveLOCATION = null;

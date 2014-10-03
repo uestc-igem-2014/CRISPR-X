@@ -32,7 +32,8 @@
                     android:id="@+id/handle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                        android:background="@drawable/shallow"
+                        android:textColor="#ffffff"
+                        android:background="@drawable/listhead"
                     android:text="Menu" />
 
                 <LinearLayout

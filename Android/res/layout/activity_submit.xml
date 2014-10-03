@@ -128,6 +128,22 @@
                             android:layout_marginLeft="52dip"
                             android:layout_weight="1" />
                     </RelativeLayout>
+                    
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <EditText
+                            android:id="@+id/editText_pam"
+                            android:layout_width="305dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="55dip"
+                            android:ems="10"
+                            android:hint="eg:NWATG" >
+                            
+                            <requestFocus />
+                        </EditText>
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -167,8 +183,6 @@
                             android:layout_marginLeft="55dip"
                             android:ems="10"
                             android:hint="eg:thrA" >
-
-                            <requestFocus />
                         </EditText>
                     </RelativeLayout>
 
@@ -233,7 +247,8 @@
                             android:id="@+id/handle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                                android:background="@drawable/shallow"
+                                android:background="@drawable/listhead"
+                                 android:textColor="#ffffff"
                             android:text="Menu" />
 
                         <LinearLayout
@@ -253,34 +268,7 @@
 
                 </RelativeLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/textView_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dip"
-                    android:text="URL:" />
-
-                <EditText
-                    android:id="@+id/editText_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="eg:192.168.10.103:8080/get" >
-                </EditText>
-
-                <Button
-                    android:id="@+id/button_save"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SAVE" />
-            </LinearLayout>
+            
         </LinearLayout>
 
 </FrameLayout>

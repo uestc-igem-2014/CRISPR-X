@@ -1,0 +1,251 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/head" >
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/foot"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="5dp"
+                        android:text="The brief introduction and functioning of the CRISPR-Cas systems"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="100dip"
+                        android:layout_height="120dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/textView1"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/introduction0" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView1"
+                        android:layout_margin="5dp"
+                        android:layout_toLeftOf="@+id/imageView4"
+                        android:text="    Development of tools for targeted genome editing and regulation of gene expression has significantly expanded our ability to elucidate the mechanisms of interesting biological phenomena, and to engineer desirable biological systems. The clustered, regularly interspaced short palindromic repeats (CRISPR) in combination with a CRISPR-associated nuclease 9 (Cas9) were recently demonstrated to be versatile tools for genome engineering [1]. Figure 1 shows  the functioning of the type II CRISPR-Cas systems in bacteria. " />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="200dip"
+                        android:layout_height="250dip"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/introduction1" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imageView1"
+                        android:layout_margin="5dp"
+                        android:layout_toLeftOf="@+id/textView3"
+                        android:text="Figure 1. Functioning of the type II CRISPR-Cas systems in bacteria.[2]" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:layout_toRightOf="@+id/imageView1"
+                        android:text="    Phase 1: in the immunization phase, the CRISPR system stores the molecular signature of a previous infection by integrating fragments of invading phage or plasmid DNA into the CRISPR locus as ‘spacers’. \n\n    Phase 2: in the immunity phase, the bacterium uses this stored information to defend against invading pathogens by transcribing the locus and processing the resulting transcript to produce CRISPR RNAs (crRNAs) that guide effector nucleases to locate and cleave nucleic acids complementary to the spacer. \n\n    First, tracrRNAs(trans-activating crRNA) hybridize to repeat regions of the pre-crRNA. Second, endogenous RNase III cleaves the hybridized crRNA-tracrRNA, and a second event removes the 5′ end of the spacer, yielding mature crRNAs that remain associated with the tracrRNA and Cas9. The complex cleaves complementary ‘protospacer’ sequences only if a PAM sequence is present [2]." />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:text="Potential applications for CRISPR-Cas9"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView5"
+                        android:layout_margin="5dp"
+                        android:layout_toLeftOf="@+id/imageView2"
+                        android:text="    In bacteria and archaea, CRISPR-Cas systems provide immunity by incorporating fragments of invading phage and plasmid DNA into CRISPR loci and using the corresponding CRISPR RNAs (crRNAs) to guide the degradation of homologous sequences [3]. Figure 2 shows  the potential applications for CRISPR-Cas9.The diverse potential applications of Cas9 range from targeted genome editing (via simplex and multiplex double-strand breaks and nicks) to targeted genome regulation (via tethering of epigenetic effector domains to either the Cas9 or sgRNA, and via competition with endogenous DNA binding factors) and possibly programmable genome reorganization and visualization. Cas9 might also be engineered to function as an RNA-guided recombinase, and via RNA tethers could serve as a scaffold for the assembly of multiprotein and nucleic acid complexes[2]." />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="200dip"
+                        android:layout_height="150dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/introduction2" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/imageView2"
+                        android:layout_below="@+id/imageView2"
+                        android:layout_margin="5dp"
+                        android:text="Figure 2 .The potential applications for CRISPR-Cas9.[2]" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:text="Background and significance for CRISPR-X"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView8"
+                        android:layout_margin="5dp"
+                        android:text="    Although the CRISPR/Cas9/sgRNA system efficiently cleaves intracellular DNA at desired target sites, major concerns remain on potential “off-target” cleavage that may occur throughout the whole genome. In order to improve CRISPR-Cas9 specificity for targeted genome editing and transcriptional control, we describe a bioinformatics tool “CRISPR-X”, which is a software developed for design of CRISPR sgRNA with minimized off-target effects and high cutting rate. This software consists of programs to perform a search for CRISPR target sites (protospacers) with user-defined parameters, predict and evaluate genome-wide Cas9 potential off-target cleavage sites."
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView9"
+                        android:src="@drawable/introduction3" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:text="Relationship with Synthetic Biology and iGEM standard parts"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView10"
+                        android:layout_margin="5dp"
+                        android:text="    Genome editing is an important part of synthetic biology. It has important application value in studying the function of genes, as well as gene correction and cell replacement therapy .CRISPR / Cas technology is a recent rise genome editing technology, which greatly improves the ability to modify and edit the genome sequence for scientists. Our software designs CRISPR sgRNA with minimized off-target effects and high cutting rate. A part is compatible with an assembly standard, as long as its sequence meets the requirements of said assembly standard. Our software design a RFC filter option that contain RFC[10],RFC[12], RFC[21], RFC[23] and RFC[25], which ensure each sgRNA meets the requirements of choosing assembly standard"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="400dip"
+                android:layout_height="match_parent" >
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <SlidingDrawer
+                    android:id="@+id/slidingDrawer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:content="@+id/content"
+                    android:handle="@+id/handle" >
+
+                    <Button
+                        android:id="@+id/handle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff"
+                                android:background="@drawable/listhead"
+                        android:text="Menu" />
+
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <ListView
+                            android:id="@+id/listView_menu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" >
+                        </ListView>
+                    </LinearLayout>
+                </SlidingDrawer>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
