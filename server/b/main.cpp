@@ -206,6 +206,8 @@ printf("1\n");
     my_bool mb=false;
     mysql_options(my_conn,MYSQL_SECURE_AUTH,&mb);
 #ifdef  _WIN32
+    printf("I don't like WIN32. \n");
+    return 32;
     if(mysql_real_connect(my_conn,MYSQL_CONF_HOST,MYSQL_CONF_USERNAME,"",MYSQL_CONF_DB,3306,NULL,0)){
 #endif
 #ifdef  __linux
@@ -375,8 +377,12 @@ printf("8\n");
         ini++;
     }
 printf("9\n");
+    mos_pthread_mutex_t mutex_exit;
+    mos_pthread_mutex_init(&mutex_exit,NULL);
     for(i=0;i<ini;i++){
+        mos_pthread_mutex_lock(&mutex_exit);
         if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
+        mos_pthread_mutex_unlock((&mutex_exit);
     }printf("9.1\n");
     free_mysqlres_local(localresult);
 printf("9.2\n");
