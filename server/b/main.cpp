@@ -377,9 +377,9 @@ printf("8\n");
 printf("9\n");
     for(i=0;i<ini;i++){
         if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
-    }
+    }printf("9.1\n");
     free_mysqlres_local(localresult);
-
+printf("9.2\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 printf("10\n");
     root=cJSON_CreateObject();
