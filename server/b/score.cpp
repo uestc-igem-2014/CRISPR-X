@@ -167,8 +167,10 @@ void *new_thread(void *args){
     score(thread_share_variables.lr,thread_share_variables.row,thread_share_variables.ini,thread_share_variables.type,thread_share_variables.r1);
     mos_pthread_mutex_unlock(&mutex);
     mos_sem_post(&sem_thread);
+    mos_pthread_mutex_lock(&mutex_exit);
     in_site[ini].ntid=0;
     mos_pthread_detach(mos_pthread_self());
+    mos_pthread_mutex_unlock(&mutex_exit);
     return NULL;
 }
 

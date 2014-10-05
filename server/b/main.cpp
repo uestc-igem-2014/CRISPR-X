@@ -173,6 +173,7 @@ const char *region_info[]={"","EXON","INTRON","UTR","INTERGENIC"};
 localrow *localresult;
 
 mos_pthread_mutex_t mutex;
+mos_pthread_mutex_t mutex_exit;
 mos_pthread_mutex_t mutex_mysql_conn;
 mos_sem_t sem_thread;
 
@@ -378,11 +379,10 @@ printf("8\n");
     }
 printf("9\n");
   printf(">%d\n",ini);
-    mos_pthread_mutex_t mutex_exit;
     mos_pthread_mutex_init(&mutex_exit,NULL);
     for(i=0;i<ini;i++){
-  printf(">>%d:%d\n",i,in_site[i].ntid);
         mos_pthread_mutex_lock(&mutex_exit);
+  printf(">>%d:%d\n",i,in_site[i].ntid);
         if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
         mos_pthread_mutex_unlock(&mutex_exit);
     }printf("9.1\n");
