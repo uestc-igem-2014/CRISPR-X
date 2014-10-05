@@ -382,7 +382,7 @@ printf("9\n");
     for(i=0;i<ini;i++){
         mos_pthread_mutex_lock(&mutex_exit);
         if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
-        mos_pthread_mutex_unlock((&mutex_exit);
+        mos_pthread_mutex_unlock(&mutex_exit);
     }printf("9.1\n");
     free_mysqlres_local(localresult);
 printf("9.2\n");
