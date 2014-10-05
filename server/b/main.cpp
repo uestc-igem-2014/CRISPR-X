@@ -201,7 +201,7 @@ int main(int args,char *argv[]){
     req_restrict.region[4]=1;
 
     localresult=NULL;
-printf("1\n");
+
     MYSQL_ROW sql_row;
     my_conn=mysql_init(NULL);
     my_bool mb=false;
@@ -224,7 +224,7 @@ printf("1\n");
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
     mos_sem_init(&sem_thread_usage,0,0);
-printf("2\n");
+
     char *req_str=argv_default;
     if(args==2) req_str=argv[1];
 
@@ -235,7 +235,7 @@ printf("2\n");
     }
 
     i=1;
-printf("3\n");
+
     cJSON *cJSON_temp;
     cJSON_temp=cJSON_GetObjectItem(request,"type");
     if(cJSON_temp) req_type=cJSON_temp->valueint;
@@ -246,7 +246,7 @@ printf("3\n");
     double req_r1=0.65;
     cJSON_temp=cJSON_GetObjectItem(request,"r1");
     if(cJSON_temp) req_r1=cJSON_temp->valuedouble;
-printf("4\n");
+
     cJSON_temp=cJSON_GetObjectItem(request,"gene");
     int req_gene_start,req_gene_end;
     char req_chromosome[100];
@@ -272,7 +272,7 @@ printf("4\n");
         req_restrict.region[3]=(cJSON_temp->valuestring)[2]-48;
         req_restrict.region[4]=(cJSON_temp->valuestring)[3]-48;
     }
-printf("5\n");
+
     char req_rfc[10];
     strcpy(req_rfc,cJSON_GetObjectItem(request,"rfc")->valuestring);
     req_restrict.rfc10=req_rfc[0]-48;
@@ -291,7 +291,7 @@ printf("5\n");
             return -1;
         }
     }
-printf("6\n");
+
     /*
     This part above is for read in JSON-style request.
     The result stored in req_specie, req_pam, req_gene_start, req_gene_end, rfc and so on.
@@ -313,7 +313,7 @@ printf("6\n");
         return -1;
     }
     mysql_free_result(result);
-printf("7\n");
+
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s';",req_specie,req_pam);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -324,7 +324,7 @@ printf("7\n");
     make_mysqlres_local(&localresult,result_t);
     localres_count(localresult);
     mysql_free_result(result_t);
-printf("8\n");
+
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -378,17 +378,14 @@ printf("8\n");
 
         ini++;
     }
-printf("9\n");
 
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
     }
-
-printf("9.1\n");
     free_mysqlres_local(localresult);
-printf("9.2\n");
+
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
-printf("10\n");
+
     root=cJSON_CreateObject();
     cJSON_AddNumberToObject(root,"status",0);
 
@@ -398,7 +395,7 @@ printf("10\n");
     cJSON_AddStringToObject(root,"location",buffer);
     cJSON_temp=getlineregion(get_Chr_No(req_specie,req_chromosome),req_gene_start,req_gene_end);    //temporary change
     if(cJSON_temp) cJSON_AddItemToObject(root,"region",cJSON_temp);
-printf("11\n");
+
     vector<cJSON*> list;
     list.clear();
     for(i=0;i<ini && i<50;i++){
@@ -424,7 +421,7 @@ printf("11\n");
         list.push_back(ans);
     }
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
-printf("12\n");
+
 #ifdef  _WIN32
     fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
