@@ -377,9 +377,11 @@ printf("8\n");
         ini++;
     }
 printf("9\n");
+  printf(">%d\n",ini);
     mos_pthread_mutex_t mutex_exit;
     mos_pthread_mutex_init(&mutex_exit,NULL);
     for(i=0;i<ini;i++){
+  printf(">>%d:%d\n",i,in_site[i].ntid);
         mos_pthread_mutex_lock(&mutex_exit);
         if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
         mos_pthread_mutex_unlock(&mutex_exit);
