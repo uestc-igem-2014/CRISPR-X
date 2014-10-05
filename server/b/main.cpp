@@ -175,6 +175,7 @@ localrow *localresult;
 mos_pthread_mutex_t mutex;
 mos_pthread_mutex_t mutex_mysql_conn;
 mos_sem_t sem_thread;
+mos_sem_t sem_thread_usage;
 
 /**
 Main function. Include Input, output and Database create connect.
@@ -206,6 +207,8 @@ int main(int args,char *argv[]){
     my_bool mb=false;
     mysql_options(my_conn,MYSQL_SECURE_AUTH,&mb);
 #ifdef  _WIN32
+    printf("I don't like WIN32. \n");
+    return 32;
     if(mysql_real_connect(my_conn,MYSQL_CONF_HOST,MYSQL_CONF_USERNAME,"",MYSQL_CONF_DB,3306,NULL,0)){
 #endif
 #ifdef  __linux
@@ -220,6 +223,7 @@ int main(int args,char *argv[]){
     mos_pthread_mutex_init(&mutex,NULL);
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
+    mos_sem_init(&sem_thread_usage,0,0);
 
     char *req_str=argv_default;
     if(args==2) req_str=argv[1];
@@ -376,7 +380,7 @@ int main(int args,char *argv[]){
     }
 
     for(i=0;i<ini;i++){
-        if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
+        mos_sem_wait(&sem_thread_usage);
     }
     free_mysqlres_local(localresult);
 
