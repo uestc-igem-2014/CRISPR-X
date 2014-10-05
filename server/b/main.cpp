@@ -173,9 +173,9 @@ const char *region_info[]={"","EXON","INTRON","UTR","INTERGENIC"};
 localrow *localresult;
 
 mos_pthread_mutex_t mutex;
-mos_pthread_mutex_t mutex_exit;
 mos_pthread_mutex_t mutex_mysql_conn;
 mos_sem_t sem_thread;
+mos_sem_t sem_thread_usage;
 
 /**
 Main function. Include Input, output and Database create connect.
@@ -223,6 +223,7 @@ printf("1\n");
     mos_pthread_mutex_init(&mutex,NULL);
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
+    mos_sem_init(&sem_thread_usage,0,0);
 printf("2\n");
     char *req_str=argv_default;
     if(args==2) req_str=argv[1];
@@ -378,14 +379,12 @@ printf("8\n");
         ini++;
     }
 printf("9\n");
-  printf(">%d\n",ini);
-    mos_pthread_mutex_init(&mutex_exit,NULL);
+
     for(i=0;i<ini;i++){
-        mos_pthread_mutex_lock(&mutex_exit);
-  printf(">>%d:%d\n",i,in_site[i].ntid);
-        if(in_site[i].ntid) mos_pthread_join(in_site[i].ntid,NULL);
-        mos_pthread_mutex_unlock(&mutex_exit);
-    }printf("9.1\n");
+        mos_sem_wait(&sem_thread_usage);
+    }
+
+printf("9.1\n");
     free_mysqlres_local(localresult);
 printf("9.2\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output

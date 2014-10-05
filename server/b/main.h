@@ -85,9 +85,9 @@ struct return_struct{
 };
 
 extern mos_pthread_mutex_t mutex;
-extern mos_pthread_mutex_t mutex_exit;
 extern mos_pthread_mutex_t mutex_mysql_conn;
 extern mos_sem_t sem_thread;
+extern mos_sem_t sem_thread_usage;
 
 extern restrict req_restrict;
 
