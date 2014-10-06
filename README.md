@@ -9,7 +9,7 @@
 
 ## server
 [![Build Status](https://travis-ci.org/uestc-igem-2014/CRISPR-X.svg?branch=master)](https://travis-ci.org/uestc-igem-2014/CRISPR-X)
-[![Coverage Status](https://coveralls.io/repos/uestc-igem-2014/CRISPR-X/badge.png)](https://coveralls.io/r/uestc-igem-2014/CRISPR-X)
+[![Coverage Status](https://coveralls.io/repos/uestc-igem-2014/CRISPR-X/badge.png?branch=master)](https://coveralls.io/r/uestc-igem-2014/CRISPR-X?branch=master)
 
 Find potential CRISPR/Cas9 sgRNAs and give a genome-wide evaluation.
 

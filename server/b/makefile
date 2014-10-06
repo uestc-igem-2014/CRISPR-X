@@ -47,7 +47,7 @@ basic:
 	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"100010"}'
 	echo "---------------test case basic 1 end------------------"
 	echo "--------------test case basic 2 start-----------------"
-	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"100010"}'
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101"}'
 	echo "---------------test case basic 2 end------------------"
 
 
