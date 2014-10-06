@@ -42,14 +42,18 @@ cleanall:
 test: $(testcases)
 
 basic:
-	echo "--------------test case 1 start-----------------"
+	echo "--------------test case basic 1 start-----------------"
 	echo "basic test case, illegal call"
 	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"100010"}'
-	echo "---------------test case 1 end------------------"
+	echo "---------------test case basic 1 end------------------"
+	echo "--------------test case basic 2 start-----------------"
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"100010"}'
+	echo "---------------test case basic 2 end------------------"
+
 
 exception:
 	# exception test, no NC_001134-chromosome3 record in Table_sgRNA
-	echo "--------------test case 2 start-----------------"
+	echo "--------------test case exception 1 start-----------------"
 	echo "exception test, call no-exist location"
-	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
-	echo "---------------test case 2 end------------------"
+	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001135-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
+	echo "---------------test case exception 1 end------------------"
