@@ -57,3 +57,8 @@ exception:
 	echo "exception test, call no-exist location"
 	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001135-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
 	echo "---------------test case exception 1 end------------------"
+
+	echo "--------------test case exception 2 start-----------------"
+	echo "exception test, call no-exist gene"
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"XXXXX","pam":"NGG","rfc":"011101"}'
+	echo "--------------test case exception 2 end -----------------"
