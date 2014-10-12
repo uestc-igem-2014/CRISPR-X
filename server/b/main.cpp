@@ -345,9 +345,11 @@ int main(int args,char *argv[]){
         mos_pthread_mutex_unlock(&mutex_mysql_conn);
 
         if(check_region(ini)==0){
+            mos_sem_post(&sem_thread_usage);
             continue;
         }
         if(check_rfc(ini)==0){
+            mos_sem_post(&sem_thread_usage);
             continue;
         }
 
@@ -371,6 +373,7 @@ int main(int args,char *argv[]){
             sscanf(sql_row[2],"%d",&in_site[ini].count);
             sscanf(sql_row[4],"%lf",&in_site[ini].gc);
             in_site[ini].otj=cJSON_Parse(sql_row[3]);
+            mos_sem_post(&sem_thread_usage);
         }else{
             mos_sem_wait(&sem_thread);
             create_thread_socre(localresult,lr,ini,req_type,req_r1);
