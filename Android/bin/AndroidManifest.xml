@@ -5,6 +5,7 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -39,6 +40,13 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.crispr_x.WebActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.crispr_x.HelpActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

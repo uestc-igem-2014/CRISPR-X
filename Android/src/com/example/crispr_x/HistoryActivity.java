@@ -54,6 +54,7 @@ public class HistoryActivity extends Activity {
 	AlertDialog alertDialog;
 	Handler timeHandler;
 	Runnable runnable1;
+	HttpThreadGet myHttpThreadGet;
 	HttpThreadPost myHttpThreadPost;
 	static Handler handler;
 
@@ -160,6 +161,9 @@ public class HistoryActivity extends Activity {
 					finish();
 					break;
 				case 4:
+					intent = new Intent(HistoryActivity.this,HelpActivity.class); // Æô¶¯Activity
+					startActivity(intent);
+					finish();
 					break;
 				case 5:
 					intent = new Intent(HistoryActivity.this,

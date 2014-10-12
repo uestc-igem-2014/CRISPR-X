@@ -6,12 +6,17 @@ import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -111,13 +116,12 @@ public class WebActivity extends Activity {
 					System.out.println("进入CHECKID");
 					result = (String) msg.obj;
 					startService();
-					SubmitActivity sa = new SubmitActivity();
-					if (sa.getStatus(result)) {
-						sa.saveMessage(result);
+					if (getStatus(result)) {
+						saveMessage(result);
 						Intent intent = new Intent(WebActivity.this,ResultActivity.class); // 启动Activity
 						startActivity(intent);
 					} else {
-						sa.debugDialog(result);
+						debugDialog(result);
 					}
 					break;
 				
@@ -165,8 +169,16 @@ public class WebActivity extends Activity {
 				case 3:
 					break;
 				case 4:
+					intent = new Intent(WebActivity.this,
+							HelpActivity.class); // 启动Activity
+					startActivity(intent);
+					finish();
 					break;
 				case 5:
+					intent = new Intent(WebActivity.this,
+							AboutActivity.class); // 启动Activity
+					startActivity(intent);
+					finish();
 					break;
 				}
 			}
@@ -186,7 +198,7 @@ public class WebActivity extends Activity {
     }
     
   //Web视图  
-    private class HelloWebViewClient extends WebViewClient {  
+    public class HelloWebViewClient extends WebViewClient {  
         @Override 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {  
             view.loadUrl(url);  
@@ -250,7 +262,72 @@ public class WebActivity extends Activity {
 		alertDialog.getWindow().setAttributes(lp);
 	}
 		
-		
+	/************************** 获取结果状态 *************************/
+
+	public boolean getStatus(String json) {
+		String strStatus = "";
+		try {
+			strStatus = new JSONObject(json).getString("status");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		if (strStatus.equals("0")) {
+			return true;
+		} else
+			return false;
+	}
+
+	/************************** 获取错误信息 *************************/
+
+	public String getErrorMessage(String json) {
+		String errorMessage = null;
+		try {
+			errorMessage = new JSONObject(json).getString("message");
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		return errorMessage;
+	}
+	/************************** 保存参数信息 *************************/
+
+	public void saveMessage(String json) {
+		String saveSPECIE = null;
+		String saveGENE = null;
+		String saveLOCATION = null;
+		String saveREGION = null;
+		try {
+			JSONObject jsonObj = new JSONObject(json);
+			saveSPECIE = jsonObj.getString("specie");
+			saveGENE = jsonObj.getString("gene");
+			saveLOCATION = jsonObj.getString("location");
+			saveREGION = jsonObj.getString("region");
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+		// 保存json与一些信息
+		Context ctx = WebActivity.this;
+		SharedPreferences info = ctx.getSharedPreferences("BUFF", MODE_PRIVATE);
+		Editor editor = info.edit();
+		editor.putString("SPECIE", saveSPECIE);
+		editor.putString("GENE", saveGENE);
+		editor.putString("LOCATION", saveLOCATION);
+		editor.putString("REGION", saveREGION);
+		editor.putString("JSON", json);
+		editor.commit();
+	}
+	/************************** debug显示框 *************************/
+
+	protected void debugDialog(String message) {
+		AlertDialog.Builder builder = new Builder(WebActivity.this);
+		builder.setMessage(message);
+		builder.setTitle("ErrorInfo");
+		builder.setCancelable(true);
+		builder.create().show();
+
+	}
+	
 	@Override
 	protected void onResume() {
 		/**

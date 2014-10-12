@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
+import android.util.Log;
 
 public class CreatMap {
 
@@ -48,13 +49,14 @@ public class CreatMap {
 		canvas.drawRect(x0, y0, x1, y1, pen);	//»­×ÜÐòÁÐ
 		
 		for(int i=0; i<ListEndpoint.size(); i++){
+			Log.d("Xdebug", ListDescription.get(i));
 			if(ListDescription.get(i).equals("INTERGENIC")) {
 				pen.setColor(Color.GRAY);
-			} if(ListDescription.get(i).equals("UTR")) {
+			}else if(ListDescription.get(i).equals("UTR")) {
 				pen.setColor(Color.YELLOW);
-			} if(ListDescription.get(i).equals("INTRON")) {
+			}else if(ListDescription.get(i).equals("INTRON")) {
 				pen.setColor(Color.RED);
-			} if(ListDescription.get(i).equals("EXON")) {
+			}else if(ListDescription.get(i).equals("EXON")) {
 				pen.setColor(Color.GREEN);
 			}
 			x1temp = (int) (SCREEN_WIDTH/20 + (ListEndpoint.get(i))/lenUnit);

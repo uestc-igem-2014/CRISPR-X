@@ -9,11 +9,13 @@ import android.os.Handler;
 import android.os.Message;
 
 public class HttpThreadPost extends Thread {
-	public static final int LOGIN = 1; // 用户登陆
-	public static final int LOGON = 2; // 用户注册
-	public static final int LOGOUT = 3; // 退出登录
-	public static final int HISTORY = 4; // 获取历史
-	public static final int CHECKID = 5; // 查询ID
+	public static final int LOGIN = 21; // 用户登陆
+	public static final int LOGON = 22; // 用户注册
+	public static final int LOGOUT = 23; // 退出登录
+	public static final int HISTORY = 24; // 获取历史
+	public static final int CHECKID = 25; // 查询ID
+	public static final int CHECKFILE = 26; // 查询文件
+	public static final int CHESPECIES = 27; // 查询物种
 
 	List<NameValuePair> params;
 	String httpUrl;
@@ -48,6 +50,12 @@ public class HttpThreadPost extends Thread {
 			break;
 		case CHECKID: // 查询ID
 			msg.what = CHECKID;
+			break;
+		case CHECKFILE: // 查询文件
+			msg.what = CHECKFILE;
+			break;
+		case CHESPECIES: // 查询文件
+			msg.what = CHESPECIES;
 			break;
 		default:
 			break;

@@ -17,6 +17,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/head" >
+
+                <Button
+                    android:id="@+id/button_news"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/shallow"
+                    android:text="More Crispr News"
+                    android:textStyle="bold" />
+
             </RelativeLayout>
 
             <LinearLayout
