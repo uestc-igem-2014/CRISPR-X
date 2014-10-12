@@ -8,7 +8,7 @@
 ///brief. hehe
 restrict req_restrict;
 
-int ini;
+int ini; 
 site in_site[NODE_SIZE];
 
 MYSQL *my_conn;
@@ -253,7 +253,7 @@ int main(int args,char *argv[]){
     if(cJSON_temp){
         strcpy(req_gene,cJSON_temp->valuestring);
         int res=get_gene_info(buffer,req_specie,req_gene);
-        if(res){
+        if(res<0){
             onError("Invaild Gene! ");
             return -1;
         }
