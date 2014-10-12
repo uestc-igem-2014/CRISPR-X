@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon_black" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            android:layout_marginBottom="46dp"
+            android:background="@drawable/deep"
+            android:text="StartGame" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:textSize="40sp"
+            android:text="Bacteria War"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView1"
+            android:text="designed by UESTC—SOFTWARE"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:textSize="16sp"
+            android:text="     One day, a group of unknown bacteria invade the tribe of white blood cells, white blood cells have fought off a wave of enemies, but it seems that the war will still last...\n     Would you like to help white blood cells resisting the bacteria and winning the victory of the battle? Please click on the ‘StartGame’ to play Bacteria War, an interesting game based on android platform which you will control it by accelerometer. "
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="40dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/pic0" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="40dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/imageView2"
+            android:src="@drawable/pic1" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/imageView5"
+            android:src="@drawable/pic2" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="40dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/imageView2"
+            android:src="@drawable/pic4" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="40dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/imageView6"
+            android:src="@drawable/pic3" />
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:gravity="center_horizontal">
+	
+	<ScrollView android:id="@+id/ScrollView01"
+	
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		
+			
+			<TextView android:id="@+id/txtHelp"
+			android:padding="10dp" android:textStyle="bold"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#ffffff"
+			android:textSize="14sp"
+			android:shadowColor="#000000"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0"
+			android:capitalize="characters"
+			android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sodales ipsum sed mauris accumsan id suscipit velit vestibulum. Suspendisse vel dolor at quam tempor accumsan. Etiam vel lacus justo. Fusce vel augue elit, non posuere ligula. Mauris dapibus, arcu ac condimentum porta, nibh purus molestie libero, sed rutrum lacus libero lobortis nisi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse id turpis est. Nunc vel dolor erat. Fusce aliquet ultricies tincidunt. Vestibulum mattis orci ac quam cursus venenatis.
+
+Integer sit amet magna nisi, vitae tempor quam. Morbi ac est tortor. Sed justo metus, laoreet nec rutrum sit amet, consectetur non nisl. Ut tristique malesuada varius. Donec porta turpis ac risus hendrerit fermentum. Proin dapibus semper consectetur. Sed a purus non lorem feugiat iaculis. Donec gravida sodales dapibus. Aenean ut est turpis, eu vestibulum ante. Aliquam erat volutpat.
+
+Ut sed arcu tortor. Nunc lacus erat, dapibus at ullamcorper a, cursus ut nunc. Ut ultricies elementum neque et mollis. Praesent feugiat porta hendrerit. Aliquam quis dolor justo. Mauris consectetur facilisis est a dictum. Sed sed massa elementum mauris sollicitudin vehicula adipiscing nec nisl. Nam sit amet lectus erat. Nullam eu purus tellus. Etiam blandit metus at quam ornare eget euismod nisi accumsan. Praesent fringilla diam eu odio gravida ut mattis erat ullamcorper. Nam at sapien adipiscing nunc auctor cursus a at ligula. Fusce sagittis vehicula elit in tincidunt. Nunc ultricies rhoncus sem, nec sollicitudin elit adipiscing sit amet. Sed gravida erat sit amet sapien scelerisque eget lobortis nibh ultricies. Vivamus vestibulum suscipit odio non suscipit.
+
+Proin suscipit mollis velit eu interdum. Vestibulum aliquet aliquet nibh, et scelerisque risus imperdiet vitae. Quisque auctor elit ultricies enim mollis sodales. Integer eu tellus nisl. Quisque mollis tincidunt interdum. Nam scelerisque eleifend leo a luctus. Sed id ante quis nunc sagittis tincidunt sed et nisi. Aenean molestie vulputate mauris quis consectetur. Donec vitae lorem leo, ac eleifend purus. Donec semper nulla pretium erat vestibulum congue. Praesent venenatis consequat nunc, sit amet ullamcorper risus tempor ut. Cras volutpat, nulla vel ornare commodo, nulla tellus convallis quam, sed vulputate nunc odio eget diam. Nulla accumsan cursus est nec consectetur. Ut a est augue, ut fermentum est. Aliquam vel condimentum urna. Pellentesque eget quam rhoncus justo condimentum sagittis. Morbi scelerisque sollicitudin libero eu bibendum. Praesent vestibulum leo eu nisl euismod nec malesuada elit faucibus.
+
+Donec aliquam mattis mauris, condimentum iaculis urna adipiscing iaculis. Donec luctus pretium purus, eget malesuada quam consectetur sit amet. Pellentesque auctor lectus ut velit porttitor in mollis lectus facilisis. In fringilla nulla gravida arcu faucibus ut pellentesque magna consectetur. Integer hendrerit varius tortor feugiat blandit. Fusce ac velit dignissim leo euismod ullamcorper at et erat. Pellentesque ac justo eu nibh volutpat sodales quis id turpis. Praesent hendrerit felis eu orci lacinia hendrerit. Proin dapibus neque in libero luctus et semper lorem malesuada. Vestibulum vestibulum neque vel sem volutpat malesuada."
+			></TextView>
+
+	</ScrollView>
+
+</LinearLayout>

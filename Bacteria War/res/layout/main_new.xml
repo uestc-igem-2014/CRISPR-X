@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:gravity="center"
+	android:background="@drawable/background">
+
+<!--	<ImageView android:id="@+id/logo" android:src="@drawable/logo_new"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:scaleType="centerInside" android:paddingLeft="10dp"  android:paddingRight="10dp"
+		android:paddingBottom="40dp" android:layout_gravity="center_horizontal" />
+-->
+		
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical" android:layout_width="wrap_content"
+		android:gravity="center_horizontal"
+		android:layout_height="wrap_content">
+		
+		<requestFocus /> <!--  ZA FOKUS -->
+		
+		<!-- za razmak -->
+		<TextView android:paddingBottom="180dp" android:textColor="#ffffff"
+			android:gravity="center_horizontal" android:text=""
+			android:layout_width="fill_parent" android:layout_height="fill_parent"></TextView>
+
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="START GAME"
+			android:textStyle="bold" android:id="@+id/btnStartGame"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+				<requestFocus /> <!--  ZA FOKUS -->
+			</TextView>
+			
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="HIGHSCORE"
+			android:textStyle="bold" android:id="@+id/btnHighscore"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+			</TextView>
+			
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="OPTIONS"
+			android:textStyle="bold" android:id="@+id/btnOptions"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+			</TextView>
+			
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="HELP"
+			android:textStyle="bold" android:id="@+id/btnHelp"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+			</TextView>
+			
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="ABOUT"
+			android:textStyle="bold" android:id="@+id/btnAbout"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+			</TextView>
+			
+		<TextView android:textColor="@color/menu_text"
+			android:gravity="center_horizontal" android:text="EXIT"
+			android:textStyle="bold" android:id="@+id/btnExit"
+			android:textSize="18sp" android:paddingTop="13dp" android:paddingBottom="13dp"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:shadowColor="#000000"
+			android:focusable="true"
+			android:shadowDx="0"
+			android:shadowDy="5"
+			android:shadowRadius="3.0">
+			</TextView>
+
+		<TextView android:id="@+id/copyright" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="COPYRIGHT 2010\n"
+			android:textSize="8sp" android:gravity="center_horizontal"
+			android:textColor="#FFFFFF" android:paddingTop="30dp"
+			></TextView>
+			
+		<TextView android:id="@+id/website" android:layout_width="wrap_content" android:autoLink="web"
+			android:layout_height="wrap_content" android:text="WWW.TRIFUNOVIC.ME"
+			android:textSize="8sp" android:gravity="center_horizontal"
+			android:textColorLink="#0f77ba" android:textColor="#0f77ba"
+			></TextView>
+
+	</LinearLayout>
+
+</LinearLayout>
