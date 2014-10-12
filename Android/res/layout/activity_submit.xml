@@ -6,72 +6,72 @@
     tools:context="com.example.crispr_x.SubmitActivity"
     tools:ignore="MergeRootFrame" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/head" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp" >
+
+                <EditText
+                    android:id="@+id/editText_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="username"
+                    android:text="qq" />
+
+                <EditText
+                    android:id="@+id/editText_pswd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="password"
+                    android:inputType="textPassword"
+                    android:text="123" />
+
+                <Button
+                    android:id="@+id/button_login"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="60dip"
+                    android:layout_height="40dip"
+                    android:background="@drawable/shallow"
+                    android:text="Login"
+                    android:textColor="#ffffff" />
+
+                <Button
+                    android:id="@+id/button_logon"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="60dip"
+                    android:layout_height="40dip"
+                    android:background="@drawable/shallow"
+                    android:text="Logon"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/foot" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/head" >
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
 
                 <LinearLayout
-                    android:id="@+id/linearLayout_login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp" >
-
-                    <EditText
-                        android:id="@+id/editText_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="qq"
-                        android:layout_weight="1"
-                        android:hint="username" />
-
-                    <EditText
-                        android:id="@+id/editText_pswd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="123"
-                        android:hint="password"
-                        android:inputType="textPassword" />
-
-                    <Button
-                        android:id="@+id/button_login"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="60dip"
-                        android:layout_height="40dip"
-                        android:background="@drawable/shallow"
-                        android:text="Login"
-                        android:textColor="#ffffff" />
-
-                    <Button
-                        android:id="@+id/button_logon"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="60dip"
-                        android:layout_height="40dip"
-                        android:background="@drawable/shallow"
-                        android:text="Logon"
-                        android:textColor="#ffffff" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/foot" >
-
-                <ScrollView
-                    android:id="@+id/scrollView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" >
-                    <LinearLayout
                     android:layout_width="400dip"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
@@ -128,8 +128,9 @@
                             android:layout_marginLeft="52dip"
                             android:layout_weight="1" />
                     </RelativeLayout>
-                    
+
                     <RelativeLayout
+                        android:id="@+id/relativeLayout_pam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
@@ -140,7 +141,7 @@
                             android:layout_marginLeft="55dip"
                             android:ems="10"
                             android:hint="eg:NWATG" >
-                            
+
                             <requestFocus />
                         </EditText>
                     </RelativeLayout>
@@ -173,11 +174,48 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/relativeLayout_Pos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <Spinner
+                            android:id="@+id/spinner_chromosome"
+                            android:layout_width="310dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="52dip"
+                            android:layout_weight="1" />
+
+                        <EditText
+                            android:id="@+id/editText_pos1"
+                            android:inputType="number"
+                            android:layout_width="150dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="55dip"
+                            android:layout_below="@+id/spinner_chromosome"
+                            android:ems="10"
+                            android:hint="start point" >
+                        </EditText>
+
+                        <EditText
+                            android:id="@+id/editText_pos2"
+                            android:inputType="number"
+                            android:layout_width="150dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/editText_pos1"
+                            android:layout_alignBottom="@+id/editText_pos1"
+                            android:layout_toRightOf="@+id/editText_pos1"
+                            android:ems="10"
+                            android:hint="end point" >
+                        </EditText>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout_Tag"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
                         <EditText
-                            android:id="@+id/editText_postag"
+                            android:id="@+id/editText_Tag"
                             android:layout_width="305dip"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="55dip"
@@ -196,79 +234,73 @@
                             android:layout_width="80dip"
                             android:layout_height="35dip"
                             android:layout_marginLeft="55dip"
+                            android:background="@drawable/shallow"
                             android:text="Adv"
-                            android:textColor="#ffffff"
-                            android:background="@drawable/shallow" />
+                            android:textColor="#ffffff" />
 
                         <Button
                             android:id="@+id/button_default"
                             android:layout_width="80dip"
                             android:layout_height="35dip"
                             android:layout_marginLeft="10dip"
+                            android:background="@drawable/shallow"
                             android:text="Def"
-                            android:textColor="#ffffff"
-                            android:background="@drawable/shallow" />
+                            android:textColor="#ffffff" />
 
                         <Button
                             android:id="@+id/button_submit"
                             android:layout_width="130dip"
                             android:layout_height="50dip"
                             android:layout_marginLeft="10dip"
+                            android:background="@drawable/shallow"
                             android:text="Submit"
                             android:textColor="#ffffff"
                             android:textSize="30sp
-                            "
-                            android:background="@drawable/shallow" />
+                            " />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dip" >
                     </RelativeLayout>
-
                 </LinearLayout>
-                </ScrollView>
+            </ScrollView>
 
-                
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <SlidingDrawer
+                    android:id="@+id/slidingDrawer1"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:content="@+id/content"
+                    android:handle="@+id/handle" >
 
-                    <SlidingDrawer
-                        android:id="@+id/slidingDrawer1"
+                    <Button
+                        android:id="@+id/handle"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:content="@+id/content"
-                        android:handle="@+id/handle" >
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/listhead"
+                        android:text="Menu"
+                        android:textColor="#ffffff" />
 
-                        <Button
-                            android:id="@+id/handle"
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <ListView
+                            android:id="@+id/listView_menu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                                android:background="@drawable/listhead"
-                                 android:textColor="#ffffff"
-                            android:text="Menu" />
-
-                        <LinearLayout
-                            android:id="@+id/content"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <ListView
-                                android:id="@+id/listView_menu"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" >
-                            </ListView>
-
-                        </LinearLayout>
-                    </SlidingDrawer>
-
-                </RelativeLayout>
-            </LinearLayout>
-            
+                            android:layout_weight="1" >
+                        </ListView>
+                    </LinearLayout>
+                </SlidingDrawer>
+            </RelativeLayout>
         </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

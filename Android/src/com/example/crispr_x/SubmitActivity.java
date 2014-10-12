@@ -18,10 +18,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.SimpleAdapter;
@@ -49,15 +53,18 @@ import android.widget.Toast;
 
 public class SubmitActivity extends Activity {
 
-	public static final String URL = "http://192.168.10.100/iGEM2014/";
-	//public static final String URL = "http://immunet.cn/iGEM2014/";
+	// public static final String URL = "http://192.168.10.100/iGEM2014/";
+	public static final String URL = "http://i.uestc.edu.cn/iGEM2014/";
 
-	private EditText etPosTag; // postag编辑框
+	private EditText etTag; // tag编辑框
 	// private EditText etSaveURL; // URL编辑框
 	private EditText etUserName; // username编辑框
 	private EditText etPassword; // password编辑框
 	private Spinner spTargetGenome; // targetgenome下拉框
 	private Spinner spPam; // pam下拉框
+	private Spinner spChromosome; // Chromosome下拉框
+	private EditText etPos1; // pos1编辑框
+	private EditText etPos2; // pos2编辑框
 	private Button btnPosition; // position按钮
 	private Button btnLocusTag; // locus tag按钮
 	private Button btnDefault; // default按钮
@@ -68,6 +75,9 @@ public class SubmitActivity extends Activity {
 	private Button btnLogon; // logon按钮
 	private Button btnSubmit; // submit按钮
 	private ListView lvMenu;
+	private RelativeLayout rlPam;
+	private RelativeLayout rlPos;
+	private RelativeLayout rlTag;
 
 	private EditText etLogonUserName;
 	private EditText etLogonPassword;
@@ -75,26 +85,33 @@ public class SubmitActivity extends Activity {
 	private EditText etLogonEmail;
 	private Button btnLogonLogon;
 
-	private CheckBox cb10, cb12, cb12a, cb21, cb23, cb25; // RFC CheckBox
+	private CheckBox cb10, cb12, cb12a, cb21, cb23, cb25, cbEXON, cbINTRON,
+			cbUTR, cbINTERGENIC; // RFC CheckBox
+
 	private TextView tvWeight;
 	private SeekBar sbWeight;
-	
+
 	private EditText etCheck; // check编辑框
 	private Button btnCheck; // check按钮
 
 	private String strType = "1";// 1=针对基因敲除，2=针对基因干扰，暂时默认1
-	private String strPosTag = null;// Position LocusTag字串
+	private String strTag = null;// Position LocusTag字串
 	private String strTargetGenome = null;// TargetGenome字串
 	private String strPam = null;// Pam字串
 	private String strCount = "20";// Count字串
 	private String strRFC = "111111";// RFC字串
+	private String strRegion = "1111";// region字串
 	private String strRFC10 = "1";// RFC字串
 	private String strRFC12 = "1";// RFC字串
 	private String strRFC12a = "1";// RFC字串
 	private String strRFC21 = "1";// RFC字串
 	private String strRFC23 = "1";// RFC字串
 	private String strRFC25 = "1";// RFC字串
-	private long timeInterval = 2 * 60 * 1000; // 登录超时时间
+	private String strEXON = "1";// region字串
+	private String strINTRON = "1";// region字串
+	private String strUTR = "1";// region字串
+	private String strINTERGENIC = "1";// region字串
+	private long timeInterval = 1 * 60 * 1000; // 登录超时时间
 	private int SCREEN_WIDTH, SCREEN_HEIGHT; // 屏幕高宽
 	private boolean tpFalg = true;
 	private boolean kiFalg = true;
@@ -103,7 +120,7 @@ public class SubmitActivity extends Activity {
 
 	private String token = null;
 	private String userName = null;
-	
+	private String userFile = null;
 
 	HttpThreadGet myHttpThreadGet;
 	HttpThreadPost myHttpThreadPost;
@@ -112,6 +129,12 @@ public class SubmitActivity extends Activity {
 	AlertDialog alertDialog;
 	SimpleAdapter listItemAdapter;
 	MD5 md5 = new MD5();
+	SpeciesChromosome chromossomeList = new SpeciesChromosome();
+
+	List<Dict> dict_tg = new ArrayList<Dict>();
+	List<Dict> dict_chromosome = new ArrayList<Dict>();
+	List<Dict> dict_pam = new ArrayList<Dict>();
+	ArrayAdapter<Dict> adapter_pam, adapter_tg, adapter_chromosome;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +151,14 @@ public class SubmitActivity extends Activity {
 
 		setContentView(R.layout.activity_submit);
 
-		etPosTag = (EditText) findViewById(R.id.editText_postag);
+		spChromosome = (Spinner) findViewById(R.id.spinner_chromosome);
+		etTag = (EditText) findViewById(R.id.editText_Tag);
 		// etSaveURL = (EditText) findViewById(R.id.editText_url);
 		etUserName = (EditText) findViewById(R.id.editText_username);
 		etPassword = (EditText) findViewById(R.id.editText_pswd);
 		spTargetGenome = (Spinner) findViewById(R.id.spinner_targetgenome);
+		etPos1 = (EditText) findViewById(R.id.editText_pos1);
+		etPos2 = (EditText) findViewById(R.id.editText_pos2);
 		spPam = (Spinner) findViewById(R.id.spinner_pam);
 		btnLocusTag = (Button) findViewById(R.id.button_locustag);
 		btnPosition = (Button) findViewById(R.id.button_position);
@@ -147,10 +173,15 @@ public class SubmitActivity extends Activity {
 		btnInterference = (Button) findViewById(R.id.button_interference);
 		// llLogin = (LinearLayout) findViewById(R.id.linearLayout_login);
 		lvMenu = (ListView) findViewById(R.id.listView_menu);
+		rlPam = (RelativeLayout) findViewById(R.id.relativeLayout_pam);
+		rlPos = (RelativeLayout) findViewById(R.id.relativeLayout_Pos);
+		rlTag = (RelativeLayout) findViewById(R.id.relativeLayout_Tag);
+		rlPos.setVisibility(View.GONE);
+		rlPam.setVisibility(View.GONE);
 
 		isLogin = new BackGroundService().getIsLogin();
 		token = new BackGroundService().getToken();
-		if(isLogin){
+		if (isLogin) {
 			startService();
 			userName = new BackGroundService().getUserName();
 			etUserName.setVisibility(View.GONE);
@@ -178,27 +209,31 @@ public class SubmitActivity extends Activity {
 				Intent intent;
 				switch (arg2) {
 				case 0:
-					
+
 					break;
 				case 1:
 					checkIdDialog("");
 					break;
 				case 2:
-					if(isLogin){
-						intent = new Intent(SubmitActivity.this,HistoryActivity.class); // 启动Activity
+					if (isLogin) {
+						intent = new Intent(SubmitActivity.this,
+								HistoryActivity.class); // 启动Activity
 						startActivity(intent);
 						finish();
 					} else {
-						Toast.makeText(getApplicationContext(), "Please login !",
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(),
+								"Please login !", Toast.LENGTH_SHORT).show();
 					}
 					break;
 				case 3:
-					intent = new Intent(SubmitActivity.this,WebActivity.class); // 启动Activity
+					intent = new Intent(SubmitActivity.this, WebActivity.class); // 启动Activity
 					startActivity(intent);
 					finish();
 					break;
 				case 4:
+					intent = new Intent(SubmitActivity.this, HelpActivity.class); // 启动Activity
+					startActivity(intent);
+					finish();
 					break;
 				case 5:
 					intent = new Intent(SubmitActivity.this,
@@ -240,15 +275,15 @@ public class SubmitActivity extends Activity {
 					result = (String) msg.obj;
 					checkIdDialog(result);
 					startService();
-					//debugDialog(result);
-					//System.out.println(result);
+					// debugDialog(result);
+					// System.out.println(result);
 					break;
 				case HttpThreadPost.LOGIN:
 					pDialog.dismiss();
 					timeHandler.removeCallbacks(runnable1);
 					System.out.println("进入LOGIN");
 					result = (String) msg.obj;
-					//System.out.println(result);
+					// System.out.println(result);
 					getLoginMessage(result);
 					break;
 				case HttpThreadPost.LOGON:
@@ -256,7 +291,7 @@ public class SubmitActivity extends Activity {
 					timeHandler.removeCallbacks(runnable1);
 					System.out.println("进入LOGON");
 					result = (String) msg.obj;
-					//System.out.println(result);
+					// System.out.println(result);
 					getLogonMessage(result);
 					break;
 				case HttpThreadPost.LOGOUT:
@@ -264,7 +299,7 @@ public class SubmitActivity extends Activity {
 					timeHandler.removeCallbacks(runnable1);
 					System.out.println("进入LOGOUT");
 					result = (String) msg.obj;
-					//System.out.println(result);
+					// System.out.println(result);
 					getLogoutMessage(result);
 					break;
 				case HttpThreadPost.CHECKID:
@@ -276,11 +311,26 @@ public class SubmitActivity extends Activity {
 
 					if (getStatus(result)) {
 						saveMessage(result);
-						Intent intent = new Intent(SubmitActivity.this,ResultActivity.class); // 启动Activity
+						Intent intent = new Intent(SubmitActivity.this,
+								ResultActivity.class); // 启动Activity
 						startActivity(intent);
 					} else {
 						debugDialog(result);
 					}
+					break;
+				case HttpThreadPost.CHECKFILE:
+					pDialog.dismiss();
+					timeHandler.removeCallbacks(runnable1);
+					System.out.println("进入CHECKFILE");
+					result = (String) msg.obj;
+					userFile = result;
+					reflashList(userFile);
+					// debugDialog(result);
+					// 添加用户物种文件
+					// dict_tg = chromossomeList.UserSpecies(dict_tg, result);
+					// adapter_tg = new ArrayAdapter<Dict>(SubmitActivity.this,
+					// R.layout.my_spinner, dict_tg);
+					// spTargetGenome.setAdapter(adapter_tg);
 					break;
 				default:
 					break;
@@ -295,13 +345,8 @@ public class SubmitActivity extends Activity {
 		pDialog.setCancelable(false);
 
 		/************************** 物种选择下拉框 *************************/
-
-		List<Dict> dict_tg = new ArrayList<Dict>();
-		dict_tg.add(new Dict("0", "Target Genome"));
-		dict_tg.add(new Dict("E.coli", "E.coli"));
-		dict_tg.add(new Dict("Saccharomyces-cerevisiae", "Saccharomyces"));
-		ArrayAdapter<Dict> adapter_tg = new ArrayAdapter<Dict>(this,
-				R.layout.my_spinner, dict_tg);
+		dict_tg = chromossomeList.Species(dict_tg);
+		adapter_tg = new ArrayAdapter<Dict>(this, R.layout.my_spinner, dict_tg);
 		spTargetGenome.setAdapter(adapter_tg);
 
 		spTargetGenome.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -309,6 +354,45 @@ public class SubmitActivity extends Activity {
 					int position, long id) {
 				// 获取键的方法：mySpinner.getSelectedItem().toString()或((Dict)mySpinner.getSelectedItem()).getId()
 				// 获取值的方法：((Dict)mySpinner.getSelectedItem()).getText();
+
+				if (position != 0) {
+					if (isLogin) {
+						dict_chromosome.clear();
+						dict_chromosome = chromossomeList
+								.paseUserChromosomesJson(userFile, position,
+										dict_chromosome);
+					} else {
+						dict_chromosome.clear();
+						switch (position) {
+						case 1:
+							dict_chromosome = chromossomeList
+									.Ecoli_Chromosome(dict_chromosome);
+							break;
+						case 2:
+							dict_chromosome = chromossomeList
+									.Saccharomyces_Chromosome(dict_chromosome);
+							break;
+						case 3:
+							dict_chromosome = chromossomeList
+									.Drosophila_Chromosome(dict_chromosome);
+							break;
+						case 4:
+							dict_chromosome = chromossomeList
+									.Caenorhabditis_Chromosome(dict_chromosome);
+							break;
+						case 5:
+							dict_chromosome = chromossomeList
+									.Arabidopsis_Chromosome(dict_chromosome);
+							break;
+						default:
+							break;
+						}
+					}
+					adapter_chromosome = new ArrayAdapter<Dict>(
+							SubmitActivity.this, R.layout.my_spinner,
+							dict_chromosome);
+					spChromosome.setAdapter(adapter_chromosome);
+				}
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -319,18 +403,43 @@ public class SubmitActivity extends Activity {
 
 		/************************* Pam位点下拉框 **************************/
 
-		List<Dict> dict_pam = new ArrayList<Dict>();
 		dict_pam.add(new Dict("0", "PAM"));
 		dict_pam.add(new Dict("NGG", "NGG"));
 		dict_pam.add(new Dict("NNNNGMTT", "NNNNGMTT"));
 		dict_pam.add(new Dict("NNAGAAW", "NNAGAAW"));
 		dict_pam.add(new Dict("NRG", "NRG"));
 		dict_pam.add(new Dict("NAAAAC", "NAAAAC"));
-		ArrayAdapter<Dict> adapter_pam = new ArrayAdapter<Dict>(this,
-				R.layout.my_spinner, dict_pam);
+		dict_pam.add(new Dict("1", "other"));
+		adapter_pam = new ArrayAdapter<Dict>(this, R.layout.my_spinner,
+				dict_pam);
 		spPam.setAdapter(adapter_pam);
 
 		spPam.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// 获取键的方法：mySpinner.getSelectedItem().toString()或((Dict)mySpinner.getSelectedItem()).getId()
+				// 获取值的方法：((Dict)mySpinner.getSelectedItem()).getText();
+				if (((Dict) spPam.getSelectedItem()).getKey().equals("1")) {
+					rlPam.setVisibility(View.VISIBLE);
+				} else {
+					rlPam.setVisibility(View.GONE);
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+
+		});
+
+		/************************** 染色体选择下拉框 *************************/
+
+		dict_chromosome = chromossomeList.Ecoli_Chromosome(dict_chromosome);
+		adapter_chromosome = new ArrayAdapter<Dict>(this, R.layout.my_spinner,
+				dict_chromosome);
+		spChromosome.setAdapter(adapter_chromosome);
+
+		spChromosome.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				// 获取键的方法：mySpinner.getSelectedItem().toString()或((Dict)mySpinner.getSelectedItem()).getId()
@@ -342,7 +451,6 @@ public class SubmitActivity extends Activity {
 			}
 
 		});
-
 		/************************* Interference按钮 **************************/
 
 		btnInterference.setOnClickListener(new OnClickListener() {
@@ -390,8 +498,8 @@ public class SubmitActivity extends Activity {
 					btnLocusTag.setBackgroundResource(R.drawable.shallow);
 					btnPosition.setBackgroundResource(R.drawable.deep);
 				}
-				etPosTag.setText("");
-				etPosTag.setHint("eg:1:200..3566");
+				rlPos.setVisibility(View.VISIBLE);
+				rlTag.setVisibility(View.GONE);
 			}
 		});
 
@@ -408,8 +516,8 @@ public class SubmitActivity extends Activity {
 					btnLocusTag.setBackgroundResource(R.drawable.shallow);
 					btnPosition.setBackgroundResource(R.drawable.deep);
 				}
-				etPosTag.setText("");
-				etPosTag.setHint("eg:thrA");
+				rlPos.setVisibility(View.GONE);
+				rlTag.setVisibility(View.VISIBLE);
 			}
 		});
 
@@ -461,9 +569,20 @@ public class SubmitActivity extends Activity {
 		btnDefault.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				etPosTag.setText("NC_001134-chromosome2:200..2873");
 				spTargetGenome.setSelection(2, true);
 				spPam.setSelection(1, true);
+				dict_chromosome.clear();
+				dict_chromosome = chromossomeList
+						.Saccharomyces_Chromosome(dict_chromosome);
+				adapter_chromosome = new ArrayAdapter<Dict>(
+						SubmitActivity.this, R.layout.my_spinner,
+						dict_chromosome);
+				spChromosome.setAdapter(adapter_chromosome);
+				spChromosome.setSelection(1, true);
+				etPos1.setText("200");
+				etPos2.setText("2873");
+				rlPos.setVisibility(View.VISIBLE);
+				rlTag.setVisibility(View.GONE);
 				tpFalg = false;
 				if (tpFalg) {
 					btnLocusTag.setBackgroundResource(R.drawable.deep);
@@ -472,7 +591,6 @@ public class SubmitActivity extends Activity {
 					btnLocusTag.setBackgroundResource(R.drawable.shallow);
 					btnPosition.setBackgroundResource(R.drawable.deep);
 				}
-				etPosTag.setHint("NC_001134-chromosome2:200..2873");
 			}
 		});
 
@@ -547,7 +665,13 @@ public class SubmitActivity extends Activity {
 		btnLogin.setOnTouchListener(new Button.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				if(isLogin){
+					Toast.makeText(getApplicationContext(),
+							"Welcome "+userName,
+							Toast.LENGTH_SHORT).show();
+					return false;
+				}
+				else if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					v.setBackgroundResource(R.drawable.deep);
 				} else {
 					v.setBackgroundResource(R.drawable.shallow);
@@ -597,21 +721,22 @@ public class SubmitActivity extends Activity {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				strPosTag = etPosTag.getText().toString();
+				strTag = etTag.getText().toString();
 				strTargetGenome = ((Dict) spTargetGenome.getSelectedItem())
 						.getKey();
 				strPam = ((Dict) spPam.getSelectedItem()).getKey();
 
-				if (etPosTag.getText().toString().isEmpty()
-						|| strPam.equals("0") || strTargetGenome.equals("0")) {
-					Toast.makeText(getApplicationContext(),
-							"Please fill in the information",
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				;
+				// if (etTag.getText().toString().isEmpty() ||
+				// strPam.equals("0")
+				// || strTargetGenome.equals("0")) {
+				// Toast.makeText(getApplicationContext(),
+				// "Please fill in the information",
+				// Toast.LENGTH_SHORT).show();
+				// return;
+				// }
+				// ;
 				timeHandler.postDelayed(runnable1, timeInterval);
-				MainSubmitPost(URL + "getMain.php");
+				MainSubmitGet(URL + "getMain.php");
 			}
 		});
 
@@ -631,21 +756,29 @@ public class SubmitActivity extends Activity {
 
 	/*********************** 主程序提交请求GET **********************/
 
-	private void MainSubmitPost(String URL) {
+	private void MainSubmitGet(String URL) {
 		System.out.println("进入MainSubmitPost");
+		strRFC = strRFC10 + strRFC12 + strRFC12a + strRFC21 + strRFC21
+				+ strRFC23 + strRFC25;
+		strRegion = strEXON + strINTRON + strUTR + strINTERGENIC;
 		// 添加参数
 		String strRequest = "?specie=" + strTargetGenome + "&pam=" + strPam
-				+ "&type=" + strType + "&rfc=" + strRFC + "&r1="
+				+ "&length=" + strCount + "&region=" + strRegion + "&type="
+				+ strType + "&rfc=" + strRFC + "&r1="
 				+ String.valueOf((double) weightR1 / 100.0);
 		if (tpFalg) {
-			strRequest = strRequest + "&gene=" + strPosTag;
+			strRequest = strRequest + "&gene=" + strTag;
 		} else {
-			strRequest = strRequest + "&location=" + strPosTag;
+			strRequest = strRequest + "&location="
+					+ ((Dict) spChromosome.getSelectedItem()).getKey() + ":"
+					+ etPos1.getText().toString() + ".."
+					+ etPos2.getText().toString();
 		}
 		if (isLogin) {
 			strRequest = strRequest + "&token=" + token;
 		}
 		URL = URL + strRequest;
+		Log.d("Xdebug", URL);
 		myHttpThreadGet = new HttpThreadGet(URL, HttpThreadGet.MAIN_SUBMIT,
 				handler);
 		myHttpThreadGet.start();
@@ -700,39 +833,45 @@ public class SubmitActivity extends Activity {
 		btnLogonLogon.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				if (etLogonUserName.getText().toString().isEmpty()
-						|| etLogonPassword.getText().toString().isEmpty()
-						|| etLogonPassword2.getText().toString().isEmpty()
-						|| etLogonEmail.getText().toString().isEmpty()) {
-					Toast.makeText(getApplicationContext(),
-							"Please fill in the user information",
-							Toast.LENGTH_SHORT).show();
-					if (!(etLogonPassword.getText().toString()
-							.equals(etLogonPassword2.getText().toString()))) {
-						Toast.makeText(getApplicationContext(),
-								"Please unified the password",
-								Toast.LENGTH_SHORT).show();
-					}
+				if (etLogonUserName.getText().toString().isEmpty()) {
+					etLogonUserName.setError("Fill a user name");
 					return;
 				}
-				;
-
-				String pswd = null;
-				pswd = MD5.getMd5Value(etLogonPassword.getText().toString()
-						.trim());
-				timeHandler.postDelayed(runnable1, timeInterval);
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("name", etLogonUserName
-						.getText().toString().trim()));
-				params.add(new BasicNameValuePair("pswd", pswd));
-				params.add(new BasicNameValuePair("email", etLogonEmail
-						.getText().toString().trim()));
-				System.out.println(pswd);
-				myHttpThreadPost = new HttpThreadPost(URL + "login/signup.php",
-						params, HttpThreadPost.LOGON, handler);
-				myHttpThreadPost.start();
-				pDialog.setMessage("LogOn...");
-				pDialog.show();
+				if (etLogonPassword.getText().toString().isEmpty()) {
+					etLogonPassword.setError("Fill a password");
+					return;
+				}
+				if (etLogonPassword2.getText().toString().isEmpty()) {
+					etLogonPassword2.setError("Fill again the password");
+					return;
+				}
+				if (etLogonEmail.getText().toString().isEmpty()) {
+					etLogonEmail.setError("Fill your Email address");
+					return;
+				}
+				if (!(etLogonPassword.getText().toString()
+						.equals(etLogonPassword2.getText().toString()))) {
+					etLogonPassword2.setError("Please unified the password");
+					return;
+				} else {
+					String pswd = null;
+					pswd = MD5.getMd5Value(etLogonPassword.getText().toString()
+							.trim());
+					timeHandler.postDelayed(runnable1, timeInterval);
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					params.add(new BasicNameValuePair("name", etLogonUserName
+							.getText().toString().trim()));
+					params.add(new BasicNameValuePair("pswd", pswd));
+					params.add(new BasicNameValuePair("email", etLogonEmail
+							.getText().toString().trim()));
+					System.out.println(pswd);
+					myHttpThreadPost = new HttpThreadPost(URL
+							+ "login/signup.php", params, HttpThreadPost.LOGON,
+							handler);
+					myHttpThreadPost.start();
+					pDialog.setMessage("LogOn...");
+					pDialog.show();
+				}
 			}
 
 		});
@@ -747,12 +886,12 @@ public class SubmitActivity extends Activity {
 				return false;
 			}
 		});
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
+		// builder.setNegativeButton("Cancel",
+		// new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialog, int which) {
+		// alertDialog.dismiss();
+		// }
+		// });
 		alertDialog = builder.create();
 		alertDialog.show();
 		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
@@ -776,6 +915,11 @@ public class SubmitActivity extends Activity {
 		cb21 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc21);
 		cb23 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc23);
 		cb25 = (CheckBox) DialogView.findViewById(R.id.checkBox_rfc25);
+		cbEXON = (CheckBox) DialogView.findViewById(R.id.checkBox_EXON);
+		cbINTRON = (CheckBox) DialogView.findViewById(R.id.checkBox_INTRON);
+		cbUTR = (CheckBox) DialogView.findViewById(R.id.checkBox_UTR);
+		cbINTERGENIC = (CheckBox) DialogView
+				.findViewById(R.id.checkBox_INTERGENIC);
 		RadioGroup group = (RadioGroup) DialogView
 				.findViewById(R.id.radioGroup1);
 		tvWeight = (TextView) DialogView.findViewById(R.id.textView_weightT);
@@ -836,18 +980,38 @@ public class SubmitActivity extends Activity {
 		} else {
 			cb25.setChecked(false);
 		}
+		if (strUTR.equals("1")) {
+			cbUTR.setChecked(true);
+		} else {
+			cbUTR.setChecked(false);
+		}
+		if (strEXON.equals("1")) {
+			cbEXON.setChecked(true);
+		} else {
+			cbEXON.setChecked(false);
+		}
+		if (strINTERGENIC.equals("1")) {
+			cbINTERGENIC.setChecked(true);
+		} else {
+			cbINTERGENIC.setChecked(false);
+		}
+		if (strINTRON.equals("1")) {
+			cbINTRON.setChecked(true);
+		} else {
+			cbINTRON.setChecked(false);
+		}
 
+		if (strCount.equals("17")) {
+			group.check(R.id.radio_17);
+		}
+		if (strCount.equals("18")) {
+			group.check(R.id.radio_18);
+		}
+		if (strCount.equals("19")) {
+			group.check(R.id.radio_19);
+		}
 		if (strCount.equals("20")) {
 			group.check(R.id.radio_20);
-		}
-		if (strCount.equals("30")) {
-			group.check(R.id.radio_30);
-		}
-		if (strCount.equals("50")) {
-			group.check(R.id.radio_50);
-		}
-		if (strCount.equals("100")) {
-			group.check(R.id.radio_100);
 		}
 
 		cb10.setOnClickListener(new OnClickListener() {
@@ -902,30 +1066,64 @@ public class SubmitActivity extends Activity {
 
 		});
 		cb23.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-
 				if (cb23.isChecked()) {
 					strRFC23 = "1";
 				} else {
 					strRFC23 = "0";
 				}
 			}
-
 		});
 		cb25.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-
 				if (cb25.isChecked()) {
 					strRFC25 = "1";
 				} else {
 					strRFC25 = "0";
 				}
 			}
-
+		});
+		cbEXON.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (cbEXON.isChecked()) {
+					strEXON = "1";
+				} else {
+					strEXON = "0";
+				}
+			}
+		});
+		cbINTRON.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (cbINTRON.isChecked()) {
+					strINTRON = "1";
+				} else {
+					strINTRON = "0";
+				}
+			}
+		});
+		cbUTR.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (cbUTR.isChecked()) {
+					strUTR = "1";
+				} else {
+					strUTR = "0";
+				}
+			}
+		});
+		cbINTERGENIC.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (cbINTERGENIC.isChecked()) {
+					strINTERGENIC = "1";
+				} else {
+					strINTERGENIC = "0";
+				}
+			}
 		});
 
 		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -934,17 +1132,17 @@ public class SubmitActivity extends Activity {
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
 
 				switch (arg1) {
+				case R.id.radio_17:
+					strCount = "17";
+					break;
+				case R.id.radio_18:
+					strCount = "18";
+					break;
+				case R.id.radio_19:
+					strCount = "19";
+					break;
 				case R.id.radio_20:
 					strCount = "20";
-					break;
-				case R.id.radio_30:
-					strCount = "30";
-					break;
-				case R.id.radio_50:
-					strCount = "50";
-					break;
-				case R.id.radio_100:
-					strCount = "100";
 					break;
 				default:
 					break;
@@ -953,17 +1151,17 @@ public class SubmitActivity extends Activity {
 
 		});
 
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
+		// builder.setNegativeButton("Cancel",
+		// new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialog, int which) {
+		// alertDialog.dismiss();
+		// }
+		// });
 
 		alertDialog = builder.create();
 		alertDialog.show();
 		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-		lp.width = (int) (SCREEN_WIDTH * 0.5);// 定义宽度
+		lp.width = (int) (SCREEN_WIDTH * 0.9);// 定义宽度
 		lp.height = (int) (SCREEN_HEIGHT * 0.9);// 定义高度
 		alertDialog.getWindow().setAttributes(lp);
 
@@ -978,30 +1176,29 @@ public class SubmitActivity extends Activity {
 		AlertDialog.Builder builder = new Builder(SubmitActivity.this);
 		builder.setView(DialogView);
 
-		etCheck = (EditText) DialogView
-				.findViewById(R.id.editText_checkid);
-		
-		btnCheck = (Button) DialogView
-				.findViewById(R.id.button_check);
+		etCheck = (EditText) DialogView.findViewById(R.id.editText_checkid);
+
+		btnCheck = (Button) DialogView.findViewById(R.id.button_check);
 
 		etCheck.setText(checkid);
-		
+
 		btnCheck.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
 				if (etCheck.getText().toString().isEmpty()) {
 					Toast.makeText(getApplicationContext(),
-							"Please fill in the ID",
-							Toast.LENGTH_SHORT).show();
+							"Please fill in the ID", Toast.LENGTH_SHORT).show();
 					return;
-					}
+				}
 				stopService();
 
 				timeHandler.postDelayed(runnable1, timeInterval);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("id", etCheck.getText().toString()));
-				myHttpThreadPost = new HttpThreadPost(SubmitActivity.URL + "getResult.php",
-						params, HttpThreadPost.CHECKID, handler);
+				params.add(new BasicNameValuePair("id", etCheck.getText()
+						.toString()));
+				myHttpThreadPost = new HttpThreadPost(SubmitActivity.URL
+						+ "getResult.php", params, HttpThreadPost.CHECKID,
+						handler);
 				myHttpThreadPost.start();
 				pDialog.setMessage("Check Result...");
 				pDialog.show();
@@ -1018,12 +1215,12 @@ public class SubmitActivity extends Activity {
 				return false;
 			}
 		});
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						alertDialog.dismiss();
-//					}
-//				});
+		// builder.setNegativeButton("Cancel",
+		// new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialog, int which) {
+		// alertDialog.dismiss();
+		// }
+		// });
 		alertDialog = builder.create();
 		alertDialog.show();
 		WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
@@ -1031,7 +1228,7 @@ public class SubmitActivity extends Activity {
 		lp.height = (int) (SCREEN_HEIGHT * 0.8);// 定义高度
 		alertDialog.getWindow().setAttributes(lp);
 	}
-		
+
 	/************************** 获取结果状态 *************************/
 
 	public boolean getStatus(String json) {
@@ -1054,7 +1251,6 @@ public class SubmitActivity extends Activity {
 		try {
 			errorMessage = new JSONObject(json).getString("message");
 		} catch (JSONException e) {
-
 			e.printStackTrace();
 		}
 		return errorMessage;
@@ -1067,14 +1263,15 @@ public class SubmitActivity extends Activity {
 		String saveGENE = null;
 		String saveLOCATION = null;
 		String saveREGION = null;
+		String saveCG = null;
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			saveSPECIE = jsonObj.getString("specie");
 			saveGENE = jsonObj.getString("gene");
 			saveLOCATION = jsonObj.getString("location");
 			saveREGION = jsonObj.getString("region");
+			saveCG = jsonObj.getString("GC");
 		} catch (JSONException e) {
-
 			e.printStackTrace();
 		}
 		// 保存json与一些信息
@@ -1085,8 +1282,18 @@ public class SubmitActivity extends Activity {
 		editor.putString("GENE", saveGENE);
 		editor.putString("LOCATION", saveLOCATION);
 		editor.putString("REGION", saveREGION);
+		editor.putString("CG", saveCG);
 		editor.putString("JSON", json);
 		editor.commit();
+	}
+
+	/************************** 更新物种信息 *************************/
+
+	private void reflashList(String json) {
+		dict_tg.clear();
+		dict_tg = chromossomeList.paseUserSpeciesJson(json, dict_tg);
+		adapter_tg = new ArrayAdapter<Dict>(this, R.layout.my_spinner, dict_tg);
+		spTargetGenome.setAdapter(adapter_tg);
 	}
 
 	/************************** 获取登录信息 *************************/
@@ -1095,35 +1302,58 @@ public class SubmitActivity extends Activity {
 		if (message.trim().equals("-")) {
 			Toast.makeText(getApplicationContext(), "Login error",
 					Toast.LENGTH_SHORT).show();
+		} else if (message.trim().equals("")) {
+			Toast.makeText(getApplicationContext(), "Can not login",
+					Toast.LENGTH_SHORT).show();
 		} else {
 			token = message; // 获取密钥
 			Toast.makeText(getApplicationContext(), "Login succeed",
 					Toast.LENGTH_SHORT).show();
 			etUserName.setVisibility(View.GONE);
 			etPassword.setVisibility(View.GONE);
-			btnLogin.setBackgroundResource(R.drawable.ic_launcher);
+			btnLogin.setBackgroundResource(R.drawable.vip);
 			btnLogin.setText("");
 			btnLogon.setText("Logout");
 			isLogin = true;
 			new BackGroundService(userName, token, true);
 			startService();
+			// 查询用户文件
+			timeHandler.postDelayed(runnable1, timeInterval);
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("token", token));
+			// myHttpThreadPost = new HttpThreadPost(SubmitActivity.URL
+			// + "upload/viewmyfiles.php", params, HttpThreadPost.CHECKFILE,
+			// handler);
+
+			myHttpThreadPost = new HttpThreadPost(SubmitActivity.URL
+					+ "upload/viewmyspecies.php", params,
+					HttpThreadPost.CHECKFILE, handler);
+			myHttpThreadPost.start();
+			pDialog.setMessage("Check Files...");
+			pDialog.show();
 		}
 	}
 
 	/************************** 获取退出登录信息 *************************/
 
 	private void getLogoutMessage(String message) {
-
-		Toast.makeText(getApplicationContext(), "Logout succeed",
-				Toast.LENGTH_SHORT).show();
-		etUserName.setVisibility(View.VISIBLE);
-		etPassword.setVisibility(View.VISIBLE);
-		btnLogin.setBackgroundResource(R.drawable.shallow);
-		btnLogin.setText("Login");
-		btnLogon.setText("Logon");
-		isLogin = false;
-		new BackGroundService(userName,token, false);
-		stopService();
+		if (message.equals("")) {
+			Toast.makeText(getApplicationContext(), "Logout succeed",
+					Toast.LENGTH_SHORT).show();
+			etUserName.setVisibility(View.VISIBLE);
+			etPassword.setVisibility(View.VISIBLE);
+			btnLogin.setBackgroundResource(R.drawable.shallow);
+			btnLogin.setText("Login");
+			btnLogon.setText("Logon");
+			isLogin = false;
+			new BackGroundService(userName, token, false);
+			stopService();
+			dict_tg.clear();
+			dict_tg = chromossomeList.Species(dict_tg);
+			adapter_tg = new ArrayAdapter<Dict>(this, R.layout.my_spinner,
+					dict_tg);
+			spTargetGenome.setAdapter(adapter_tg);
+		}
 	}
 
 	/************************** 获取注册信息 *************************/
@@ -1136,6 +1366,17 @@ public class SubmitActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "Logon fail:" + message,
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	/**
+	 * 检测网络是否可用
+	 * 
+	 * @return
+	 */
+	public boolean isNetworkConnected() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		return ni != null && ni.isConnectedOrConnecting();
 	}
 
 	// 启动服务
@@ -1185,7 +1426,7 @@ public class SubmitActivity extends Activity {
 		if (null != pDialog) {
 			pDialog.dismiss();
 		}
-		//stopService();
+		// stopService();
 		// //销毁线程通信
 		// myHttpThread.interrupt();
 	}

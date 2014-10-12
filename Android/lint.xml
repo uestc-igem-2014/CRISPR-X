@@ -4,6 +4,7 @@
     <issue id="ContentDescription">
         <ignore path="res/layout/activity_about.xml" />
     </issue>
+    <issue id="DefaultLocale" severity="ignore" />
     <issue id="DisableBaselineAlignment" severity="ignore">
         <ignore path="res/layout/activity_about.xml" />
     </issue>
@@ -19,6 +20,7 @@
         <ignore path="res/layout/activity_about.xml" />
     </issue>
     <issue id="SetJavaScriptEnabled" severity="ignore" />
+    <issue id="ShowToast" severity="ignore" />
     <issue id="UselessLeaf" severity="ignore">
         <ignore path="res/layout/activity_about.xml" />
     </issue>
