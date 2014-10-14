@@ -381,7 +381,7 @@ printf("4.2\n");
 
         ini++;
     }
-
+printf("4.3\n");
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
     }
