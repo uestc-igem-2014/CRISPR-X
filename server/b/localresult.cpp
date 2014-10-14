@@ -33,10 +33,10 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
 @brief Free data on RAM.
 @see localrow
 */
-void free_mysqlres_local(localrow *localresult,int x){
+void free_mysqlres_local(localrow *localresult){
     while(localresult){
         localrow *p=localresult;
-        if(x==3) printf("%d\n",p);
+        printf("%d\n",p);
         localresult=p->next;
         free(p);
     }

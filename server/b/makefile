@@ -66,6 +66,6 @@ exception:
 	echo "--------------test case exception 3 start-----------------"
 	echo "query in illegal rfc combinations"
 	# here, RFC 10 is incompatible to BioBrick RFC 12 and RFC 23
-	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"110010"}' 1
+	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"110010"}'
 	echo "--------------test case exception 3 end -----------------"
 
