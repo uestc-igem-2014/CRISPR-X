@@ -15,8 +15,8 @@ int res=make_mysqlres_local(&localresult,result);
 */
 int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
     int count=0;
-    localrow **p=localresult;
     mysql_data_seek(result_t,0);
+    localrow **p=localresult;
     MYSQL_ROW sql_row;
     while((sql_row=mysql_fetch_row(result_t))){
         *p=(localrow*)malloc(sizeof(localrow));
@@ -36,6 +36,7 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
 void free_mysqlres_local(localrow *localresult){
     while(localresult){
         localrow *p=localresult;
+        printf("%d\n",p);
         localresult=p->next;
         free(p);
     }
