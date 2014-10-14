@@ -235,7 +235,7 @@ int main(int args,char *argv[]){
     }
 
     i=1;
-
+printf("1\n");
     cJSON *cJSON_temp;
     cJSON_temp=cJSON_GetObjectItem(request,"type");
     if(cJSON_temp) req_type=cJSON_temp->valueint;
@@ -272,7 +272,7 @@ int main(int args,char *argv[]){
         req_restrict.region[3]=(cJSON_temp->valuestring)[2]-48;
         req_restrict.region[4]=(cJSON_temp->valuestring)[3]-48;
     }
-
+printf("2\n");
     char req_rfc[10];
     strcpy(req_rfc,cJSON_GetObjectItem(request,"rfc")->valuestring);
     req_restrict.rfc10=req_rfc[0]-48;
@@ -298,7 +298,7 @@ int main(int args,char *argv[]){
     At the same time, it reads in ptt file for specie,
     and also open files.
     */
-
+printf("3\n");
     int res;
     sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
@@ -324,7 +324,7 @@ int main(int args,char *argv[]){
     make_mysqlres_local(&localresult,result_t);
     localres_count(localresult);
     mysql_free_result(result_t);
-
+printf("4\n");
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -343,7 +343,7 @@ int main(int args,char *argv[]){
         mos_pthread_mutex_lock(&mutex_mysql_conn);
         in_site[ini].region=getRegion(atoi(sql_row[6]),atoi(sql_row[7]),atoi(sql_row[0]),atoi(sql_row[1]));
         mos_pthread_mutex_unlock(&mutex_mysql_conn);
-
+printf("4.1\n");
         if(check_region(ini)==0){
             mos_sem_post(&sem_thread_usage);
             continue;
@@ -357,7 +357,7 @@ int main(int args,char *argv[]){
         for(int i=0;i<8;i++){
             strcpy(lr.row[i],sql_row[i]);
         }
-
+printf("4.2\n");
         sprintf(buffer,"SELECT result_Sspe, result_Seff, result_count, result_offtarget, result_gc FROM Table_sgRNA as r JOIN Table_result as t ON r.sgrna_ID=t.sgrna_ID WHERE result_ntlength=%d and r.sgrna_ID=%s and result_offtarget IS NOT NULL",req_restrict.ntlength,lr.row[6]);
         mos_pthread_mutex_lock(&mutex_mysql_conn);
         int res=mysql_query(my_conn,buffer);
@@ -386,7 +386,7 @@ int main(int args,char *argv[]){
         mos_sem_wait(&sem_thread_usage);
     }
     free_mysqlres_local(localresult);
-
+printf("5\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
     root=cJSON_CreateObject();
@@ -424,7 +424,7 @@ int main(int args,char *argv[]){
         list.push_back(ans);
     }
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
-
+printf("6\n");
 #ifdef  _WIN32
     fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
