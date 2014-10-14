@@ -114,5 +114,5 @@ cJSON *getlineregion(int,int,int);
 int getRegion(int sgrna_ID,int Chr_No,int sgrna_start,int sgrna_end);
 
 int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t);
-void free_mysqlres_local(localrow *localresult);
+void free_mysqlres_local(localrow *localresult,int x);
 int localres_count(localrow *lr);

@@ -226,7 +226,7 @@ int main(int args,char *argv[]){
     mos_sem_init(&sem_thread_usage,0,0);
 
     char *req_str=argv_default;
-    if(args==2) req_str=argv[1];
+    if(args>=2) req_str=argv[1];
 
     cJSON *request=cJSON_Parse(req_str);
     if(check_req(request)){
@@ -343,7 +343,7 @@ printf("4\n");
         mos_pthread_mutex_lock(&mutex_mysql_conn);
         in_site[ini].region=getRegion(atoi(sql_row[6]),atoi(sql_row[7]),atoi(sql_row[0]),atoi(sql_row[1]));
         mos_pthread_mutex_unlock(&mutex_mysql_conn);
-printf("4.1\n");
+
         if(check_region(ini)==0){
             mos_sem_post(&sem_thread_usage);
             continue;
@@ -357,7 +357,7 @@ printf("4.1\n");
         for(int i=0;i<8;i++){
             strcpy(lr.row[i],sql_row[i]);
         }
-printf("4.2\n");
+
         sprintf(buffer,"SELECT result_Sspe, result_Seff, result_count, result_offtarget, result_gc FROM Table_sgRNA as r JOIN Table_result as t ON r.sgrna_ID=t.sgrna_ID WHERE result_ntlength=%d and r.sgrna_ID=%s and result_offtarget IS NOT NULL",req_restrict.ntlength,lr.row[6]);
         mos_pthread_mutex_lock(&mutex_mysql_conn);
         int res=mysql_query(my_conn,buffer);
@@ -381,11 +381,11 @@ printf("4.2\n");
 
         ini++;
     }
-printf("4.3\n");
+
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
     }printf("4.4\n");
-    free_mysqlres_local(localresult);
+    free_mysqlres_local(localresult,args);
 printf("5\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
