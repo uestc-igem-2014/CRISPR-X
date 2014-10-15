@@ -431,7 +431,7 @@ int main(int args,char *argv[]){
 #endif // _WIN32
 #ifdef  __linux
     //printf("{\"status\":1,\"message\":\"System in maintenance\"}");
-    printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
+    printf("%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
 printf("10\n");
     //free(argv[0]);
