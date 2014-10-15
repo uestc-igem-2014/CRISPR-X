@@ -384,7 +384,7 @@ int main(int args,char *argv[]){
 
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
-    }printf("4.4\n");
+    }
     //free_mysqlres_local(localresult);
 
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
@@ -433,7 +433,7 @@ int main(int args,char *argv[]){
     //printf("{\"status\":1,\"message\":\"System in maintenance\"}");
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
-printf("10\n");
+
     //free(argv[0]);
     //mysql_free_result(result);
     //mysql_close(my_conn);
