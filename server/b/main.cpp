@@ -434,7 +434,7 @@ printf("9\n");
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
 printf("10\n");
-    free(argv[0]);
+    //free(argv[0]);
     mysql_free_result(result);
     mysql_close(my_conn);
 
