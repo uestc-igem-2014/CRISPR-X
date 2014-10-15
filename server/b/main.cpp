@@ -322,7 +322,10 @@ int main(int args,char *argv[]){
     }
     MYSQL_RES *result_t=mysql_store_result(my_conn);
     make_mysqlres_local(&localresult,result_t);
-    //localres_count(localresult);
+    if(localres_count(localresult)<0){
+	    onError("database error3");
+		return -1;
+	} 
     mysql_free_result(result_t);
 
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);

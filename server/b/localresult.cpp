@@ -49,7 +49,7 @@ int localres_count(localrow *lr){
     while(lr){
         i++;
         lr=lr->next;
-        if(i>1000000) return -1;
+        if(i>NODE_SIZE) return -1;
     }
     return i;
 }
