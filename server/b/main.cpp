@@ -235,7 +235,7 @@ int main(int args,char *argv[]){
     }
 
     i=1;
-printf("1\n");
+
     cJSON *cJSON_temp;
     cJSON_temp=cJSON_GetObjectItem(request,"type");
     if(cJSON_temp) req_type=cJSON_temp->valueint;
@@ -272,7 +272,7 @@ printf("1\n");
         req_restrict.region[3]=(cJSON_temp->valuestring)[2]-48;
         req_restrict.region[4]=(cJSON_temp->valuestring)[3]-48;
     }
-printf("2\n");
+
     char req_rfc[10];
     strcpy(req_rfc,cJSON_GetObjectItem(request,"rfc")->valuestring);
     req_restrict.rfc10=req_rfc[0]-48;
@@ -298,7 +298,7 @@ printf("2\n");
     At the same time, it reads in ptt file for specie,
     and also open files.
     */
-printf("3\n");
+
     int res;
     sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
@@ -324,7 +324,7 @@ printf("3\n");
     make_mysqlres_local(&localresult,result_t);
     //localres_count(localresult);
     mysql_free_result(result_t);
-printf("4\n");
+
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -386,19 +386,19 @@ printf("4\n");
         mos_sem_wait(&sem_thread_usage);
     }printf("4.4\n");
     //free_mysqlres_local(localresult);
-printf("5\n");
+
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
-printf("6\n");
+
     root=cJSON_CreateObject();
     cJSON_AddNumberToObject(root,"status",0);
-printf("7\n");
+
     cJSON_AddStringToObject(root,"specie",req_specie);
     cJSON_AddStringToObject(root,"gene",req_gene);
     sprintf(buffer,"%s:%d..%d",req_chromosome,req_gene_start,req_gene_end);
     cJSON_AddStringToObject(root,"location",buffer);
     cJSON_temp=getlineregion(get_Chr_No(req_specie,req_chromosome),req_gene_start,req_gene_end);    //temporary change
     if(cJSON_temp) cJSON_AddItemToObject(root,"region",cJSON_temp);
-printf("8\n");
+
     vector<cJSON*> list;
     list.clear();
     for(i=0;i<ini && i<50;i++){
@@ -424,7 +424,7 @@ printf("8\n");
         list.push_back(ans);
     }
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
-printf("9\n");
+
 #ifdef  _WIN32
     fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
@@ -436,7 +436,7 @@ printf("9\n");
 printf("10\n");
     //free(argv[0]);
     //mysql_free_result(result);
-    //mysql_close(my_conn);
+    mysql_close(my_conn);
 
     return 0;
 }

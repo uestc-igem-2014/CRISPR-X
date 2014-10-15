@@ -36,7 +36,6 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
 void free_mysqlres_local(localrow *localresult){
     while(localresult){
         localrow *p=localresult;
-        if(p->next==NULL) printf(">>%d\n",p);
         localresult=p->next;
         free(p);
     }
