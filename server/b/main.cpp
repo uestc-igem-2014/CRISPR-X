@@ -388,17 +388,17 @@ printf("4\n");
     //free_mysqlres_local(localresult);
 printf("5\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
-
+printf("6\n");
     root=cJSON_CreateObject();
     cJSON_AddNumberToObject(root,"status",0);
-
+printf("7\n");
     cJSON_AddStringToObject(root,"specie",req_specie);
     cJSON_AddStringToObject(root,"gene",req_gene);
     sprintf(buffer,"%s:%d..%d",req_chromosome,req_gene_start,req_gene_end);
     cJSON_AddStringToObject(root,"location",buffer);
     cJSON_temp=getlineregion(get_Chr_No(req_specie,req_chromosome),req_gene_start,req_gene_end);    //temporary change
     if(cJSON_temp) cJSON_AddItemToObject(root,"region",cJSON_temp);
-
+printf("8\n");
     vector<cJSON*> list;
     list.clear();
     for(i=0;i<ini && i<50;i++){
@@ -424,7 +424,7 @@ printf("5\n");
         list.push_back(ans);
     }
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
-printf("6\n");
+printf("9\n");
 #ifdef  _WIN32
     fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
@@ -433,7 +433,7 @@ printf("6\n");
     //printf("{\"status\":1,\"message\":\"System in maintenance\"}");
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
-printf("7\n");
+printf("10\n");
     free(argv[0]);
     mysql_free_result(result);
     mysql_close(my_conn);
