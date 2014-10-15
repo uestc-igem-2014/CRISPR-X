@@ -435,8 +435,8 @@ printf("9\n");
 #endif // __linux
 printf("10\n");
     //free(argv[0]);
-    mysql_free_result(result);
-    mysql_close(my_conn);
+    //mysql_free_result(result);
+    //mysql_close(my_conn);
 
     return 0;
 }
