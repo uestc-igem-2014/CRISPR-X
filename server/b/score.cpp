@@ -139,9 +139,8 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     int res=mysql_query(my_conn,buffer);
     mos_pthread_mutex_unlock(&mutex_mysql_conn);
     if(res){
-        printf("%s\n\n",buffer);
-        printf("%s\n",mysql_error(my_conn));
-        system("pause");
+        printf("%s\n",buffer);
+        printf("%s\n\n",mysql_error(my_conn));
     }
     in_site[ini].otj=otj;
     in_site[ini].ot.clear();
