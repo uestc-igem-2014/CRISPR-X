@@ -385,7 +385,7 @@ printf("4\n");
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
     }printf("4.4\n");
-    free_mysqlres_local(localresult);
+    //free_mysqlres_local(localresult);
 printf("5\n");
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
