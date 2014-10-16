@@ -13,19 +13,19 @@ public class Options {
 	}
 	
 	public boolean getSoundEffects(){
-		return options.getBoolean("chkSound",false);
+		return options.getBoolean("chkSound",true);
 	}
 	
 	public boolean getMusic(){
-		return options.getBoolean("chkMusic",false);
+		return options.getBoolean("chkMusic",true);
 	}
 	
 	public boolean getVibration(){
-		return options.getBoolean("chkVibration",false);
+		return options.getBoolean("chkVibration",true);
 	}
 	
 	public boolean getAutoFire(){
-		return options.getBoolean("chkAutoFire",false);
+		return options.getBoolean("chkAutoFire",true);
 	}
 	
 	public String getUsername(){
@@ -33,7 +33,7 @@ public class Options {
 	}
 	
 	public String getControlls(){
-		return options.getString("lstControls","-1");
+		return options.getString("lstControls","1");
 	}
 	
 	public String getDifficulty(){

@@ -28,6 +28,8 @@ public class Boss extends AnimatedSprite implements IEnemy {
 	private Laser laser2;
 	private boolean i;
 	private boolean uleteo;
+	/************ÐÞ¸ÄÑªÁ¿************/
+	private int health = 10;
 	
 	public Boss(float pX, float pY, TiledTextureRegion pTiledTextureRegion, TextureRegion laserRegion, final Engine engine) {
 		super(pX, pY, pTiledTextureRegion);
@@ -36,6 +38,15 @@ public class Boss extends AnimatedSprite implements IEnemy {
 		killed=false;
 		uleteo=false;
 		this.setVisible(false);
+	}
+	
+	public int getHealth(){
+		return health;
+	}
+	
+	public int hit(){
+		health = health - 1;
+		return health;
 	}
 	
 	public boolean isKilled(){

@@ -55,8 +55,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:textSize="16sp"
-            android:text="     One day, a group of unknown bacteria invade the tribe of white blood cells, white blood cells have fought off a wave of enemies, but it seems that the war will still last...\n     Would you like to help white blood cells resisting the bacteria and winning the victory of the battle? Please click on the ‘StartGame’ to play Bacteria War, an interesting game based on android platform which you will control it by accelerometer. "
+            android:textSize="14sp"
+            android:text="     This is designed by iGEM UESTC-SOFTWARE. iGEM (International Genetically Engineered Machine Competition) is an annual world-class competition in synthetic biology, aims to promote national undergraduate learning, communicating and cooperating in this field.\n    One day, a large group of unknown viruses invaded bacteria. Bacteria are facing an unprecedented challenge, but they play to their wisdom, using CRISPR as a weapon cope tenaciously this war. Would you like to help bacteria resisting the viruses and winning the victory of the battle? Please click on the ‘StartGame’ to play Bacteria War (by accelerometer)."
             android:textStyle="bold" />
 
         <ImageView

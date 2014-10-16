@@ -10,11 +10,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
-	private int SCREEN_WIDTH, SCREEN_HEIGHT; // фад╩╦ъ©М
+//	private int SCREEN_WIDTH, SCREEN_HEIGHT; // фад╩╦ъ©М
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +22,11 @@ public class MainActivity extends Activity {
 		SetFullWindows();
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		SCREEN_WIDTH = dm.widthPixels;
-		SCREEN_HEIGHT = dm.heightPixels;
+//		SCREEN_WIDTH = dm.widthPixels;
+//		SCREEN_HEIGHT = dm.heightPixels;
 
 		setContentView(R.layout.mymain);
-		ImageView iv = (ImageView) findViewById(R.id.imageView1);
+//		ImageView iv = (ImageView) findViewById(R.id.imageView1);
 		Button btnStart =  (Button) findViewById(R.id.button1);
 		
 //		iv.setAlpha(90);

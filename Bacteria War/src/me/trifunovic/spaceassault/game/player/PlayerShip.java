@@ -15,7 +15,7 @@ public class PlayerShip extends AnimatedSprite {
 	private final Engine mEngine;
 	private final PlayerShipShadow shadow;
 	/************修改血量************/
-	private int health = 21;
+	private int health = 25;
 	private boolean killed=false;
 	private int numBullets;
 	
@@ -52,7 +52,13 @@ public class PlayerShip extends AnimatedSprite {
 
 	public void hit() {
 		/************修改血量************/
-		health =health-5;
+		health =health-7;
+		this.addShapeModifier(new SequenceModifier(new ColorModifier(0.3f, 1, 1, 1, 0, 1, 0), new ColorModifier(0.3f, 1, 1, 0, 1, 0, 1)));
+	}
+	
+	public void hit2() {
+		/************修改血量************/
+		health =health-15;
 		this.addShapeModifier(new SequenceModifier(new ColorModifier(0.3f, 1, 1, 1, 0, 1, 0), new ColorModifier(0.3f, 1, 1, 0, 1, 0, 1)));
 	}
 
