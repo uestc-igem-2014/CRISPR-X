@@ -71,9 +71,10 @@ public final class R {
         public static final int shallow=0x7f02002e;
         public static final int sub=0x7f02002f;
         public static final int sub1=0x7f020030;
-        public static final int vip=0x7f020031;
-        public static final int wiki=0x7f020032;
-        public static final int write=0x7f020033;
+        public static final int the_logo2=0x7f020031;
+        public static final int vip=0x7f020032;
+        public static final int wiki=0x7f020033;
+        public static final int write=0x7f020034;
     }
     public static final class id {
         public static final int action_settings=0x7f08006e;

@@ -86,7 +86,7 @@ public class CreatMap {
 				canvas.drawRect(x0, y0, x1, y1, pen);	//»­gRNA
 				pen.setColor(Color.BLACK);
 				canvas.drawRect(x0-1, y0-1, x0+1, y1+1, pen);	//»­PAM
-			} else if(dir.equals("-")) {
+			} else {
 				//»­Ñ¡ÖÐgRNA
 				x0 = (int) (SCREEN_WIDTH/20 + (onPos-startPos)/lenUnit);
 				x1 = (int) (x0 - 23/lenUnit);
