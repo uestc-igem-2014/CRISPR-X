@@ -219,7 +219,7 @@ int main(int args,char *argv[]){
         onError(buffer);
         return -1;
     }
-printf("1\n");
+
     mos_pthread_mutex_init(&mutex,NULL);
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
@@ -298,7 +298,7 @@ printf("1\n");
     At the same time, it reads in ptt file for specie,
     and also open files.
     */
-printf("2\n");
+
     int res;
     sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
@@ -313,7 +313,7 @@ printf("2\n");
         return -1;
     }
     mysql_free_result(result);
-printf("3\n");
+
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s';",req_specie,req_pam);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -327,7 +327,7 @@ printf("3\n");
         return -1;
     } 
     mysql_free_result(result_t);
-printf("4\n");
+
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -429,7 +429,7 @@ printf("4\n");
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
 
 #ifdef  _WIN32
-    fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
+    fprintf(fopen("D:/out.txt","w"),"%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
 #endif // _WIN32
 #ifdef  __linux

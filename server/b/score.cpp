@@ -103,16 +103,16 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     else if(in_site[ini].gc>0.5 && in_site[ini].gc<0.7) Sgc=0;
     else Sgc=35;
     if(in_site[ini].nt[LEN-req_restrict.ntlength]!='G') S20=35;
-	
-    localresult *flr;
-	FILE *fin=fopen("out",r);
-    while(lr){
-        int start=atoi(lr->row[0]);
+
+    localrow flr;
+    FILE *fin=fopen("tmp/out.tmp","r");
+    while(fscanf(fin,"%s",flr.row[0])==1){
+        for(int j=1;j<8;j++) fscanf(fin,"%s",flr.row[j]);
+        int start=atoi(flr.row[0]);
         if(in_site[ini].index!=start){
-            double smm=subscore(ini,lr,&Nph,1);
+            double smm=subscore(ini,&flr,&Nph,1);
             sum+=smm;
         }
-        lr=lr->next;
     }
     //sum=sigma+S1
     if(type==1 && Nph>3){
@@ -146,6 +146,8 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     }
     in_site[ini].otj=otj;
     in_site[ini].ot.clear();
+
+    fclose(fin);
 }
 
 /**
