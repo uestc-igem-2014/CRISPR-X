@@ -103,7 +103,9 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     else if(in_site[ini].gc>0.5 && in_site[ini].gc<0.7) Sgc=0;
     else Sgc=35;
     if(in_site[ini].nt[LEN-req_restrict.ntlength]!='G') S20=35;
-
+	
+    localresult *flr;
+	FILE *fin=fopen("out",r);
     while(lr){
         int start=atoi(lr->row[0]);
         if(in_site[ini].index!=start){

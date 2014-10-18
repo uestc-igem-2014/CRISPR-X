@@ -219,7 +219,7 @@ int main(int args,char *argv[]){
         onError(buffer);
         return -1;
     }
-
+printf("1\n");
     mos_pthread_mutex_init(&mutex,NULL);
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
@@ -298,7 +298,7 @@ int main(int args,char *argv[]){
     At the same time, it reads in ptt file for specie,
     and also open files.
     */
-
+printf("2\n");
     int res;
     sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
@@ -313,7 +313,7 @@ int main(int args,char *argv[]){
         return -1;
     }
     mysql_free_result(result);
-
+printf("3\n");
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s';",req_specie,req_pam);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -323,11 +323,11 @@ int main(int args,char *argv[]){
     MYSQL_RES *result_t=mysql_store_result(my_conn);
     make_mysqlres_local(&localresult,result_t);
     if(localres_count(localresult)<0){
-	    onError("database error3");
-		return -1;
-	} 
+	onError("database error3");
+        return -1;
+    } 
     mysql_free_result(result_t);
-
+printf("4\n");
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){

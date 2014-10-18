@@ -33,7 +33,6 @@ using namespace std;
 #define NUM_NO 4
 #define NUM_CHROMOSOME 30
 #define GENE_LEN 8000000
-#define DCFILE_LEN 8000000
 #define NODE_SIZE 1000000
 #define LOCALROW_LEN 120
 #define MAX_SEM_THREAD 80
@@ -42,9 +41,9 @@ using namespace std;
 #define RETURN_SUCCEED 0
 
 #define MYSQL_CONF_HOST "127.0.0.1"
-#define MYSQL_CONF_USERNAME "root"
+#define MYSQL_CONF_USERNAME "igem"
 #define MYSQL_CONF_DB "CasDB"
-#define MYSQL_CONF_PASSWD ""
+#define MYSQL_CONF_PASSWD "uestc2014!"
 
 typedef struct site{
     char nt[LEN+1];
