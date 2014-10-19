@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,10 +38,12 @@ public class IDsearch extends JFrame implements ActionListener{
 		
 		Font font = new Font(null, 1, 25);
 		
+		ImageIcon ReaultQuery=new ImageIcon("image/ReaultQuery.jpg");
+		
 		ID=new JLabel("ID :");
 		IDdiplay=new JLabel(IDStr);
-		tishi=new JLabel("正在计算中。。。");
-		close=new JButton("立即查询");
+		tishi=new JLabel("<html>Your requirement has been submitted.Please make down this ID(IMPORTANT) to query the result later.</html>");
+		close=new JButton(ReaultQuery);
 		game=new JButton("小游戏");
 		this.add(ID);
 		ID.setBounds(30, 24, 50, 30);
@@ -49,16 +52,16 @@ public class IDsearch extends JFrame implements ActionListener{
 		IDdiplay.setFont(font);
 		this.add(IDdiplay);
 		this.add(close);
-		close.setBounds(250, 100,85,30);
+		close.setBounds(240, 120,130,30);
 		close.setFont(null);
-		this.add(game);
+//		this.add(game);
 		game.setBounds(150, 100, 80, 30);
 		this.setFont(null);
 		this.add(tishi);
-		tishi.setBounds(30, 56, 105, 30);
+		tishi.setBounds(30, 56,350, 50);
 		close.addActionListener(this);
 		
-		this.setSize(360,180);
+		this.setSize(400,200);
 		this.setResizable(false);
 		this.setLocation(300,280);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

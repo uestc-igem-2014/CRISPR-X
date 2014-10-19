@@ -21,7 +21,7 @@ public class JFrameBackground {
  }
 
  public JFrameBackground() {
-  background = new ImageIcon("image/tableImage.png");// 背景图片
+  background =new ImageIcon("image/tableImage.png");// 背景图片
   JLabel label = new JLabel(background);// 把背景图片显示在一个标签里面
   // 把标签的大小位置设置为图片刚好填充整个面板
   label.setBounds(0, 0, background.getIconWidth(),

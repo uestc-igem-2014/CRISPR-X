@@ -2,6 +2,10 @@ package Model;
 
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.UIManager;
 
@@ -54,10 +58,12 @@ public class Analyze
 		   JSONObject dataJson=new JSONObject(varlueStr);
 		   status=dataJson.getInt("status");
 		   if(status==0){
+			   List<Imageweizhi> regionlist=new ArrayList<Imageweizhi>();
 //			   JSONObject message=dataJson.getJSONObject("message");
 			   String location=dataJson.getString("location");
 //			   System.out.print(location);
 			   JSONArray result= dataJson.getJSONArray("result");
+			   JSONArray region= dataJson.getJSONArray("region");
 			   int jsonLength=result.length();
 			   String[] positionStr=new String[jsonLength];
 			   String[] strandStr=new String[jsonLength];
@@ -95,13 +101,33 @@ public class Analyze
         			strandStr[i]=strand;
 //        			int count=result.getJSONObject(i).getInt("count");
 //        			datakey[i][5]=count+"";
+        			
+        			
 			   }
-	     new result(positionStr,location,strandStr,jsonLength);
+			   System.out.println(region.length());
+			   for(int i=0;i<region.length();i++){
+				   
+				   int length=0;
+				   String description=region.getJSONObject(i).getString("description");
+       				if(i!=0){
+       					int endpoint=region.getJSONObject(i).getInt("endpoint");
+       					int lastendpoint=region.getJSONObject(i-1).getInt("endpoint");
+       					length=endpoint-lastendpoint;
+       				}else{
+       					length=region.getJSONObject(i).getInt("endpoint");
+       				}
+       				Imageweizhi xinxi=new Imageweizhi();
+       				xinxi.setDescription(description);
+       				xinxi.setEndpoint(length);
+       				regionlist.add(xinxi);
+			   }
+	     new result(positionStr,location,strandStr,jsonLength,regionlist);
+//	     new result();
 	     ok=1;
 	   }else if(status==1){
-		   javax.swing.JOptionPane.showMessageDialog(null,"没有该基因","massage",0);
+		   javax.swing.JOptionPane.showMessageDialog(null,"<html>None of the genes","massage</html>",0);
 	   }else if(status==2){
-		   javax.swing.JOptionPane.showMessageDialog(null,"计算未完成","massage",0);
+		   javax.swing.JOptionPane.showMessageDialog(null,"<html>The calculation is not complete","massage</html>",0);
 	   }
 	}
 }

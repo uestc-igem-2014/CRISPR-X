@@ -9,11 +9,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.sf.json.JSONObject;
 
 import org.json.JSONException;
+
 
 
 
@@ -27,12 +29,14 @@ public class Send implements Runnable{
 	String IDValue;
 	String PositionValue;
 	String Value1;
-	int postStatus=3;//0_signup,1_login,2_history
-	String lines,rfcStr;
+	double r1;
+	int postStatus=3,ntlength;//0_signup,1_login,2_history
+	String lines,rfcStr,regionStr;
 	String name,pswd,email;
 	public String key="361610445ee59220d3463620ee42fa1a";
 	static StringBuffer ID=new StringBuffer();
 	StringBuffer value=new StringBuffer();
+	StringBuffer value_MoreInfo=new StringBuffer();
 	String blast="CCACATGCCAT";
 	static File file;
 	static String note;
@@ -48,14 +52,19 @@ public class Send implements Runnable{
 	public String importfile_URL="http://i.uestc.edu.cn/iGEM2014/upload/import.php";
 	public String Viewmyfiles_URL="http://i.uestc.edu.cn/iGEM2014/upload/viewmyfiles.php";
 	public String Viewmysp_URL="http://i.uestc.edu.cn/iGEM2014/upload/viewmyspecies.php";
+	public String MoreInfo_URL="http://i.uestc.edu.cn/iGEM2014/getMoreInfo.php?";
+	public String MoreInfoimg_URL="http://i.uestc.edu.cn/iGEM2014/RNAFold/";
 	
 	
-    	public Send(String TargetGenomeValue,String PAMValue,String IDValue,String PositionValue, String rfcStr) {
+    	public Send(String TargetGenomeValue,String PAMValue,String IDValue,String PositionValue, String rfcStr,String regeion,int ntlength,double r1ralue) {
 		    this.TargetGenomeValue = TargetGenomeValue;
 		    this.PAMValue=PAMValue;
 		    this.IDValue=IDValue;
 		    this.PositionValue=PositionValue;
-		    this.rfcStr=rfcStr;	    
+		    this.rfcStr=rfcStr;	
+		    this.regionStr=regeion;
+		    this.ntlength=ntlength;
+		    this.r1=r1ralue;
     	}
     	public Send() {
 			
@@ -92,14 +101,17 @@ public class Send implements Runnable{
 		    }else if(postStatus==1){
 		    }else if(postStatus==2){
 		    	StringBuffer history=SendPost(getHistory_url,key,"","");
-		    	
 		    	new AnalyzeHistory().historyAnalyze(history.toString());
 		    }else if(postStatus==3){
-		    	StringBuffer kk=SendPost(result_URL,ID.toString(), "", "");
-//		    	System.out.println(kk);
+		    	StringBuffer kk=SendPost(result_URL,ID.toString(), "", "");;
 		    	new Analyze(kk);
 		    }else if(postStatus==4){
 		    	SendPost(upload_url,name,pswd,email);
+		    	if(value.equals("N2")){
+		    		javax.swing.JOptionPane.showMessageDialog(null,filename+"Upload failed");
+		    	}else{
+		    		javax.swing.JOptionPane.showMessageDialog(null,filename+"Uploaded successfully");
+		    	}
 		    }else if(postStatus==5){
 		    	SendPost(importfile_URL,fliesImport.toString(),"","");
 		    }else if(postStatus==6){
@@ -111,9 +123,9 @@ public class Send implements Runnable{
 		    }
     	}
 		public  void SendGet() throws IOException{
-    		String getURL = GET_URL + "type=1"+"&pam="+PAMValue+"&specie=" + TargetGenomeValue+"&location="+IDValue+"&gene="+PositionValue+"&rfc="+rfcStr+"&listcount=40"+"&token="+key;
-    		System.out.println("type=1"+"&pam="+PAMValue+"&specie=" + TargetGenomeValue+"&location="+IDValue+"&gene="+PositionValue+"&rfc="+rfcStr+"&listcount=40"+"&token="+key);
+    		String getURL = GET_URL + "type=1"+"&pam="+PAMValue+"&specie=" + TargetGenomeValue+"&location="+IDValue+"&gene="+PositionValue+"&rfc="+rfcStr+"&region="+regionStr+"&length="+ntlength+"&r1="+r1+"&token="+key;
     		URL getUrl = new URL(getURL);
+    		System.out.print(getURL);
     		 HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
     		 connection.connect();
     		 connection.setConnectTimeout(100000);
@@ -142,6 +154,24 @@ public class Send implements Runnable{
 //    	        reader.close();
     	        connection.disconnect();
     	}
+		public String sendgetM(String sequenceStr) throws IOException{
+			String sequence= MoreInfo_URL +"sequence="+sequenceStr;
+			System.out.println(sequence);
+			URL getUrl = new URL(sequence);
+			HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
+   		 	connection.connect();
+   		 	connection.setConnectTimeout(100000);
+   		 	BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
+		    while ((lines = reader.readLine()) !=null){
+		    	lines = new String(lines.getBytes(), "utf-8");
+		    	value_MoreInfo.append(lines);
+		    	System.out.println(value_MoreInfo);
+		    }
+		    reader.close();
+		    connection.disconnect();
+			return value_MoreInfo.toString();
+			
+		}
 		public  StringBuffer SendPost(String sUrl,String name,String pswd,String email){
 			
 			try{
@@ -157,9 +187,9 @@ public class Send implements Runnable{
 				OutputStream Data=link.getOutputStream();
 				OutputStreamWriter inputData=new OutputStreamWriter(Data,"utf-8");
 				if(postStatus==0){
-					inputData.write("name=TTEE&pswd=12345&email=23111");
+					inputData.write("myhistory=TTEE&pswd=12345&email=23111");
 				}else if(postStatus==1){
-					inputData.write("name="+name+"&pswd="+pswd);
+					inputData.write("myhistory="+name+"&pswd="+pswd);
 				}else if(postStatus==2){
 					inputData.write("token="+name);
 				}else if (postStatus==3){
@@ -175,6 +205,7 @@ public class Send implements Runnable{
 						flieStr.append((char)aa);
 					}
 					inputData.write("token="+key+"&file="+flieStr.toString()+"&note="+note+"&filename="+filename);
+					
 				}else if(postStatus==5){
 					inputData.write("token="+key+"&command="+name);
 				}else if(postStatus==6){

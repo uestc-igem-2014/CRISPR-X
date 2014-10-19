@@ -37,15 +37,16 @@ public class DrawImage extends JFrame{
 	void DrawImage(){
 		minNum=Integer.parseInt(minStr);
 		maxNum=Integer.parseInt(maxStr);
-		MapImage mapImage=new MapImage(positionNum,minNum,maxNum,count,strand);
-		this.add(mapImage);
-		this.setSize(500,300);
-		this.setResizable(false);
-		this.setLocation(300,280);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setVisible(true);	
+//		MapImage mapImage=new MapImage(positionNum,minNum,maxNum,count,strand);
+//		this.add(mapImage);
+		
 	}
-
+	int getminNum(){
+		return minNum;
+	}
+	int getmaxNum(){
+		return maxNum;
+	}
 }
 class MapImage extends JPanel{
 	float position;

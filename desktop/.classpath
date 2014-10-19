@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="D:/用户目录/Desktop/beautyeye_lnf_v3.5_all_in_one/dist/beautyeye_lnf.jar"/>
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/org.json.jar"/>
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/commons-lang-2.3.jar"/>
@@ -10,5 +9,6 @@
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/ezmorph-1.0.4.jar"/>
 	<classpathentry kind="lib" path="G:/android/CRISPER-X/123/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="D:/用户目录/Desktop/beautyeye_lnf_v3.5_all_in_one/dist/beautyeye_lnf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

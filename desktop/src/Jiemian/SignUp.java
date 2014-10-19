@@ -27,7 +27,7 @@ public class SignUp extends JFrame implements ActionListener {
 		new SignUp();
 	}
 	SignUp(){
-		name=new JLabel("name :");
+		name=new JLabel("myhistory :");
 		password=new JLabel("Initial Password :");
 		repassword=new JLabel("Reenter Password :");
 		email=new JLabel("Reenter Email :");

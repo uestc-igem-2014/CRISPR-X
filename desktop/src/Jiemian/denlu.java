@@ -1,13 +1,18 @@
 package Jiemian;
 
+import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -20,27 +25,45 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 	JLabel name,passward;
 	JTextField nameInput,passwardInput;
 	JButton  login,signUp;
-	String key;
+	static String key,nameStr;
 	int status;
+	static JDialog loginsuccess;
 	public static void main(String[] args) {
 		try{
 			UIManager.put("RootPane.setupButtonVisible",false);
-			BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
+			BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencySmallShadow;
 			org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
 		}
 		catch(Exception e){
 		}
-		new denlu();
+		new denlu().login();
 	}
 	public void login(){
 		
+		ImageIcon loginimg=new ImageIcon("image/login.jpg");
+		ImageIcon SignUpimg=new ImageIcon("image/SignUp.jpg");
+		
+		Font font1=new Font("Arial",1,12);
+		
 		this.setLayout(null);
-		name=new JLabel("name :");
-		passward=new JLabel("passward :");
+		name=new JLabel("Name :");
+		name.setFont(font1);
+		passward=new JLabel("Passward :");
+		passward.setFont(font1);
 		nameInput=new JTextField(20);
 		passwardInput=new JTextField();
-		login=new JButton("login");
-		signUp=new JButton("Sign Up");
+		login=new JButton(loginimg);
+		signUp=new JButton(SignUpimg);
+		
+		loginsuccess=new JDialog(this,true);
+		loginsuccess.setLayout(null);
+		loginsuccess.setSize(300, 200);
+		loginsuccess.setLocation(getX() + 50, getY() + 50);
+		JLabel messagelogin=new JLabel("Login was successful!");
+		JButton loginsuccessclose=new JButton("ok");
+		loginsuccess.add(messagelogin);
+		loginsuccess.add(loginsuccessclose);
+		messagelogin.setBounds(0, 0, 200, 200);
 		
 		this.add(name);
 		this.add(passward);
@@ -49,18 +72,19 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 		this.add(login);
 		this.add(signUp);
 //		this.setUndecorated(true);
-		name.setBounds(20, 20, 40, 20);
-		passward.setBounds(20, 60, 80, 20);
-		nameInput.setBounds(90, 20, 120, 20);
-		passwardInput.setBounds(90,60,120,20);
-		login.setBounds(198,100, 50, 20);
-		signUp.setBounds(120, 100, 65, 20);
+		name.setBounds(55, 20, 40, 20);
+		passward.setBounds(55, 90, 80, 20);
+		nameInput.setBounds(135, 20, 200, 25);
+		passwardInput.setBounds(135,90,200,25);
+		login.setBounds(220,170, 100, 32);
+		signUp.setBounds(80, 170,100, 32);
 		
 		login.addActionListener(this);
 		signUp.addActionListener(this);
 		
 		
-		this.setSize(300,180);
+		
+		this.setSize(400,250);
 		this.setResizable(false);
 		this.setLocation(300,280);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,16 +92,19 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==login){
-			String nameStr=(String)nameInput.getText();
+			nameStr=(String)nameInput.getText();
 			String passWordStr=passwardInput.getText();
 			String pwsd=Md5(passWordStr.trim());
 			key=new Send().Send(nameStr,pwsd);
 			if(key.toString().equals("-")){
-				javax.swing.JOptionPane.showMessageDialog(null,"µÇÂ¼Ê§°Ü");
+				javax.swing.JOptionPane.showMessageDialog(null,"Logon failure");
 				status=0;
 			}else{
 				status=1;
-				javax.swing.JOptionPane.showMessageDialog(null,"µÇÂ¼³É¹¦");
+//				loginsuccess.dispose();
+				javax.swing.JOptionPane.showMessageDialog(null,"Login was successful");
+//				loginsuccess.setVisible(true);
+				new Intex().user.setText(denlu.nameStr);
 				try {
 					new Intex(status);
 				} catch (JSONException e1) {
@@ -86,7 +113,9 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 			}
 				
 			this.setVisible(false);
-//			System.out.println(pwsd);
+		}
+		if(e.getSource()==signUp){
+			new SignUp();
 		}
 	}
 	private static String Md5(String plainText ) { 
