@@ -14,6 +14,7 @@ public class EnemyBullet extends Sprite {
 			TextureRegion pTiledTextureRegion, Engine engine) {
 		super(pX, pY, pTiledTextureRegion);
 		mEngine = engine;
+		//设置子弹xy方向
 		this.setVelocity(0, 300);
 		GameActivity.enemyBullets.add(this);
 	}

@@ -137,6 +137,8 @@ public class Boss extends AnimatedSprite implements IEnemy {
 	@Override
 	public void removeFromScene() {
 		killed=true;
+		laser.removeFromScene();
+		laser2.removeFromScene();
 		this.clearShapeModifiers();
 		this.addShapeModifier(new SequenceModifier(
 				new IShapeModifierListener() {

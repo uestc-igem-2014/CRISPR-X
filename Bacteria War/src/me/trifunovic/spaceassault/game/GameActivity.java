@@ -4,6 +4,7 @@ import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,6 +18,7 @@ import me.trifunovic.spaceassault.game.enemies.EnemyShip1;
 import me.trifunovic.spaceassault.game.enemies.EnemyShip2;
 import me.trifunovic.spaceassault.game.hud.HudScore;
 import me.trifunovic.spaceassault.game.level.Level;
+import me.trifunovic.spaceassault.game.myparameters.Parameters;
 import me.trifunovic.spaceassault.game.options.Options;
 import me.trifunovic.spaceassault.game.player.Bullet;
 import me.trifunovic.spaceassault.game.player.PlayerShip;
@@ -85,6 +87,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameActivity extends BaseGameActivity implements
 		IAccelerometerListener {
@@ -171,6 +174,22 @@ public class GameActivity extends BaseGameActivity implements
 	// FADE
 	private Rectangle fade;
 
+	// PARAMETERS
+	public Parameters mParameters = new Parameters();
+
+	// RANDROM
+	Random rand = new Random();
+
+	private int selectedIndex = 0;
+	private int nowArmor;
+	private int nowGameRound;
+	private float nowPlayerShipFireSpeed;
+	private float nowPlayerShipFlySpeed;
+	private int nowPlayerRecover;
+	private int nowEnemyShip0Frequency;
+	private int nowEnemyShip1Frequency;
+	private int nowEnemyShip2Frequency;
+
 	@Override
 	protected void onSetContentView() {
 		final RelativeLayout relativeLayout = new RelativeLayout(this);
@@ -224,14 +243,6 @@ public class GameActivity extends BaseGameActivity implements
 		return new Engine(engineOptions);
 	}
 
-	// public void myOption() {
-	// options.getSoundEffects() = true;
-	// options.getMusic() = true;
-	// options.getControlls() = "1";
-	// options.getAutoFire() = true;
-	// options.getVibration() = true;
-	// }
-
 	@Override
 	public void onLoadResources() {
 
@@ -242,7 +253,6 @@ public class GameActivity extends BaseGameActivity implements
 
 		mLaserTextureRegion = TextureRegionFactory.createFromAsset(
 				this.mBuildableTexture, this, "laser.png");
-
 		GameActivity.mShipTextureRegion = TextureRegionFactory
 				.createTiledFromAsset(this.mBuildableTexture, this,
 						"ship2.png", 4, 1);
@@ -264,9 +274,9 @@ public class GameActivity extends BaseGameActivity implements
 				.createTiledFromAsset(this.mBuildableTexture, this,
 						"explosion2.png", 4, 2);
 
-		myEnemyRand.add(mEnemy0TextureRegion);
-		myEnemyRand.add(mEnemy1TextureRegion);
-		myEnemyRand.add(mEnemy2TextureRegion);
+//		myEnemyRand.add(mEnemy0TextureRegion);
+//		myEnemyRand.add(mEnemy1TextureRegion);
+//		myEnemyRand.add(mEnemy2TextureRegion);
 
 		if (GameActivity.options.getControlls().equals("3")) {
 			this.mOnScreenControlTexture = new Texture(256, 128,
@@ -384,7 +394,7 @@ public class GameActivity extends BaseGameActivity implements
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-								mEngine.start();
+//								mEngine.start();
 							}
 						});
 				mEngine.stop();
@@ -393,7 +403,7 @@ public class GameActivity extends BaseGameActivity implements
 		});
 	};
 
-	private void goToNextLevel() {
+	private void goToNextLevel(final Boolean isNextRound) {
 		fade.addShapeModifier(new SequenceModifier(
 				new IShapeModifierListener() {
 
@@ -401,12 +411,21 @@ public class GameActivity extends BaseGameActivity implements
 					public void onModifierFinished(
 							IShapeModifier pShapeModifier, IShape pShape) {
 
+						showShop();
 						showScore();
 
 						mEngine.clearUpdateHandlers();
 						level.getScene().clearUpdateHandlers();
 						level.getScene().clearChildScene();
 						level.getScene().clearTouchAreas();
+
+						if (isNextRound) {
+							level.reset();
+							isBossFight = false;
+							//新建boss
+							boss = new Boss(200, -200, mBossTextureRegion, mLaserTextureRegion,
+									getEngine());
+						}
 
 						level.next();
 						bulletsToReuse.clear();
@@ -417,18 +436,6 @@ public class GameActivity extends BaseGameActivity implements
 						explosionsToReuse.clear();
 
 						loadScene();
-
-						// // 添加控制
-						// level.getScene().registerUpdateHandler(
-						// new TimerHandler(0.8f, new ITimerCallback() {
-						// @Override
-						// public void onTimePassed(
-						// final TimerHandler pTimerHandler) {
-						// pTimerHandler.reset();
-						// if (isGameReady == true)
-						// ship.fire();
-						// }
-						// }));
 
 						fade.addShapeModifier(new SequenceModifier(
 								new IShapeModifierListener() {
@@ -449,6 +456,19 @@ public class GameActivity extends BaseGameActivity implements
 		isGameReady = false;
 		isBossFight = false;
 
+
+		//获取现在的参数
+		nowArmor = mParameters.getPlayerShipArmor();
+		nowGameRound = mParameters.getGameRound();
+		nowPlayerShipFlySpeed = mParameters.getPlayerShipFlySpeed();
+		nowPlayerShipFireSpeed = mParameters.getPlayerShipFireSpeed();
+		nowPlayerRecover = mParameters.getPlayerRecover();
+		nowEnemyShip0Frequency = mParameters.getEnemyShip0Frequency();
+		nowEnemyShip1Frequency = mParameters.getEnemyShip1Frequency();
+		nowEnemyShip2Frequency = mParameters.getEnemyShip2Frequency();
+		
+		refreshScore();
+		
 		if (level.getLevel() != 0) {
 			mAutoScrollBackgroundTexture.clearTextureSources();
 			TextureRegionFactory.createFromAsset(mAutoScrollBackgroundTexture,
@@ -467,7 +487,7 @@ public class GameActivity extends BaseGameActivity implements
 						pTimerHandler.reset();
 
 						if (isGameReady == true) {
-							if (score.getScore() >= 10000) {
+							if (score.getScore() >= (nowGameRound*10000)) {
 								if (boss.isVisible() == false
 										&& enemies0.size() == 0
 										&& enemies1.size() == 0
@@ -484,7 +504,7 @@ public class GameActivity extends BaseGameActivity implements
 									if (enemies0.size() == 0
 											&& enemies1.size() == 0
 											&& enemies2.size() == 0) {
-										gameLevelCleared();
+										gameLevelCleared(false);
 									}
 								} else {
 									for (int i = 0; i < level.getScene()
@@ -524,15 +544,16 @@ public class GameActivity extends BaseGameActivity implements
 
 		if (options.getAutoFire() == true) {
 			level.getScene().registerUpdateHandler(
-					new TimerHandler(0.8f, new ITimerCallback() {
-						@Override
-						public void onTimePassed(
-								final TimerHandler pTimerHandler) {
-							pTimerHandler.reset();
-							if (isGameReady == true)
-								ship.fire();
-						}
-					}));
+					new TimerHandler(nowPlayerShipFireSpeed,
+							new ITimerCallback() {
+								@Override
+								public void onTimePassed(
+										final TimerHandler pTimerHandler) {
+									pTimerHandler.reset();
+									if (isGameReady == true)
+										ship.fire();
+								}
+							}));
 		}
 
 		if (GameActivity.options.getControlls().equals("3")) {
@@ -567,6 +588,7 @@ public class GameActivity extends BaseGameActivity implements
 
 			level.getScene().setChildScene(analogOnScreenControl);
 		}
+
 	}
 
 	@Override
@@ -574,7 +596,7 @@ public class GameActivity extends BaseGameActivity implements
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				scoreView.setText("SCORE: 0");
+				scoreView.setText("DNA : 0");
 			}
 		});
 
@@ -597,7 +619,7 @@ public class GameActivity extends BaseGameActivity implements
 	@Override
 	public void onAccelerometerChanged(AccelerometerData accelerometer) {
 		if (isGameReady == true)
-			ship.move(accelerometer);
+			ship.move(accelerometer, mParameters);
 		else
 			ship.setVelocity(0);
 	}
@@ -692,18 +714,6 @@ public class GameActivity extends BaseGameActivity implements
 		ship = new PlayerShip(CAMERA_WIDTH / 2
 				- mShipTextureRegion.getTileWidth() / 2, CAMERA_HEIGHT + 300,
 				mShipTextureRegion, getEngine());
-
-		// // 修改的代码，加入重力控制和自动开火
-		// this.enableAccelerometerSensor(this);
-		// level.getScene().registerUpdateHandler(
-		// new TimerHandler(0.8f, new ITimerCallback() {
-		// @Override
-		// public void onTimePassed(final TimerHandler pTimerHandler) {
-		// pTimerHandler.reset();
-		// if (isGameReady == true)
-		// ship.fire();
-		// }
-		// }));
 	}
 
 	public void gameGetReady() {
@@ -746,7 +756,7 @@ public class GameActivity extends BaseGameActivity implements
 						.getInstance())));
 	}
 
-	public void gameLevelCleared() {
+	public void gameLevelCleared(final Boolean isNextRound) {
 		final Text textCenter = new Text(CAMERA_WIDTH / 2 - 215,
 				CAMERA_HEIGHT / 2 - 60, gameOver_font, "LEVEL\nCLEARED",
 				HorizontalAlign.CENTER);
@@ -766,7 +776,7 @@ public class GameActivity extends BaseGameActivity implements
 										runOnUpdateThread(new Runnable() {
 											public void run() {
 												// finish();
-												goToNextLevel();
+												goToNextLevel(isNextRound);
 											}
 										});
 									}
@@ -807,33 +817,33 @@ public class GameActivity extends BaseGameActivity implements
 		// TiledTextureRegion rEnemyTextureRegion = myEnemyRand.get(rand
 		// .nextInt(3));
 
-		Random rand = new Random();
-		int r = rand.nextInt(10);
+		int enemyR = rand.nextInt(10);
 
-		if (r < 6) {
+		if (enemyR < nowEnemyShip0Frequency) {
 			if (enemiesToReuse0.isEmpty()) {
 				final EnemyShip0 enemy = new EnemyShip0(CAMERA_WIDTH / 2
 						- mShipTextureRegion.getTileWidth() / 2, -50,
 						mEnemy0TextureRegion, getEngine());
 				enemy.addToScene();
-				enemy.folow(path, 10);
+				enemy.folow(path, mParameters.getEnemyShip0FlySpeed());
 			} else {
 				final EnemyShip0 enemy = EnemyShip0.reuse();
 				enemy.addToScene();
-				enemy.folow(path, 10);
+				enemy.folow(path, mParameters.getEnemyShip0FlySpeed());
 			}
-		} else if (r < 8 && r>=5) {
+		} else if (enemyR < nowEnemyShip1Frequency
+				&& enemyR >= nowEnemyShip0Frequency) {
 
 			if (enemiesToReuse1.isEmpty()) {
 				final EnemyShip1 enemy = new EnemyShip1(CAMERA_WIDTH / 2
 						- mShipTextureRegion.getTileWidth() / 2, -50,
 						mEnemy1TextureRegion, getEngine());
 				enemy.addToScene();
-				enemy.folow(path, 12);
+				enemy.folow(path, mParameters.getEnemyShip1FlySpeed());
 			} else {
 				final EnemyShip1 enemy = EnemyShip1.reuse();
 				enemy.addToScene();
-				enemy.folow(path, 12);
+				enemy.folow(path, mParameters.getEnemyShip1FlySpeed());
 			}
 		} else {
 
@@ -842,11 +852,11 @@ public class GameActivity extends BaseGameActivity implements
 						- mShipTextureRegion.getTileWidth() / 2, -50,
 						mEnemy2TextureRegion, getEngine());
 				enemy.addToScene();
-				enemy.folow(path, 13);
+				enemy.folow(path, mParameters.getEnemyShip2FlySpeed());
 			} else {
 				final EnemyShip2 enemy = EnemyShip2.reuse();
 				enemy.addToScene();
-				enemy.folow(path, 13);
+				enemy.folow(path, mParameters.getEnemyShip2FlySpeed());
 			}
 		}
 	}
@@ -867,7 +877,10 @@ public class GameActivity extends BaseGameActivity implements
 						public void run() {
 
 							bullet.removeFromScene();
-							ship.hit();
+							// 根据不同的round设置不同的额外的扣血量
+
+							int bloodR = rand.nextInt(nowGameRound * 2);
+							ship.hit(bloodR - nowArmor);
 
 							// ISTAMPAJ HEALTH BAR
 							Debug.d("HEALTH > " + ship.getHealth());
@@ -920,7 +933,9 @@ public class GameActivity extends BaseGameActivity implements
 					runOnUpdateThread(new Runnable() {
 						public void run() {
 
-							ship.hit2();
+							// 根据不同的round设置不同的额外的扣血量
+							int bloodR = rand.nextInt(nowGameRound * 3);
+							ship.hit2(bloodR - nowArmor);
 							// ISTAMPAJ HEALTH BAR
 							Debug.d("HEALTH > " + ship.getHealth());
 							if (ship.getHealth() >= 0) {
@@ -971,11 +986,12 @@ public class GameActivity extends BaseGameActivity implements
 										enemy.getY() + enemy.getHeight()) == true
 								&& !enemy.isKilled()) {
 							runOnUpdateThread(new Runnable() {
+
 								public void run() {
 									score.addPoints();
 
 									/************ 修改血量 ************/
-									ship.addHealth();
+									ship.addHealth(nowPlayerRecover);
 									healthbar
 											.setWidth((ship.getHealth() + 1) * 5);
 
@@ -1009,7 +1025,7 @@ public class GameActivity extends BaseGameActivity implements
 									score.addPoints();
 
 									/************ 修改血量 ************/
-									ship.addHealth();
+									ship.addHealth(nowPlayerRecover);
 									healthbar
 											.setWidth((ship.getHealth() + 1) * 5);
 
@@ -1020,12 +1036,14 @@ public class GameActivity extends BaseGameActivity implements
 									enemy.hit();
 									makeExplosion(enemy.getX(), enemy.getY());
 									if (enemy.getHealth() < 0) {
-										if (GameActivity.options.getSoundEffects() == true)
+										if (GameActivity.options
+												.getSoundEffects() == true)
 											explosionSound.play();
 										enemy.removeFromScene();
 									}
-//									makeExplosion(enemy.getX(), enemy.getY());
-//									enemy.removeFromScene();
+									// makeExplosion(enemy.getX(),
+									// enemy.getY());
+									// enemy.removeFromScene();
 								}
 							});
 						}
@@ -1048,7 +1066,7 @@ public class GameActivity extends BaseGameActivity implements
 									score.addPoints();
 
 									/************ 修改血量 ************/
-									ship.addHealth();
+									ship.addHealth(nowPlayerRecover);
 									healthbar
 											.setWidth((ship.getHealth() + 1) * 5);
 
@@ -1059,12 +1077,14 @@ public class GameActivity extends BaseGameActivity implements
 									enemy.hit();
 									makeExplosion(enemy.getX(), enemy.getY());
 									if (enemy.getHealth() < 0) {
-										if (GameActivity.options.getSoundEffects() == true)
+										if (GameActivity.options
+												.getSoundEffects() == true)
 											explosionSound.play();
 										enemy.removeFromScene();
 									}
-//									makeExplosion(enemy.getX(), enemy.getY());
-//									enemy.removeFromScene();
+									// makeExplosion(enemy.getX(),
+									// enemy.getY());
+									// enemy.removeFromScene();
 								}
 							});
 						}
@@ -1093,12 +1113,18 @@ public class GameActivity extends BaseGameActivity implements
 									new ColorModifier(0.3f, 1, 1, 0, 1, 0, 1)));
 
 							boss.hit();
+							ship.addHealth(nowPlayerRecover);
 							if (boss.getHealth() < 0) {
+								boss.removeFromScene();
 								if (GameActivity.options.getSoundEffects() == true)
 									explosionSound.play();
 								makeExplosion(boss.getX(), boss.getY());
-								showGameOver();
-								// goToNextLevel();
+								// 过关，round+1
+								mParameters.setGameRound(nowGameRound + 1);
+								mParameters.EnemyShipAllUpdata();
+								// 重置关卡
+								level = new Level(GameActivity.this);
+								gameLevelCleared(true);
 							}
 						}
 					});
@@ -1111,7 +1137,7 @@ public class GameActivity extends BaseGameActivity implements
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				GameActivity.scoreView.setText("SCORE: " + score.getScore());
+				GameActivity.scoreView.setText("DNA : " + score.getScore());
 			}
 		});
 	}
@@ -1187,7 +1213,7 @@ public class GameActivity extends BaseGameActivity implements
 
 																	alert.setTitle("HIGHSCORE");
 																	alert.setIcon(R.drawable.trophy);
-																	alert.setMessage("Score : "
+																	alert.setMessage("DNA : "
 																			+ score.getScore()
 																			+ "\nEnter your name:");
 
@@ -1290,5 +1316,171 @@ public class GameActivity extends BaseGameActivity implements
 		alert.setIcon(R.drawable.icon);
 		alert.show();
 	}
+
+	public void showShop() {
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						GameActivity.this);
+
+				final String[] arrayItem = new String[] { "Speed:1500 DNA",
+						"Fire:1500 DNA", "Armor:1000 DNA", "Recover:3000 DNA" };
+
+				alert.setTitle("UPDATE YOUR SHIP");
+				alert.setIcon(R.drawable.trophy);
+				// alert.setMessage("Your score:" +
+				// String.valueOf(GameActivity.score.getScore()));
+
+				alert.setSingleChoiceItems(arrayItem, 0,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								selectedIndex = which;
+							}
+						});
+
+				alert.setNeutralButton("UPDATE",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+								Field field = null;
+								try {
+									field = dialog.getClass().getSuperclass()
+											.getDeclaredField("mShowing");
+									field.setAccessible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								switch (selectedIndex) {
+								case 0:
+									mParameters.setPlayerShipFlySpeed(nowPlayerShipFlySpeed *1.200f);
+									if (GameActivity.score.getScore() < 1500) {
+										Toast.makeText(GameActivity.this,
+												"Score Not Enough",
+												Toast.LENGTH_SHORT).show();
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, false);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									} else {
+										score.subPoints(1500);
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, true);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+									break;
+								case 1:
+									mParameters.setPlayerShipFireSpeed(nowPlayerShipFireSpeed * 0.800f);
+									if (GameActivity.score.getScore() < 1500) {
+										Toast.makeText(GameActivity.this,
+												"Score Not Enough",
+												Toast.LENGTH_SHORT).show();
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, false);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									} else {
+										score.subPoints(1500);
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, true);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+									break;
+								case 2:
+									mParameters.setPlayerShipArmor(mParameters
+											.getPlayerShipArmor() + 1);
+									if (GameActivity.score.getScore() < 1500) {
+										Toast.makeText(GameActivity.this,
+												"Score Not Enough",
+												Toast.LENGTH_SHORT).show();
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, false);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									} else {
+										score.subPoints(1000);
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, true);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+									break;
+								case 3:
+									mParameters.setPlayerRecover(mParameters
+											.getPlayerRecover() + 1);
+									if (GameActivity.score.getScore() < 1500) {
+										Toast.makeText(GameActivity.this,
+												"Score Not Enough",
+												Toast.LENGTH_SHORT).show();
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, false);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									} else {
+										score.subPoints(3000);
+										// 用于不关闭对话框
+										try {
+											field.set(dialog, true);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+									break;
+								default:
+									break;
+								}
+								mEngine.start();
+							}
+						});
+
+				alert.setNegativeButton("GO ON",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								try {
+									Field field = dialog.getClass()
+											.getSuperclass()
+											.getDeclaredField("mShowing");
+									field.setAccessible(true);
+									field.set(dialog, true);
+									mEngine.start();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+				mEngine.stop();
+				alert.show();
+			}
+		});
+	};
 
 }

@@ -12,7 +12,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 //import android.widget.ImageView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
+
+private Button btnStart;
+private Button btnSetting;
 
 //	private int SCREEN_WIDTH, SCREEN_HEIGHT; // 屏幕高宽
 	
@@ -20,31 +23,46 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		SetFullWindows();
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-//		SCREEN_WIDTH = dm.widthPixels;
-//		SCREEN_HEIGHT = dm.heightPixels;
-
-		setContentView(R.layout.mymain);
-//		ImageView iv = (ImageView) findViewById(R.id.imageView1);
-		Button btnStart =  (Button) findViewById(R.id.button1);
-		
-//		iv.setAlpha(90);
-
-		btnStart.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this, GameActivity.class); // 启动Activity
-				startActivity(intent);
-			}
-		});
+		setupView();
+		setListener();
 	}
 	
 	private void SetFullWindows() {
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		// 无title
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// 全屏
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	}
+
+	/**设置监听器*/
+	private void setListener() {
+		btnStart.setOnClickListener(this);
+		btnSetting.setOnClickListener(this);
+	}
+	
+	private void setupView() {
+		setContentView(R.layout.mymain);
+		btnStart=(Button) findViewById(R.id.button1);
+		btnSetting=(Button) findViewById(R.id.button2);
+	}
+	
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.button1:
+			Intent intent1 = new Intent(MainActivity.this, GameActivity.class); // 启动Activity
+			startActivity(intent1);
+			break;
+		case R.id.button2:
+			Intent intent3 = new Intent(MainActivity.this, PreferenceScreen.class); // 启动Activity
+			startActivity(intent3);
+			break;
+		default:
+			break;
+		}
 	}
 }

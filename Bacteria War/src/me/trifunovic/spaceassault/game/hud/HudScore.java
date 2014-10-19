@@ -19,5 +19,10 @@ public class HudScore {
 	public void addPoints() {
 		this.score +=50 ;
 	}
+	
+	//¼õ·ÖÊý
+	public void subPoints(int points) {
+		this.score -= points ;
+	}
 
 }

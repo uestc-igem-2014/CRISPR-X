@@ -22,17 +22,16 @@ public final class R {
         public static final int menu_text=0x7f070000;
     }
     public static final class drawable {
-        public static final int background=0x7f020000;
-        public static final int deep=0x7f020001;
-        public static final int demo2=0x7f020002;
-        public static final int icon=0x7f020003;
-        public static final int icon_black=0x7f020004;
-        public static final int pic0=0x7f020005;
-        public static final int pic1=0x7f020006;
-        public static final int pic2=0x7f020007;
-        public static final int pic3=0x7f020008;
-        public static final int pic4=0x7f020009;
-        public static final int trophy=0x7f02000a;
+        public static final int deep=0x7f020000;
+        public static final int ic_stat_name=0x7f020001;
+        public static final int icon=0x7f020002;
+        public static final int icon_black=0x7f020003;
+        public static final int pic0=0x7f020004;
+        public static final int pic1=0x7f020005;
+        public static final int pic2=0x7f020006;
+        public static final int pic3=0x7f020007;
+        public static final int pic4=0x7f020008;
+        public static final int trophy=0x7f020009;
     }
     public static final class id {
         public static final int ScrollView01=0x7f080000;
@@ -42,17 +41,13 @@ public final class R {
         public static final int btnHighscore=0x7f080003;
         public static final int btnOptions=0x7f080004;
         public static final int btnStartGame=0x7f080002;
-        public static final int button1=0x7f08000b;
+        public static final int button1=0x7f08000d;
+        public static final int button2=0x7f08000c;
         public static final int copyright=0x7f080008;
-        public static final int imageView1=0x7f08000a;
-        public static final int imageView2=0x7f08000f;
-        public static final int imageView3=0x7f080013;
-        public static final int imageView4=0x7f080011;
-        public static final int imageView5=0x7f080010;
-        public static final int imageView6=0x7f080012;
-        public static final int textView1=0x7f08000c;
-        public static final int textView2=0x7f08000d;
-        public static final int textView3=0x7f08000e;
+        public static final int imageView1=0x7f08000e;
+        public static final int textView1=0x7f08000a;
+        public static final int textView2=0x7f08000b;
+        public static final int textView3=0x7f08000f;
         public static final int txtHelp=0x7f080001;
         public static final int website=0x7f080009;
     }

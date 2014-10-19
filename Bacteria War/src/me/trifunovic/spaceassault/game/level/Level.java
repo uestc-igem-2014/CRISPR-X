@@ -69,4 +69,8 @@ public class Level {
 		currLevel++;
 		activity.getEngine().setScene(scenes.get(currLevel));
 	}
+	
+	public void reset(){
+		currLevel = 0;
+	}
 }

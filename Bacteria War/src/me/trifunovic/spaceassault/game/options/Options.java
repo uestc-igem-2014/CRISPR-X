@@ -21,7 +21,7 @@ public class Options {
 	}
 	
 	public boolean getVibration(){
-		return options.getBoolean("chkVibration",true);
+		return options.getBoolean("chkVibration",false);
 	}
 	
 	public boolean getAutoFire(){

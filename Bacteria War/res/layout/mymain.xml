@@ -7,25 +7,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/icon_black" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:textColor="#ffffff"
-            android:textSize="30sp"
-            android:layout_marginBottom="46dp"
-            android:background="@drawable/deep"
-            android:text="StartGame" />
-
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -48,60 +29,47 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="12sp" />
 
+        <Button
+            android:id="@+id/button2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="100dip"
+            android:layout_height="60dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/deep"
+            android:text="Setting"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/deep"
+            android:text="StartGame"
+            android:textColor="#ffffff"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_black" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:textSize="14sp"
-            android:text="     This is designed by iGEM UESTC-SOFTWARE. iGEM (International Genetically Engineered Machine Competition) is an annual world-class competition in synthetic biology, aims to promote national undergraduate learning, communicating and cooperating in this field.\n    One day, a large group of unknown viruses invaded bacteria. Bacteria are facing an unprecedented challenge, but they play to their wisdom, using CRISPR as a weapon cope tenaciously this war. Would you like to help bacteria resisting the viruses and winning the victory of the battle? Please click on the ‘StartGame’ to play Bacteria War (by accelerometer)."
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="40dip"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/textView2"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/pic0" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="40dip"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/imageView2"
-            android:src="@drawable/pic1" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="40dip"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/imageView5"
-            android:src="@drawable/pic2" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="40dip"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/imageView2"
-            android:src="@drawable/pic4" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="40dip"
-            android:layout_height="60dip"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/imageView6"
-            android:src="@drawable/pic3" />
+            android:layout_margin="10dp"
+            android:text="     This is designed by iGEM UESTC-SOFTWARE. iGEM (International Genetically Engineered Machine Competition) is an annual world-class competition in synthetic biology, aims to promote national undergraduate learning, communicating and cooperating in this field.\n    One day, a large group of unknown viruses invaded bacteria. Bacteria are facing an unprecedented challenge, but they play to their wisdom, using CRISPR as a weapon cope tenaciously this war. Would you like to help bacteria resisting the viruses and winning the victory of the battle? Please click on the ‘StartGame’ to play Bacteria War (by accelerometer)."
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

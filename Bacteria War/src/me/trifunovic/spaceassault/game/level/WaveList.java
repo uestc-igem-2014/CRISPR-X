@@ -26,5 +26,10 @@ public class WaveList {
 	public void next(){
 		i++;
 	}
+	
+	public void reset(){
+		i=-1;
+		waves.clear();
+	}
 
 }
