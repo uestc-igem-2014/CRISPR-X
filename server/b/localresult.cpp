@@ -13,9 +13,9 @@ MYSQL_RES *result=mysql_store_result(mysql_conn);\n
 localrow *localresult;\n
 int res=make_mysqlres_local(&localresult,result);
 */
-int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
-    //FILE *fout=fopen("tmp/out.tmp","w");
-    FILE *fout=tmpfile();
+FILE *make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
+    FILE *fout=fopen("tmp/out.tmp","w");
+    //FILE *fout=tmpfile();
 	if(fout==NULL){
         printf("no!!!!!!!");
         return -1;
@@ -33,7 +33,7 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
     
     fclose(fout);
     
-    return 0;
+    return fout;
 /*
     int count=0;
     mysql_data_seek(result_t,0);
@@ -55,11 +55,12 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
 @see localrow
 */
 void free_mysqlres_local(localrow *localresult){
-    while(localresult){
+    //fclose(fout);
+    /*while(localresult){
         localrow *p=localresult;
         localresult=p->next;
         free(p);
-    }
+    }*/
 }
 /**
 @brief Get number of saved sgRNA-Info on RAM.
