@@ -13,7 +13,7 @@ MYSQL_RES *result=mysql_store_result(mysql_conn);\n
 localrow *localresult;\n
 int res=make_mysqlres_local(&localresult,result);
 */
-FILE *make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
+int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
     FILE *fout=fopen("tmp/out.tmp","w");
     //FILE *fout=tmpfile();
 	if(fout==NULL){
@@ -33,7 +33,7 @@ FILE *make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
     
     fclose(fout);
     
-    return fout;
+    return 0;
 /*
     int count=0;
     mysql_data_seek(result_t,0);
