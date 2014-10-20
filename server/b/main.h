@@ -33,7 +33,6 @@ using namespace std;
 #define NUM_NO 4
 #define NUM_CHROMOSOME 30
 #define GENE_LEN 8000000
-#define DCFILE_LEN 8000000
 #define NODE_SIZE 1000000
 #define LOCALROW_LEN 120
 #define MAX_SEM_THREAD 80
