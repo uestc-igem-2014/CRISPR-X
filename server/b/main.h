@@ -41,9 +41,9 @@ using namespace std;
 #define RETURN_SUCCEED 0
 
 #define MYSQL_CONF_HOST "127.0.0.1"
-#define MYSQL_CONF_USERNAME "igem"
+#define MYSQL_CONF_USERNAME "root"
 #define MYSQL_CONF_DB "CasDB"
-#define MYSQL_CONF_PASSWD "uestc2014!"
+#define MYSQL_CONF_PASSWD ""
 
 typedef struct site{
     char nt[LEN+1];
