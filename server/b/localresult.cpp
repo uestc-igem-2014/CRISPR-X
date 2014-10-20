@@ -14,12 +14,17 @@ localrow *localresult;\n
 int res=make_mysqlres_local(&localresult,result);
 */
 int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
+<<<<<<< HEAD
     //FILE *fout=fopen("tmp/out.tmp","w");
     FILE *fout=tmpfile();
 	if(fout==NULL){
         printf("no!!!!!!!");
         return -1;
     }
+=======
+    FILE *fout=fopen("tmp/out.tmp","w");
+    if(fout==NULL) printf("no!!!!!!!");
+>>>>>>> be72a056aee41475518f6de83ea5855ead5b6c69
     mysql_data_seek(result_t,0);
     MYSQL_ROW sql_row;
     

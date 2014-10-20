@@ -37,7 +37,7 @@ clean:
 	rm $(obj)
 
 cleanall:
-	rm $(obj) ../main
+	rm $(obj) ../main *.gc*
 
 test: $(testcases)
 
