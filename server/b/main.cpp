@@ -404,14 +404,10 @@ fflush(stdout);
         mos_sem_wait(&sem_thread_usage);
     }printf("");
     //free_mysqlres_local(localresult);
-<<<<<<< HEAD
 #ifdef debug
 printf("6\n");
 fflush(stdout);
 #endif
-=======
-
->>>>>>> be72a056aee41475518f6de83ea5855ead5b6c69
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
     root=cJSON_CreateObject();
@@ -464,14 +460,7 @@ fflush(stdout);
     //printf("{\"status\":1,\"message\":\"System in maintenance\"}");
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
-<<<<<<< HEAD
-#ifdef debug
-printf("9\n");
-fflush(stdout);
-#endif
-=======
 
->>>>>>> be72a056aee41475518f6de83ea5855ead5b6c69
     //free(argv[0]);
     //mysql_free_result(result);
     //mysql_close(my_conn);
