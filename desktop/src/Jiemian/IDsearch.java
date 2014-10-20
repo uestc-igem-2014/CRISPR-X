@@ -32,6 +32,7 @@ public class IDsearch extends JFrame implements ActionListener{
 	}
 	public IDsearch(String ID){
 		this.IDStr=ID;
+		System.out.print("IDÊÇ"+ID);
 	}
 	public IDsearch() {
 		this.setLayout(null);

@@ -441,7 +441,6 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		}
 		if(e.getSource()==IDseacher){
 			
-	
 		}
 		if(e.getSource()==fanhelp){
 			

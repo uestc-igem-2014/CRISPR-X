@@ -25,7 +25,7 @@ public class MoreInfo extends JFrame{
 	static JScrollPane kkc;
 	static List<MoreIfozhi> MoreInfo;
 	static int GC;
-	static String RNAfold;
+	static String RNAfold,RNAfoldimg;
 	static String[][] xiansi;
 	static String[] xiansihander={"start","end","myhistory","strand","sequece"};
 	static BufferedImage image;
@@ -37,6 +37,7 @@ public class MoreInfo extends JFrame{
 		MoreInfo=analyzeM.MoreInfo;
 		GC=analyzeM.getGC();
 		RNAfold=analyzeM.getRNAfold();
+		RNAfoldimg=analyzeM.getRNAfoldimg();
 		new MoreInfo();
 	}
 	public MoreInfo(){
@@ -52,7 +53,7 @@ public class MoreInfo extends JFrame{
 		moreinfo=new JTable(tableModel);
 		kkc = new JScrollPane (moreinfo);
 		try {
-			image=new Getimage().image();
+			image=new Getimage(RNAfoldimg).image();
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();

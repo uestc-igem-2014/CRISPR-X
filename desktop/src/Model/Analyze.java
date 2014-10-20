@@ -104,18 +104,11 @@ public class Analyze
         			
         			
 			   }
-			   System.out.println(region.length());
 			   for(int i=0;i<region.length();i++){
 				   
 				   int length=0;
 				   String description=region.getJSONObject(i).getString("description");
-       				if(i!=0){
-       					int endpoint=region.getJSONObject(i).getInt("endpoint");
-       					int lastendpoint=region.getJSONObject(i-1).getInt("endpoint");
-       					length=endpoint-lastendpoint;
-       				}else{
-       					length=region.getJSONObject(i).getInt("endpoint");
-       				}
+       				length=region.getJSONObject(i).getInt("endpoint");
        				Imageweizhi xinxi=new Imageweizhi();
        				xinxi.setDescription(description);
        				xinxi.setEndpoint(length);

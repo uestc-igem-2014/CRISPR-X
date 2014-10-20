@@ -6,7 +6,6 @@ public class Imageweizhi {
 	String description;
 	int endpoint;
 	double bili;
-	int min,max;
 	public Color getDescription() {
 		if(description.equals("INTERGENIC")){
 			return Color.black;

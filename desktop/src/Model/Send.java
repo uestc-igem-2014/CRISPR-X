@@ -34,12 +34,12 @@ public class Send implements Runnable{
 	String lines,rfcStr,regionStr;
 	String name,pswd,email;
 	public String key="361610445ee59220d3463620ee42fa1a";
-	static StringBuffer ID=new StringBuffer();
+	static StringBuffer ID;
 	StringBuffer value=new StringBuffer();
 	StringBuffer value_MoreInfo=new StringBuffer();
 	String blast="CCACATGCCAT";
 	static File file;
-	static String note;
+	static String note,IDStr;
 	static String filename;
 	static JSONObject fliesImport;
 	public String result_URL="http://i.uestc.edu.cn/iGEM2014/getResult.php";
@@ -103,7 +103,7 @@ public class Send implements Runnable{
 		    	StringBuffer history=SendPost(getHistory_url,key,"","");
 		    	new AnalyzeHistory().historyAnalyze(history.toString());
 		    }else if(postStatus==3){
-		    	StringBuffer kk=SendPost(result_URL,ID.toString(), "", "");;
+		    	StringBuffer kk=SendPost(result_URL,IDStr, "", "");;
 		    	new Analyze(kk);
 		    }else if(postStatus==4){
 		    	SendPost(upload_url,name,pswd,email);
@@ -130,6 +130,7 @@ public class Send implements Runnable{
     		 connection.connect();
     		 connection.setConnectTimeout(100000);
     		 InputStreamReader reade=new InputStreamReader(connection.getInputStream(),"utf-8");
+    		 ID=new StringBuffer();
     		 for(int i=0;i<20;i++){
     		 int kk=reade.read();
     		 if((char)kk=='Q'){
@@ -140,8 +141,9 @@ public class Send implements Runnable{
     		 char line=(char)kk;
 			 ID.append(line); 
     		 }
+    		 IDStr=ID.toString();
 //    		 System.out.println(value);
-    		 new IDsearch(ID.toString());
+    		 new IDsearch(IDStr);
     		 new IDsearch();
 //    		 SendPost(result_URL,ID.toString(), "", "");
     		 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
@@ -193,7 +195,7 @@ public class Send implements Runnable{
 				}else if(postStatus==2){
 					inputData.write("token="+name);
 				}else if (postStatus==3){
-					inputData.write("id="+ID);
+					inputData.write("id="+IDStr);
 //					System.out.println(ID);
 				}else if (postStatus==4){
 					StringBuffer flieStr = new StringBuffer();

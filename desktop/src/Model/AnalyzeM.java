@@ -10,11 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AnalyzeM {
-	String MoreInfoStr,RNAfold;
+	String MoreInfoStr,RNAfold,RNAfoldimg;
 	int GC;
 	public List<MoreIfozhi> MoreInfo=new ArrayList<MoreIfozhi>();
 	public AnalyzeM(String MoreInfoStr) throws JSONException{
 		JSONObject dataJson=new JSONObject(MoreInfoStr);
+		RNAfoldimg=dataJson.getString("RNAfold-img");
 		GC=dataJson.getInt("GC-ratio");
 		RNAfold=dataJson.getString("RNAfold-res");
 		JSONArray enzyme= dataJson.getJSONArray("enzyme");
@@ -34,6 +35,9 @@ public class AnalyzeM {
 			MoreInfo.add(moreIfozhi);
 		}
 		
+	}
+	public String getRNAfoldimg() {
+		return RNAfoldimg;
 	}
 	public AnalyzeM() {
 		

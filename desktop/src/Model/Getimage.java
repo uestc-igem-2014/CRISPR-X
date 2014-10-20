@@ -12,10 +12,16 @@ import javax.imageio.ImageIO;
  
 public class Getimage {
     // 自定义的web服务器的资源
-    private static String URL_PATH = "http://i.uestc.edu.cn/iGEM2014/RNAFold/AACACCTAGAAGGACCA.jpg";
+	static String imgurl;
+    private static String URL_PATH = "http://i.uestc.edu.cn/iGEM2014/RNAFold/";
  
     public Getimage() {
         // TODO Auto-generated constructor stub
+    	
+    }
+    public Getimage(String url) {
+        // TODO Auto-generated constructor stub
+    	this.imgurl=url;
     }
  
 //    public static void saveImageToDisk() throws IOException {
@@ -66,7 +72,7 @@ public class Getimage {
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
         try {
-            URL url = new URL(URL_PATH);
+            URL url = new URL(URL_PATH+imgurl);
             if (url != null) {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 // 设置连接网络的超时时间

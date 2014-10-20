@@ -49,7 +49,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 	ImagePanel backImagePanl;
 	String sequence,username;
 	MapImage1 image;
-	static String minStr,maxStr;
+	static String minStr,maxStr,strandstates="+";
 	static String[] position;
 	static String[] location;
 	static String[] strand;
@@ -91,7 +91,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		this.maxStr=ks[1];		
 		this.count=count;
 		this.strand=strand;
-		this.imageweizhi=imageweizhi;
+		this.imageweizhi=imageweizhi;	
 		new MapImage1(this.minStr,this.maxStr);
 	}
 	public  result() {
@@ -104,17 +104,18 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 				super.paint(g);
 //				g.setColor(Color.gray);
 //				g.fillRect(50,65,800,10);
-				for(int i=0;i<imageweizhi.size();i++){
+//				System.out.println(imageweizhi.size());
+				for(int i=imageweizhi.size()-1;i>=0;i--){
 					g.setColor(imageweizhi.get(i).getDescription());
-					g.fillRect(50, 65,image.Mapspace(imageweizhi.get(i).getEndpoint()), 10);
-//					System.out.println(imageweizhi.get(i).getEndpoint());
+					g.fillRect(50, 65,(int) image.Mapspace(imageweizhi.get(i).getEndpoint()), 10);
+//					System.out.println(image.Mapspace(imageweizhi.get(i).getEndpoint()));
 				}
-				if(strand.equals("+")){
+				if(strandstates.equals("+")){
 					g.setColor(Color.black);
-					g.fillRect(wei,15,8,25);
+					g.fillRect(wei,30,10,10);
 //					System.out.println(wei);
 					g.setColor(new Color(143,196,31));
-					g.fill3DRect(wei+2,15,18,25, true);
+					g.fill3DRect(wei+2,30,12,10, true);
 				}else{
 //					System.out.println(strand[i]);
 					g.setColor(Color.black);
@@ -198,7 +199,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		help.setBounds(798, 0, 100, 65);
 		help.setBackground(new Color(231,240,226));
 		help.setForeground(new Color(143,196,31));
-		MoreInfo.setBounds(790, 460, 85, 35);
+		MoreInfo.setBounds(790, 460, 85, 32);
 		image.setBounds(0, 0, 900, 130);
 		
 		this.getContentPane().add(mb1);
@@ -259,6 +260,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
             //javax.swing.JOptionPane.showMessageDialog(null,info);
                wei=image.MapImage1(positon, "+");
                mb1.repaint();
+               strandstates=strand[r];
              }
          });
 		ImageIcon kk=new ImageIcon("image/image.png");
@@ -357,7 +359,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 class MapImage1 extends JPanel{
 	static String[] position;
 	static float site;
-	static int spacelength;
+	static float spacelength;
 	static int length=1000,positionNum;
 	static String strand="+";
 	static int minNum,maxNum,wei;
@@ -377,8 +379,8 @@ class MapImage1 extends JPanel{
 		repaint();
 		return wei;
 	}
-	public int Mapspace(int length) {
-		this.spacelength=(int) ((float)length/((float)maxNum-(float)minNum)*800);
+	public float Mapspace(int length) {
+		this.spacelength=(((float)length-(float)minNum)/((float)maxNum-(float)minNum))*800;
 		return spacelength;
 	}
 	public int maplength(int length){
