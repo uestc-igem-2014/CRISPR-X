@@ -104,13 +104,15 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     else Sgc=35;
     if(in_site[ini].nt[LEN-req_restrict.ntlength]!='G') S20=35;
 
-    while(lr){
-        int start=atoi(lr->row[0]);
+    localrow flr;
+    FILE *fin=fopen("tmp/out.tmp","r");
+    while(fscanf(fin,"%s",flr.row[0])==1){
+        for(int j=1;j<8;j++) fscanf(fin,"%s",flr.row[j]);
+        int start=atoi(flr.row[0]);
         if(in_site[ini].index!=start){
-            double smm=subscore(ini,lr,&Nph,1);
+            double smm=subscore(ini,&flr,&Nph,1);
             sum+=smm;
         }
-        lr=lr->next;
     }
     //sum=sigma+S1
     if(type==1 && Nph>3){
@@ -139,12 +141,13 @@ void score(localrow *lr,localrow row,int ini,int type,double r1){
     int res=mysql_query(my_conn,buffer);
     mos_pthread_mutex_unlock(&mutex_mysql_conn);
     if(res){
-        printf("%s\n\n",buffer);
-        printf("%s\n",mysql_error(my_conn));
-        system("pause");
+        printf("%s\n",buffer);
+        printf("%s\n\n",mysql_error(my_conn));
     }
     in_site[ini].otj=otj;
     in_site[ini].ot.clear();
+
+    fclose(fin);
 }
 
 /**

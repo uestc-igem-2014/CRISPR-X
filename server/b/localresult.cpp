@@ -14,9 +14,25 @@ localrow *localresult;\n
 int res=make_mysqlres_local(&localresult,result);
 */
 int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
-    int count=0;
-    localrow **p=localresult;
+    FILE *fout=fopen("tmp/out.tmp","w");
+    if(fout==NULL) printf("no!!!!!!!");
     mysql_data_seek(result_t,0);
+    MYSQL_ROW sql_row;
+    
+    while((sql_row=mysql_fetch_row(result_t))){
+        int i;
+        for(i=0;i<8-1;i++){
+            fprintf(fout,"%s\t",sql_row[i]);
+        }fprintf(fout,"%s\n",sql_row[i]);
+    }
+    
+    fclose(fout);
+    
+    return 0;
+/*
+    int count=0;
+    mysql_data_seek(result_t,0);
+    localrow **p=localresult;
     MYSQL_ROW sql_row;
     while((sql_row=mysql_fetch_row(result_t))){
         *p=(localrow*)malloc(sizeof(localrow));
@@ -27,7 +43,7 @@ int make_mysqlres_local(localrow **localresult,MYSQL_RES *result_t){
         count++;
     }
     *p=NULL;
-    return count;
+    return count;*/
 }
 /**
 @brief Free data on RAM.
@@ -49,7 +65,7 @@ int localres_count(localrow *lr){
     while(lr){
         i++;
         lr=lr->next;
-        if(i>1000000) return -1;
+        if(i>NODE_SIZE) return -1;
     }
     return i;
 }

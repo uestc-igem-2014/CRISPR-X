@@ -14,3 +14,4 @@ JOIN Table_chromosome as c ON c.Chr_No=r.Chr_No
 JOIN Table_Specie as s ON s.Sno=c.Sno
 JOIN Table_PAM as p ON p.pam_id=r.pam_id
 ;
+

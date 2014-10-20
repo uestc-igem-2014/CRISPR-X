@@ -226,7 +226,7 @@ int main(int args,char *argv[]){
     mos_sem_init(&sem_thread_usage,0,0);
 
     char *req_str=argv_default;
-    if(args==2) req_str=argv[1];
+    if(args>=2) req_str=argv[1];
 
     cJSON *request=cJSON_Parse(req_str);
     if(check_req(request)){
@@ -322,7 +322,10 @@ int main(int args,char *argv[]){
     }
     MYSQL_RES *result_t=mysql_store_result(my_conn);
     make_mysqlres_local(&localresult,result_t);
-    localres_count(localresult);
+    if(localres_count(localresult)<0){
+	onError("database error3");
+        return -1;
+    } 
     mysql_free_result(result_t);
 
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
@@ -384,8 +387,8 @@ int main(int args,char *argv[]){
 
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
-    }
-    free_mysqlres_local(localresult);
+    }printf("");
+    //free_mysqlres_local(localresult);
 
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
@@ -426,7 +429,7 @@ int main(int args,char *argv[]){
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
 
 #ifdef  _WIN32
-    fprintf(fopen("D:/out.txt","w"),"%s\n",_NomoreSpace(argv[0]=cJSON_Print(root)));
+    fprintf(fopen("D:/out.txt","w"),"%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
     printf("%s\n",NomoreSpace(argv[0]));
 #endif // _WIN32
 #ifdef  __linux
@@ -434,9 +437,9 @@ int main(int args,char *argv[]){
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
 #endif // __linux
 
-    free(argv[0]);
-    mysql_free_result(result);
-    mysql_close(my_conn);
+    //free(argv[0]);
+    //mysql_free_result(result);
+    //mysql_close(my_conn);
 
     return 0;
 }
