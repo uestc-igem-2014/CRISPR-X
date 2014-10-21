@@ -20,6 +20,8 @@ import org.json.JSONException;
 
 
 
+
+import Jiemian.IDseacher;
 import Jiemian.IDsearch;
 import Jiemian.denlu;
 
@@ -89,6 +91,9 @@ public class Send implements Runnable{
 //    		new Send(4);
 			return 1;
     	}
+    	public void IDseacher(String IDStr){
+    		this.IDStr=IDStr;
+    	}
     	public int importFile(JSONObject fliesImport){
     		this.fliesImport=fliesImport;
     		System.out.print(fliesImport.toString());
@@ -103,7 +108,7 @@ public class Send implements Runnable{
 		    	StringBuffer history=SendPost(getHistory_url,key,"","");
 		    	new AnalyzeHistory().historyAnalyze(history.toString());
 		    }else if(postStatus==3){
-		    	StringBuffer kk=SendPost(result_URL,IDStr, "", "");;
+		    	StringBuffer kk=SendPost(result_URL,"", "", "");;
 		    	new Analyze(kk);
 		    }else if(postStatus==4){
 		    	SendPost(upload_url,name,pswd,email);
