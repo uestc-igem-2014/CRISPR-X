@@ -318,7 +318,7 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 				Thread sendkais=new Thread(send);
 				sendkais.start();
 			}else{
-				javax.swing.JOptionPane.showMessageDialog(null,"ÄúÓÐ²ÎÊýÎ´Ìî£¡£¡£¡");
+				javax.swing.JOptionPane.showMessageDialog(null,"Do you have a parameter is not filled£¡");
 			}
 		}
 		if(e.getSource()==advanced){

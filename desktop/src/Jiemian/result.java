@@ -98,34 +98,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		image=new MapImage1();
 		
 		this.setLayout(null);
-		mb1=new JPanel(null){
-			public void paint(Graphics g) 
-			{
-				super.paint(g);
-//				g.setColor(Color.gray);
-//				g.fillRect(50,65,800,10);
-//				System.out.println(imageweizhi.size());
-				for(int i=imageweizhi.size()-1;i>=0;i--){
-					g.setColor(imageweizhi.get(i).getDescription());
-					g.fillRect(50, 65,(int) image.Mapspace(imageweizhi.get(i).getEndpoint()), 10);
-//					System.out.println(image.Mapspace(imageweizhi.get(i).getEndpoint()));
-				}
-				if(strandstates.equals("+")){
-					g.setColor(Color.black);
-					g.fillRect(wei,30,10,10);
-//					System.out.println(wei);
-					g.setColor(new Color(143,196,31));
-					g.fill3DRect(wei+2,30,12,10, true);
-				}else{
-//					System.out.println(strand[i]);
-					g.setColor(Color.black);
-					g.fillRect(wei,100,10,10);
-					g.setColor(new Color(143,196,31));
-					g.fill3DRect(wei+2,100,12,10, true);
-					
-				}
-			}
-		};
+		mb1=new JPanel(null);
 		mb2=new JPanel(null);
 		mb2.setBackground(new Color(231,240,226));
 //		DefaultTableModel  tableModel = new DefaultTableModel(datakey,columnNames);
@@ -157,7 +130,35 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		help.setBackground(Color.lightGray);
 		ImageIcon MoreInfoimage=new ImageIcon("image/MoreInfo.jpg");
 		MoreInfo=new JButton(MoreInfoimage);
-		image=new MapImage1();
+		image=new MapImage1(){
+			public void paint(Graphics g) 
+			{
+				super.paint(g);
+//				g.setColor(Color.gray);
+//				g.fillRect(50,65,800,10);
+//				System.out.println(imageweizhi.size());
+				for(int i=imageweizhi.size()-1;i>=0;i--){
+					g.setColor(imageweizhi.get(i).getDescription());
+					g.fillRect(50, 65,(int) image.Mapspace(imageweizhi.get(i).getEndpoint()), 10);
+//					System.out.println(image.Mapspace(imageweizhi.get(i).getEndpoint()));
+				}
+				if(strandstates.equals("+")){
+					g.setColor(Color.black);
+					g.fillRect(wei,30,10,10);
+//					System.out.println(wei);
+					g.setColor(new Color(143,196,31));
+					g.fill3DRect(wei+2,30,12,10, true);
+				}else{
+//					System.out.println(strand[i]);
+					g.setColor(Color.black);
+					g.fillRect(wei,100,10,10);
+					g.setColor(new Color(143,196,31));
+					g.fill3DRect(wei+2,100,12,10, true);
+					
+				}
+			}
+		};
+		image.setLayout(null);
 		
 		//tableKey
 		TableColumn firsetColumn = tableKey.getColumnModel().getColumn(0);
@@ -175,7 +176,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 //		pane1.setOpaque(false);                                            /*边框透明效果*/
 		pane1.setBorder(new CompoundBorder(new TitledBorder(""),
                 new EmptyBorder(8, 8, 8, 8)));
-		pane1.setBounds(20,130,345,300);
+		pane1.setBounds(20,45,345,300);
 		
 //		DrawImage xx= new DrawImage(position,location,strand,count);
 //        int min=xx.getminNum();
@@ -199,13 +200,15 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		help.setBounds(798, 0, 100, 65);
 		help.setBackground(new Color(231,240,226));
 		help.setForeground(new Color(143,196,31));
-		MoreInfo.setBounds(790, 460, 85, 32);
+		MoreInfo.setBounds(790, 370, 85, 32);
 		image.setBounds(0, 0, 900, 130);
 		
 		this.getContentPane().add(mb1);
 		this.getContentPane().add(mb2);
-		mb1.setBounds(0,65,900,690);
+		this.getContentPane().add(image);
+		mb1.setBounds(0,180,900,690);
 		mb2.setBounds(0, 0,900,65);
+		image.setBounds(0, 65, 900,115);
 		
 		result.addMouseListener(this);
 		result.addMouseMotionListener(this);
@@ -228,6 +231,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
                int r= tableKey.getSelectedRow();
                int c= tableKey.getSelectedColumn();
                sequence=(String) tableKey.getValueAt(r,1) ;
+//               System.out.println(r+":"+c);
                String positon= (String) tableKey.getValueAt(r,2);
                
                //得到选中的单元格的值，表格中都是字符串
@@ -239,8 +243,11 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
             		   dataofftargetx[i][j]=dataofftarget[r][i][j];
             	   }           	   
                }
+//               System.out.println(dataofftargetx[0][1]);
               tableModel = new DefaultTableModel(dataofftargetx,coloumnSonNames){ public boolean isCellEditable(int row, int column) { return false; }};
               tableOfftarget=new JTable(tableModel);
+              tableModel.fireTableStructureChanged();// JTable刷新结构
+              tableModel.fireTableDataChanged();
               tableOfftarget.clearSelection();
                JScrollPane pane2 = new JScrollPane (tableOfftarget);
                TableColumn firsetColumn1=tableOfftarget.getColumnModel().getColumn(0);
@@ -252,14 +259,14 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 //             pane2.setOpaque(false);
      			pane2.setBorder(new CompoundBorder(new TitledBorder(""),
                      new EmptyBorder(8, 8, 8, 8)));
-       			backImagePanl.add(pane2);
+//       			backImagePanl.add(pane2);
        			mb1.add(pane2);
-               pane2.setBounds(360,130, 520, 300);
+               pane2.setBounds(360,45, 520, 300);
 //             pane2.setOpaque(false);
 //            String info=r+"行"+c+"列值 : "+value.toString();
             //javax.swing.JOptionPane.showMessageDialog(null,info);
                wei=image.MapImage1(positon, "+");
-               mb1.repaint();
+               image.repaint();
                strandstates=strand[r];
              }
          });
@@ -274,11 +281,11 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		}
 		backImagePanl=new ImagePanel(backeImage);
 		this.backImagePanl.setLayout(null);
-		backImagePanl.add(pane1);
+//		backImagePanl.add(pane1);
 		backImagePanl.add(drawImage);
 		mb1.add(pane1);
 		mb1.add(MoreInfo);
-		mb1.add(image);
+//		mb1.add(image);
 		
 		
 		
@@ -289,7 +296,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		this.setTitle("Results page");
 		this.setSize(910,650);
 		 //this.setIconImage((new ImageIcon("image/qq.jpg")).getImage());
-		 this.setLocation(280,135);
+		 this.setLocation(280,100);
 		 this.setResizable(false);
 		 this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		 this.setVisible(true);
@@ -376,7 +383,6 @@ class MapImage1 extends JPanel{
 		this.length=minNum-minNum;
 		this.site=(((float)positionNum-(float)minNum)/((float)maxNum-(float)minNum));
 		this.wei=(int)(800*site)+50;
-		repaint();
 		return wei;
 	}
 	public float Mapspace(int length) {
