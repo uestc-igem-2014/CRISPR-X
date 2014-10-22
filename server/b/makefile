@@ -58,7 +58,7 @@ basic:
 	echo "---------------test case basic 2 end------------------"
 	echo "--------------test case basic 3 start-----------------"
 	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101","region":"1001","length":18}'
-	echo "---------------test case basic 3 end------------------"
+	echo "---------------test case basic 3 end------------------" 
 
 
 exception:
