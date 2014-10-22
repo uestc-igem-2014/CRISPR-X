@@ -178,7 +178,7 @@ printf("\n%s\n",Sno);
             strcpy(Chr_No,sql_row[0]);
             mysql_free_result(result);
                 
-                if(strcmp(argv[2],"0")==0 && cJSON_GetObjectItem(node,"filePath")) sprintf(buffer,cJSON_GetObjectItem(node,"filePath")-valuestring);
+                if(strcmp(argv[2],"0")==0 && cJSON_GetObjectItem(node,"filePath")) sprintf(buffer,cJSON_GetObjectItem(node,"filePath")->valuestring);
                 else sprintf(buffer,"../uploaddata/%d",getFileID(argv[2],cJSON_GetObjectItem(node,"fileName")->valuestring));
 printf("%s\n",buffer);
                 FILE *ff=fopen(buffer,"r");
