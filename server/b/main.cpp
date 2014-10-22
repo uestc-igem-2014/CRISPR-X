@@ -178,8 +178,6 @@ mos_pthread_mutex_t mutex_mysql_conn;
 mos_sem_t sem_thread;
 mos_sem_t sem_thread_usage;
 
-#define debug
-
 /**
 Main function. Include Input, output and Database create connect.
 */
