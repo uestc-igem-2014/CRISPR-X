@@ -37,16 +37,19 @@ public class ToolXmlBySAX {
 		return null;
 	}
 	
-	public static void main(String[] args) {
+	
+	public List<HashMap<String, String>> jiexisbol(File sbol) {
 		try {
-			FileInputStream input = new FileInputStream(new File("itcast.xml"));
-			List<HashMap<String, String>> list = _readXml(input, "person");
+			FileInputStream input = new FileInputStream(sbol);
+			List<HashMap<String, String>> list = _readXml(input, "s:nucleotides");
 			for(HashMap<String, String> p : list){
-				System.out.println(p.toString());
+//				System.out.println(p.toString());
 			}
+			return list;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 	}
 }

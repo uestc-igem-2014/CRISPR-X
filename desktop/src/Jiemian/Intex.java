@@ -18,6 +18,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
@@ -345,18 +347,44 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		}	
 	}
 	private void read() throws FileNotFoundException, IOException {
+		final List list=new ArrayList();
+		list.add("fna");
+		list.add("xml");	
+		file.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            public boolean accept(File f) {
+               if(f.isDirectory())return true;
+               String name=f.getName();
+               int p=name.lastIndexOf('.');
+               if(p==-1)return false;
+               String suffix=name.substring(p+1).toLowerCase();
+               return list.contains(suffix);
+            }
+            public String getDescription() {
+                return "gene files";
+            }
+});
 		file.showOpenDialog(this);
 		blastWJFile=file.getSelectedFile();
-		FileInputStream bb=new FileInputStream(blastWJFile);
-		int aa;
-		aa = bb.read();  
-		while (aa!=(-1))   
-		{
-			aa = bb.read();
-			blast.append((char)aa);
+		String houzuiming=blastWJFile.getName().substring(blastWJFile.getName().lastIndexOf(".")+1);
+		System.out.println(houzuiming);
+		if(houzuiming.equals("xml")){
+			List<HashMap<String, String>> jieguo=new ToolXmlBySAX().jiexisbol(blastWJFile);
+			HashMap<String, String>kk=jieguo.get(0);
+			String kc=kk.get("s:nucleotides");
+			blast.append(kc);
+		}else{
+			FileInputStream bb=new FileInputStream(blastWJFile);
+			int aa;
+			aa = bb.read();  
+			while (aa!=(-1))   
+			{
+				aa = bb.read();
+				blast.append((char)aa);
+			}
+			bb.close();
+			inputSequence.append(blast.toString());
 		}
-		bb.close();
-		inputSequence.append(blast.toString());
+		
 	}
 	@Override
 	public void itemStateChanged(ItemEvent e) {
