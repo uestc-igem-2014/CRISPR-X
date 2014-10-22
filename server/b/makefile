@@ -65,7 +65,7 @@ exception:
 	# exception test, no NC_001134-chromosome3 record in Table_sgRNA
 	echo "--------------test case exception 1 start-----------------"
 	echo "exception test, call no-exist location"
-	! ../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001135-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
+	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001135-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
 	echo "---------------test case exception 1 end------------------"
 
 	echo "--------------test case exception 2 start-----------------"
