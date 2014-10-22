@@ -81,7 +81,7 @@ exception:
 
 	echo "--------------test case exception 3 start-----------------"
 	echo "exception test, wrong args"
-	! ../main helloWorld
+	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG"}'
 	echo "---------------test case exception 3 end------------------"
 
 	echo "--------------test case exception 4 start-----------------"
