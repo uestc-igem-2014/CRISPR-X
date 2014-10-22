@@ -59,6 +59,10 @@ basic:
 	echo "--------------test case basic 3 start-----------------"
 	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101","region":"1001","length":18}'
 	echo "---------------test case basic 3 end------------------" 
+	echo "--------------test case basic 4 start-----------------"
+	echo "basic test case, input large range"
+	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..6000","pam":"NGG","rfc":"011101"}'
+	echo "---------------test case basic 4 end------------------" 
 
 
 exception:
