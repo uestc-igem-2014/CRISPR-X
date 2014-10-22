@@ -73,18 +73,18 @@ exception:
 	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"XXXXX","pam":"NGG","rfc":"011101"}'
 	echo "--------------test case exception 2 end -----------------"
 
-	echo "--------------test case exception 3 start-----------------"
-	echo "query in illegal rfc combinations"
+	#echo "--------------test case exception 3 start-----------------"
+	#echo "query in illegal rfc combinations"
 	# here, RFC 10 is incompatible to BioBrick RFC 12 and RFC 23
-	! ../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"110010"}'
-	echo "--------------test case exception 3 end -----------------"
+	#! ../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome2:200..2873","pam":"NGG","rfc":"110010"}'
+	#echo "--------------test case exception 3 end -----------------"
 
-	echo "--------------test case exception 4 start-----------------"
+	echo "--------------test case exception 3 start-----------------"
 	echo "exception test, wrong args"
 	! ../main hello world
-	echo "---------------test case exception 4 end------------------"
+	echo "---------------test case exception 3 end------------------"
 
-	echo "--------------test case exception 5 start-----------------"
+	echo "--------------test case exception 4 start-----------------"
 	echo "exception test, invalid nt length"
 	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101,"length":16}'
-	echo "---------------test case exception 5 end------------------"
+	echo "---------------test case exception 4 end------------------"
