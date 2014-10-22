@@ -7,10 +7,12 @@ util = util.h main.h cJSON/cJSON.h
 CF = -c -fprofile-arcs -ftest-coverage
 testcases = basic exception
 
+.PHONY: clean cleanall test install beforeInstall $(testcases)
+
 all: $(obj)
 	$(cc) -o $(main) $(obj) $(y) -fprofile-arcs -ftest-coverage -lgcov
 
-install: beforeInstall, $(obj)
+install: beforeInstall $(obj)
 	$(cc) -o $(main) $(obj) $(y)
 
 beforeInstall:
@@ -37,7 +39,6 @@ gene.o: gene.cpp $(util)
 localresult.o: localresult.cpp $(util)
 	$(cc) $(CF) localresult.cpp $(x)
 
-.PHONY: clean cleanall test $(testcases)
 
 clean:
 	rm $(obj)

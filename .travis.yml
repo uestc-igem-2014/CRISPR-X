@@ -24,7 +24,7 @@ script:
   - make
   - cd ../b 
   - make install
-  - make clean
+  - make cleanall
   - make
   # automated test
   - make test
