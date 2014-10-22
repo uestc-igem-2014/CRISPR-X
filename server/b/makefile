@@ -16,7 +16,7 @@ install: beforeInstall $(obj)
 	$(cc) -o $(main) $(obj) $(y)
 
 beforeInstall:
-	$(CF) := -c
+	$(eval CF = -c)
 
 cJSON.o: cJSON/cJSON.c cJSON/cJSON.h
 	$(cc) -c cJSON/cJSON.c $(x)
