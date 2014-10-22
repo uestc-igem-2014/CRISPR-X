@@ -16,15 +16,15 @@ MYSQL *my_conn;
 bool cmp_in_site(site a,site b){
     return a.score>b.score;
 }
-bool cmp_by_index(site a,site b){
-    return a.index<b.index;
-}
+//bool cmp_by_index(site a,site b){
+//    return a.index<b.index;
+//}
 
-int readLine(FILE *file){
+/*int readLine(FILE *file){
     char ch;
     while(fscanf(file,"%c",&ch)==1) if(ch=='\n') return 1;
     return 0;
-}
+}*/
 
 cJSON *Create_array_of_anything(cJSON **objects,int num)
 {
@@ -94,6 +94,7 @@ int check_rfc(int i){
     return 1;
 }
 
+/*
 //R=A,G; M=A,C; W=A,T; S=C,G; K=G,T; Y=C,T; H=A,C,T; V=A,C,G; B=C,G,T; D=A,G,T; N=A,G,C,T
 int check_pam(const char *str,const char *pam){
     for(;*pam;pam++,str++){
@@ -129,7 +130,7 @@ char *dna_rev(char *sr,const char *s,int len){
     }
     sr[i]=0;
     return sr;
-}
+}*/
 
 char *NomoreSpace(char *str){
     int i,j;
@@ -142,9 +143,9 @@ char *NomoreSpace(char *str){
     return str;
 }
 
-char *_NomoreSpace(char *str){
-    return str;
-}
+//char *_NomoreSpace(char *str){
+//    return str;
+//}
 
 int check_req(cJSON *request){
     int clt=3;

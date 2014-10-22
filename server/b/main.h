@@ -98,7 +98,7 @@ extern cJSON *dc_root;
 
 extern MYSQL *my_conn;
 
-int readLine(FILE *);
+//int readLine(FILE *);
 cJSON *Create_array_of_anything(cJSON **objects,int num);
 
 void create_thread_socre(localrow *lr,localrow row,int ini,int type,double r1);

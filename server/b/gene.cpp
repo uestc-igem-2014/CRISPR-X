@@ -20,7 +20,10 @@ int get_gene_info(char *str,const char *specie_name,const char *gene_name){
     MYSQL_ROW sql_row;
     if((sql_row=mysql_fetch_row(result))){
         sprintf(str,"%s:%s..%s",sql_row[0],sql_row[1],sql_row[2]);
-    }
-    mysql_free_result(result);
-    return 0;
+		mysql_free_result(result);
+		return 0;
+    }else{
+		mysql_free_result(result);
+		return -1;
+	}
 }
