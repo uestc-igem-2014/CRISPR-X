@@ -81,7 +81,7 @@ exception:
 
 	echo "--------------test case exception 3 start-----------------"
 	echo "exception test, wrong args"
-	! ../main hello world
+	! ../main helloWorld
 	echo "---------------test case exception 3 end------------------"
 
 	echo "--------------test case exception 4 start-----------------"
