@@ -10,6 +10,12 @@ testcases = basic exception
 all: $(obj)
 	$(cc) -o $(main) $(obj) $(y) -fprofile-arcs -ftest-coverage -lgcov
 
+install: beforeInstall, $(obj)
+	$(cc) -o $(main) $(obj) $(y)
+
+beforeInstall:
+	CF = -c
+
 cJSON.o: cJSON/cJSON.c cJSON/cJSON.h
 	$(cc) -c cJSON/cJSON.c $(x)
 

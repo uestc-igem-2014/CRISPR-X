@@ -1,6 +1,6 @@
 # CRISPR-X V1.2.0
 
-Please use our lastest version, we have migrated our server domain.
+__Please use our lastest version, we have migrated our server__.
 ## structure
 
 	Android/ 			The Android project of CRISPR-X
