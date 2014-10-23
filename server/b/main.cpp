@@ -16,15 +16,15 @@ MYSQL *my_conn;
 bool cmp_in_site(site a,site b){
     return a.score>b.score;
 }
-bool cmp_by_index(site a,site b){
-    return a.index<b.index;
-}
+//bool cmp_by_index(site a,site b){
+//    return a.index<b.index;
+//}
 
-int readLine(FILE *file){
+/*int readLine(FILE *file){
     char ch;
     while(fscanf(file,"%c",&ch)==1) if(ch=='\n') return 1;
     return 0;
-}
+}*/
 
 cJSON *Create_array_of_anything(cJSON **objects,int num)
 {
@@ -94,6 +94,7 @@ int check_rfc(int i){
     return 1;
 }
 
+/*
 //R=A,G; M=A,C; W=A,T; S=C,G; K=G,T; Y=C,T; H=A,C,T; V=A,C,G; B=C,G,T; D=A,G,T; N=A,G,C,T
 int check_pam(const char *str,const char *pam){
     for(;*pam;pam++,str++){
@@ -129,7 +130,7 @@ char *dna_rev(char *sr,const char *s,int len){
     }
     sr[i]=0;
     return sr;
-}
+}*/
 
 char *NomoreSpace(char *str){
     int i,j;
@@ -142,9 +143,9 @@ char *NomoreSpace(char *str){
     return str;
 }
 
-char *_NomoreSpace(char *str){
-    return str;
-}
+//char *_NomoreSpace(char *str){
+//    return str;
+//}
 
 int check_req(cJSON *request){
     int clt=3;
@@ -221,8 +222,8 @@ int main(int args,char *argv[]){
     }
 #ifdef debug
 printf("1\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     mos_pthread_mutex_init(&mutex,NULL);
     mos_pthread_mutex_init(&mutex_mysql_conn,NULL);
     mos_sem_init(&sem_thread,0,80);
@@ -240,8 +241,8 @@ fflush(stdout);
     i=1;
 #ifdef debug
 printf("2\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     cJSON *cJSON_temp;
     cJSON_temp=cJSON_GetObjectItem(request,"type");
     if(cJSON_temp) req_type=cJSON_temp->valueint;
@@ -306,8 +307,8 @@ fflush(stdout);
     */
 #ifdef debug
 printf("3\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     int res;
     sprintf(buffer,"SELECT Sno FROM Table_Specie WHERE SName=\"%s\";",req_specie);
     res=mysql_query(my_conn,buffer);
@@ -338,8 +339,8 @@ fflush(stdout);
     mysql_free_result(result_t);
 #ifdef debug
 printf("4\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     sprintf(buffer,"SELECT sgrna_start, sgrna_end, sgrna_strand, sgrna_seq, sgrna_PAM, Chr_Name, sgrna_ID, Chr_No FROM view_allsgrna WHERE SName='%s' and pam_PAM='%s' and Chr_Name='%s' and sgrna_start>=%d and sgrna_end<=%d;",req_specie,req_pam,req_chromosome,req_gene_start,req_gene_end);
     res=mysql_query(my_conn,buffer);
     if(res){
@@ -398,16 +399,16 @@ fflush(stdout);
     }
 #ifdef debug
 printf("5\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     for(i=0;i<ini;i++){
         mos_sem_wait(&sem_thread_usage);
     }printf("");
     //free_mysqlres_local(localresult);
 #ifdef debug
 printf("6\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     sort(in_site,in_site+ini,cmp_in_site);  // Sort & Output
 
     root=cJSON_CreateObject();
@@ -421,8 +422,8 @@ fflush(stdout);
     if(cJSON_temp) cJSON_AddItemToObject(root,"region",cJSON_temp);
 #ifdef debug
 printf("7\n");
-fflush(stdout);
 #endif
+fflush(stdout);
     vector<cJSON*> list;
     list.clear();
     for(i=0;i<ini && i<50;i++){
@@ -450,16 +451,9 @@ fflush(stdout);
     cJSON_AddItemToObject(root,"result",Create_array_of_anything(&(list[0]),list.size()));
 #ifdef debug
 printf("8\n");
-fflush(stdout);
 #endif
-#ifdef  _WIN32
-    fprintf(fopen("D:/out.txt","w"),"%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
-    printf("%s\n",NomoreSpace(argv[0]));
-#endif // _WIN32
-#ifdef  __linux
-    //printf("{\"status\":1,\"message\":\"System in maintenance\"}");
+fflush(stdout);
     printf("%s\n",NomoreSpace(argv[0]=cJSON_Print(root)));
-#endif // __linux
 
     //free(argv[0]);
     //mysql_free_result(result);

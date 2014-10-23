@@ -1,6 +1,6 @@
 # CRISPR-X V1.2.0
 
-Please use our lastest version, we have migrated our server domain.
+__Please use our lastest version, we have migrated our server__.
 ## structure
 
 	Android/ 			The Android project of CRISPR-X
@@ -24,12 +24,19 @@ Update:
 * beautify the UI design.
 * Enhance the task push service.
 * optimize some logic operation, more efficient.
+* Analysis secondary structure and enzyme cutting sites.
+
 
 Manually test passed.
 
 ## Desktop
 
 Java program to support multiple desktop platforms. Provide the same functions as Android version.
+
+Update:
+* More friendly User Interface.
+* Enable upload customized genome data.
+* Analysis secondary structure and enzyme cutting sites.
 
 Manually test passed.
 
