@@ -69,12 +69,12 @@ exception:
 	# exception test, no NC_001134-chromosome3 record in Table_sgRNA
 	echo "--------------test case exception 1 start-----------------"
 	echo "exception test, call no-exist location"
-	! ../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
+	../main '{"specie":"Saccharomyces-cerevisiae","location":"NC_001134-chromosome3:200..2873","pam":"NGG","rfc":"100010"}'
 	echo "---------------test case exception 1 end------------------"
 
 	echo "--------------test case exception 2 start-----------------"
 	echo "exception test, call no-exist gene"
-	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"XXXXX","pam":"NGG","rfc":"011101"}'
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"XXXXX","pam":"NGG","rfc":"011101"}'
 	echo "--------------test case exception 2 end -----------------"
 
 	#echo "--------------test case exception 3 start-----------------"
@@ -85,10 +85,10 @@ exception:
 
 	echo "--------------test case exception 3 start-----------------"
 	echo "exception test, wrong args"
-	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG"}'
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG"}'
 	echo "---------------test case exception 3 end------------------"
 
 	echo "--------------test case exception 4 start-----------------"
 	echo "exception test, invalid nt length"
-	! ../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101,"length":16}'
+	../main '{"specie":"Saccharomyces-cerevisiae","gene":"ATP1","pam":"NGG","rfc":"011101,"length":16}'
 	echo "---------------test case exception 4 end------------------"
