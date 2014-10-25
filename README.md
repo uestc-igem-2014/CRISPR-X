@@ -1,4 +1,4 @@
-# CRISPR-X V1.2.0
+# CRISPR-X V1.2.1
 
 __Please use our lastest version, we have migrated our server__.
 ## structure
@@ -6,6 +6,9 @@ __Please use our lastest version, we have migrated our server__.
 	Android/ 			The Android project of CRISPR-X
 	desktop/			The desktop version of CRISPR-X
 	server/				The back-end of CRISPR-X, mainly calculation core written in C/C++
+	Bacteria War/		The game of CRISPR-X
+	release/			The compiled applications
+	doc/				The test and APIs documentation
 	.travis.yml         Provide Travis CI automatically build and Coveralls auto-test.
 
 ## server
@@ -40,3 +43,6 @@ Update:
 
 Manually test passed.
 
+## Bacteria War
+
+A funny Android game, propagate iGEM ideas.
