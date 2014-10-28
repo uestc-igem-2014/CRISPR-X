@@ -31,6 +31,7 @@ public class AnalyzeHistory implements Runnable{
 	 public AnalyzeHistory() {
 	}
 	public void historyAnalyze(String history) throws JSONException{
+		System.out.println(history);
 		   JSONArray datahistory=new JSONArray(history);
 //		   System.out.println(history);
 		   int length=datahistory.length();
@@ -41,9 +42,7 @@ public class AnalyzeHistory implements Runnable{
 			   
 		   }
 		   BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
-//		   new User(historyStr);
 		   new User(historyStr,files);
-		   new User();
 	   }
 
 	@Override

@@ -26,14 +26,10 @@ public class DrawImage extends JFrame{
 		String[] ks=ss.split("\\..");
 		this.minStr=ks[0];
 		this.maxStr=ks[1];
-//		System.out.println(ks[0]);
+
 		this.strand=strand;
 		DrawImage();
 	}
-//	public DrawImage() {
-////		DrawImage();
-//		System.out.println("123");
-//	}
 	void DrawImage(){
 		minNum=Integer.parseInt(minStr);
 		maxNum=Integer.parseInt(maxStr);

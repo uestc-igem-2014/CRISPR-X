@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -31,13 +32,13 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import org.json.JSONException;
 public class Intex extends JFrame implements ActionListener,ItemListener,MouseMotionListener,MouseListener
 {
-	JTextField inputId;
+	JTextField inputId,helplabel;
 	JTextField inputPosition;
 	JPanel panel1,panel2,panelabout,panelhelp;
 	
 	static JComboBox<String> germ,PAMbox;
 	static JButton submit=null,upLoad,advanced,history;
-	JLabel TargetGenome,ID,PAM,logolabel;
+	JLabel TargetGenome,ID,PAM,logolabel,aboutlJLabel;
 	JLabel Position,Sequence,tisiSequence;
 	JTextArea inputSequence; 
 	JScrollPane gd;
@@ -50,6 +51,7 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 	static int ntlength;
 	static double r1Value;
 	StringBuffer blast=new StringBuffer();
+	StringBuffer helpStrb;
 	int userstatus=0;
 	static List<Specie> ff;
 	static JLabel fansubmit,fanhistory,fanhelp,IDseacher,fanabout,user;
@@ -84,7 +86,15 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		
 		panel1=new JPanel();
 		panel2=new JPanel();
+		panelhelp=new JPanel(null);
+		panelabout=new JPanel(null);
 		panel2.setBackground(new Color(231,240,226));
+		
+		helplabel=new JTextField("help");
+		helplabel.setEditable(false);
+		helplabel.setBorder(null);
+		
+		aboutlJLabel=new JLabel("<html><a href='http://2014.igem.org/Team:UESTC-Software'>our wiki</a></html>");
 		
 		logolabel=new JLabel(logoimage);
 		TargetGenome=new JLabel("Target Genome");
@@ -169,24 +179,26 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		history=new JButton("history");
 //		submit.setBorder(null);
 //		submit.setOpaque(false);
-//		submit.setContentAreaFilled(false);//͸��Ч��
+//		submit.setContentAreaFilled(false);//透锟斤拷效锟斤拷
 		
 		
-		ImageIcon background = new ImageIcon("image/interBackimage.png");// ����ͼƬ
-		JLabel label = new JLabel(background);// �ѱ���ͼƬ��ʾ��һ����ǩ����
-		// �ѱ�ǩ�Ĵ�Сλ������ΪͼƬ�պ�����������
+		ImageIcon background = new ImageIcon("image/interBackimage.png");// 锟斤拷锟斤拷图片
+		JLabel label = new JLabel(background);// 锟窖憋拷锟斤拷图片锟斤拷示锟斤拷一锟斤拷锟斤拷签锟斤拷锟斤拷
+		// 锟窖憋拷签锟侥达拷小位锟斤拷锟斤拷锟斤拷为图片锟秸猴拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 		label.setBounds(0, 0, background.getIconWidth(),
 			    background.getIconHeight());
-		// �����ݴ���ת��ΪJPanel���������÷���setOpaque()��ʹ���ݴ���͸��
+		// 锟斤拷锟斤拷锟捷达拷锟斤拷转锟斤拷为JPanel锟斤拷锟斤拷锟斤拷锟斤拷锟矫凤拷锟斤拷setOpaque()锟斤拷使锟斤拷锟捷达拷锟斤拷透锟斤拷
 		JPanel imagePanel = (JPanel) this.getContentPane();
 		imagePanel.setOpaque(false);
-		// ���ݴ���Ĭ�ϵĲ��ֹ�����ΪBorderLayout
+		// 锟斤拷锟捷达拷锟斤拷默锟较的诧拷锟街癸拷锟斤拷锟斤拷为BorderLayout
 		imagePanel.setLayout(new FlowLayout());
 		imagePanel.add(ID);
 		panel1.setLayout(null);
 		panel2.setLayout(null);
+		panelhelp.setLayout(null);
+		panelabout.setLayout(null);
 		
-		this.setLayout(null);//���ò���
+		this.setLayout(null);//锟斤拷锟矫诧拷锟斤拷
 		this.getLayeredPane().add(label, new Integer(Integer.MIN_VALUE));
 		panel1.add(ID);
 		panel1.add(inputId);
@@ -216,11 +228,30 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		panel2.add(fanhelp);
 		panel2.add(fanabout);
 		
+		panelhelp.add(helplabel);
+		
+		panelabout.add(aboutlJLabel);
+		panelabout.addMouseListener(new MouseAdapter() {  
+			  
+            public void mouseClicked(MouseEvent e) {  
+                try {  
+                    Runtime.getRuntime().exec("cmd.exe /c start " + "http://2014.igem.org/Team:UESTC-Software");  
+                } catch (Exception ex) {  
+                    ex.printStackTrace();  
+                }  
+            }  
+        });
 		
 		panel1.setBounds(200,0,908,662);
 		this.getContentPane().add(panel1);
 		panel2.setBounds(0, 0, 200, 662);
 		this.getContentPane().add(panel2);
+		panelhelp.setBounds(200,0,908,662);
+		this.getContentPane().add(panelhelp);
+		panelhelp.setVisible(false);
+		panelabout.setBounds(200,0,908,662);
+		this.getContentPane().add(panelabout);
+		panelabout.setVisible(false);
 		
 		logolabel.setBounds(0, 0, 200, 70);
 		user.setBounds(0, 140, 200, 40);
@@ -230,11 +261,11 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		fanhelp.setBounds(0, 400, 200, 60);
 		fanabout.setBounds(0, 460, 200, 60);
 		TargetGenome.setBounds(45, 30,93, 23);
-		germ.setBounds(165, 30,250, 25);//germ��λ��
-		inputId.setBounds(165, 100, 250, 25);//����ID��λ��
-		ID.setBounds(45,100,60,23);//ID��λ��
-		Position.setBounds(45, 65,93, 23);//positionλ��
-		inputPosition.setBounds(165, 65, 250, 25);//inputPositionλ��
+		germ.setBounds(165, 30,250, 25);//germ锟斤拷位锟斤拷
+		inputId.setBounds(165, 100, 250, 25);//锟斤拷锟斤拷ID锟斤拷位锟斤拷
+		ID.setBounds(45,100,60,23);//ID锟斤拷位锟斤拷
+		Position.setBounds(45, 65,93, 23);//position位锟斤拷
+		inputPosition.setBounds(165, 65, 250, 25);//inputPosition位锟斤拷
 		PAM.setBounds(45, 135, 30, 23);
 		PAMbox.setBounds(165, 135,250,25);
 		Sequence.setBounds(45, 175, 90, 23);
@@ -244,6 +275,9 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		tisiSequence.setBounds(265, 177, 120, 30);
 //		shangc.setBounds(230,460, 80, 80);
 		advanced.setBounds(165, 480,90,30);
+		
+		helplabel.setBounds(10, 0, 908, 662);
+		aboutlJLabel.setBounds(10, 0,908 , 662);
 		
 //		history.setBounds(600,550,70,30);
 		history.setVisible(false);
@@ -296,7 +330,6 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		new Send(7);
 		ff=new AnalyzeUserspce().AnalyzeUserspce();
 		int length=ff.size();
-		System.out.println(length);
 		germ.removeAllItems();
 		for(int i=0;i<length;i++){
 			germ.addItem(ff.get(i).getSpecieName());
@@ -315,12 +348,11 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 //			System.out.print(rfcStr);
 			if(PositionValue.trim().length() != 0||IDValue.trim().length() != 0){
 //				System.out.println(PositionValue+IDValue);
-				Send send=new Send(TargetGenomeValue, PAMValue, IDValue, PositionValue,rfcStr,region,ntlength,r1Value/100);
-				System.out.println(r1Value);
+				Send send=new Send(TargetGenomeValue, PAMValue, IDValue, PositionValue,blast.toString(),rfcStr,region,ntlength,r1Value/100);
 				Thread sendkais=new Thread(send);
 				sendkais.start();
 			}else{
-				javax.swing.JOptionPane.showMessageDialog(null,"Do you have a parameter is not filled��");
+				javax.swing.JOptionPane.showMessageDialog(null,"Do you have a parameter is not filled锟斤拷");
 			}
 		}
 		if(e.getSource()==advanced){
@@ -366,7 +398,6 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		file.showOpenDialog(this);
 		blastWJFile=file.getSelectedFile();
 		String houzuiming=blastWJFile.getName().substring(blastWJFile.getName().lastIndexOf(".")+1);
-		System.out.println(houzuiming);
 		if(houzuiming.equals("xml")){
 			List<HashMap<String, String>> jieguo=new ToolXmlBySAX().jiexisbol(blastWJFile);
 			HashMap<String, String>kk=jieguo.get(0);
@@ -375,7 +406,8 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		}else{
 			FileInputStream bb=new FileInputStream(blastWJFile);
 			int aa;
-			aa = bb.read();  
+			aa = bb.read();
+			blast.append((char)aa);
 			while (aa!=(-1))   
 			{
 				aa = bb.read();
@@ -407,7 +439,6 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 					if(pams!=null){					
 						int pamslength=pams.length;
 						for(int j=0;j<pamslength;j++){
-//							System.out.print(pams[j]);
 							PAMbox.addItem(pams[j]);
 						}
 					}					
@@ -452,16 +483,20 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 			denlu denlu=new denlu();
 			Thread denluxc=new Thread(denlu);
 			denluxc.start();
-			System.out.print(denlu.nameStr);
 		}
 		if(e.getSource()==fansubmit){
 //			fansubmit.setBackground(Color.black);
+			fanhelp.setBackground(new Color(231,240,226));
+			fansubmit.setBackground(new Color(46,48,45));
+			panel1.setVisible(true);
+			panelhelp.setVisible(false);
+			panelabout.setVisible(false);
 		}
 		if(e.getSource()==fanhistory){
 			if(true){
 				try {
-					new Send(6);
-					new Send(2);
+					new Send(7);
+					new User();
 				} catch (JSONException e1) {
 					e1.printStackTrace();
 				}
@@ -471,23 +506,52 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 			new IDseacher().idSeacherWindow();
 		}
 		if(e.getSource()==fanhelp){
+			helpStrb=new StringBuffer("");
+			fanhelp.setBackground(new Color(46,48,45));
+			fansubmit.setBackground(new Color(231,240,226));
+			panelabout.setVisible(false);
+			panel1.setVisible(false);
+			panelhelp.setVisible(true);
+			File helpw=new File("help/help.txt");
+			FileInputStream bb;
+			try {
+				bb = new FileInputStream(helpw);
+				int aa;
+				aa = bb.read(); 
+				helpStrb.append((char)aa);
+				while (aa!=(-1))   
+				{
+					aa = bb.read();
+					helpStrb.append((char)aa);
+				}
+				bb.close();
+				helplabel.setText(helpStrb.toString());
+			} catch (IOException e1) {
+				// TODO 自动生成的 catch 块
+				e1.printStackTrace();
+			}
 			
+		}
+		if(e.getSource()==fanabout){
+			panel1.setVisible(false);
+			panelhelp.setVisible(false);
+			panelabout.setVisible(true);
 		}
 		
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO �Զ����ɵķ������
+		// TODO 锟皆讹拷锟斤拷锟缴的凤拷锟斤拷锟斤拷锟�
 		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO �Զ����ɵķ������
+		// TODO 锟皆讹拷锟斤拷锟缴的凤拷锟斤拷锟斤拷锟�
 		
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO �Զ����ɵķ������
+		// TODO 锟皆讹拷锟斤拷锟缴的凤拷锟斤拷锟斤拷锟�
 		
 	}
 	@Override

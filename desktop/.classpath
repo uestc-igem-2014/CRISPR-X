@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/beautyeye_lnf.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/commons-lang-2.3.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/ezmorph-1.0.4.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/json-lib-2.4-jdk15.jar"/>
-	<classpathentry kind="lib" path="G:/android/crisper/lib/org.json.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/beautyeye_lnf.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/ezmorph-1.0.4.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="G:/android/crispr/lib/org.json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

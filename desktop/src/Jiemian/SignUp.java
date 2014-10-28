@@ -2,6 +2,8 @@ package Jiemian;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,6 +12,9 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+import org.json.JSONException;
+
+import Model.Send;
 
 
 public class SignUp extends JFrame implements ActionListener {
@@ -27,7 +32,7 @@ public class SignUp extends JFrame implements ActionListener {
 		new SignUp();
 	}
 	SignUp(){
-		name=new JLabel("myhistory :");
+		name=new JLabel("name :");
 		password=new JLabel("Initial Password :");
 		repassword=new JLabel("Reenter Password :");
 		email=new JLabel("Reenter Email :");
@@ -57,6 +62,8 @@ public class SignUp extends JFrame implements ActionListener {
 		this.add(email);
 		email.setBounds(39, 105,100, 20);
 		
+		apply.addActionListener(this);
+		
 		this.setSize(500,230);
 		this.setResizable(false);
 		this.setLocation(300,280);
@@ -66,10 +73,35 @@ public class SignUp extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==apply){
 			String nameStr=inputName.getText();
-			String pswdStr=inputPwd.getText();
+			String pswdStr=Md5(inputPwd.getText().trim());
 			String email=inputEmail.getText();
-			
+			System.out.println(nameStr+":"+pswdStr+":"+email);
+			String value=new Send().Send(nameStr, pswdStr, email);
 		}
 		
+	}
+	private static String Md5(String plainText ) { 
+		String kk = null;
+		try { 
+		MessageDigest md = MessageDigest.getInstance("MD5"); 
+		md.update(plainText.getBytes()); 
+		byte b[] = md.digest(); 
+
+		int i; 
+
+		StringBuffer buf = new StringBuffer(""); 
+		for (int offset = 0; offset < b.length; offset++) { 
+		i = b[offset]; 
+		if(i<0) i+= 256; 
+		if(i<16) 
+		buf.append("0"); 
+		buf.append(Integer.toHexString(i)); 
+		} 
+		 kk=buf.toString();//32λ�ļ��� 
+
+		} catch (NoSuchAlgorithmException e) { 
+		e.printStackTrace(); 
+		}
+		return kk; 
 	}
 }

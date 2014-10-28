@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -23,8 +24,9 @@ import Model.Send;
 
 public class denlu extends JFrame implements ActionListener,Runnable{
 	JLabel name,passward;
-	JTextField nameInput,passwardInput;
+	JTextField nameInput;
 	JButton  login,signUp;
+	JPasswordField passwardInput;
 	static String key,nameStr;
 	int status;
 	static JDialog loginsuccess;
@@ -51,7 +53,7 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 		passward=new JLabel("Passward :");
 		passward.setFont(font1);
 		nameInput=new JTextField(20);
-		passwardInput=new JTextField();
+		passwardInput=new JPasswordField();
 		login=new JButton(loginimg);
 		signUp=new JButton(SignUpimg);
 		
@@ -93,9 +95,14 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==login){
 			nameStr=(String)nameInput.getText();
-			String passWordStr=passwardInput.getText();
+			String passWordStr=new String(passwardInput.getPassword());
 			String pwsd=Md5(passWordStr.trim());
-			key=new Send().Send(nameStr,pwsd);
+			try {
+				key=new Send().Send(nameStr,pwsd);
+			} catch (JSONException e2) {
+				// TODO 自动生成的 catch 块
+				e2.printStackTrace();
+			}
 			if(key.toString().equals("-")){
 				javax.swing.JOptionPane.showMessageDialog(null,"Logon failure");
 				status=0;
@@ -135,7 +142,7 @@ public class denlu extends JFrame implements ActionListener,Runnable{
 		buf.append("0"); 
 		buf.append(Integer.toHexString(i)); 
 		} 
-		 kk=buf.toString();//32位的加密 
+		 kk=buf.toString();//32位锟侥硷拷锟斤拷 
 
 		} catch (NoSuchAlgorithmException e) { 
 		e.printStackTrace(); 

@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 
 
+
 import Jiemian.IDseacher;
 import Jiemian.IDsearch;
 import Jiemian.denlu;
@@ -35,7 +36,7 @@ public class Send implements Runnable{
 	int postStatus=3,ntlength;//0_signup,1_login,2_history
 	String lines,rfcStr,regionStr;
 	String name,pswd,email;
-	public String key="361610445ee59220d3463620ee42fa1a";
+	public String key;
 	static StringBuffer ID;
 	StringBuffer value=new StringBuffer();
 	StringBuffer value_MoreInfo=new StringBuffer();
@@ -58,12 +59,13 @@ public class Send implements Runnable{
 	public String MoreInfoimg_URL="http://i.uestc.edu.cn/iGEM2014/RNAFold/";
 	
 	
-    	public Send(String TargetGenomeValue,String PAMValue,String IDValue,String PositionValue, String rfcStr,String regeion,int ntlength,double r1ralue) {
+    	public Send(String TargetGenomeValue,String PAMValue,String IDValue,String PositionValue,String blast,String rfcStr,String regeion,int ntlength,double r1ralue) {
 		    this.TargetGenomeValue = TargetGenomeValue;
 		    this.PAMValue=PAMValue;
 		    this.IDValue=IDValue;
 		    this.PositionValue=PositionValue;
 		    this.rfcStr=rfcStr;	
+		    this.blast=blast;
 		    this.regionStr=regeion;
 		    this.ntlength=ntlength;
 		    this.r1=r1ralue;
@@ -71,17 +73,30 @@ public class Send implements Runnable{
     	public Send() {
 			
 		}
-    	public String Send(String name,String pswd){
+    	public String Send(String name,String pswd) throws JSONException{
     		this.name=name;
     		this.pswd=pswd;
     		postStatus=1;
-    		SendPost(login_url,name,pswd,"");
+    		SendPost(login_url,this.name,this.pswd,"");
     		key=value.toString();
+    		postStatus=6;
+    		StringBuffer sp=SendPost(Viewmysp_URL,name,"","");
+	    	new AnalyzeUserspce().Analyze(sp.toString());
+    		postStatus=2;
+    		StringBuffer history=SendPost(getHistory_url,key,"","");
+	    	new AnalyzeHistory().historyAnalyze(history.toString());
     		System.out.println(key);
 			return value.toString();
     	}
     	public Send(String ID){
     		this.IDValue=ID;
+    	}
+    	public String Send(String name,String pswd,String email){
+    		this.name=name;
+    		this.pswd=pswd;
+    		this.email=email;
+    		SendPost(signup_URL,name,pswd,email);
+    		return value.toString();
     	}
     	public int uploadFile(File file,String note,String filename){
     		this.file=file;
@@ -130,7 +145,6 @@ public class Send implements Runnable{
 		public  void SendGet() throws IOException{
     		String getURL = GET_URL + "type=1"+"&pam="+PAMValue+"&specie=" + TargetGenomeValue+"&location="+IDValue+"&gene="+PositionValue+"&rfc="+rfcStr+"&region="+regionStr+"&length="+ntlength+"&r1="+r1+"&token="+key;
     		URL getUrl = new URL(getURL);
-    		System.out.print(getURL);
     		 HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
     		 connection.connect();
     		 connection.setConnectTimeout(100000);
@@ -163,7 +177,6 @@ public class Send implements Runnable{
     	}
 		public String sendgetM(String sequenceStr) throws IOException{
 			String sequence= MoreInfo_URL +"sequence="+sequenceStr;
-			System.out.println(sequence);
 			URL getUrl = new URL(sequence);
 			HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
    		 	connection.connect();
@@ -172,7 +185,6 @@ public class Send implements Runnable{
 		    while ((lines = reader.readLine()) !=null){
 		    	lines = new String(lines.getBytes(), "utf-8");
 		    	value_MoreInfo.append(lines);
-		    	System.out.println(value_MoreInfo);
 		    }
 		    reader.close();
 		    connection.disconnect();
@@ -183,10 +195,11 @@ public class Send implements Runnable{
 			
 			try{
 				if(sUrl==null||sUrl.trim().equals("")){
-					System.out.print("URLµØÖ·ÎÞÐ§");
+					System.out.print("URLï¿½ï¿½Ö·ï¿½ï¿½Ð§");
 				}
 				URL url=new URL(sUrl);
 				HttpURLConnection link=(HttpURLConnection) url.openConnection();
+				link.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 				link.setRequestMethod("POST");
 				link.setDoOutput(true);
 				link.setDoInput(true);
@@ -196,7 +209,7 @@ public class Send implements Runnable{
 				if(postStatus==0){
 					inputData.write("myhistory=TTEE&pswd=12345&email=23111");
 				}else if(postStatus==1){
-					inputData.write("myhistory="+name+"&pswd="+pswd);
+					inputData.write("name="+name+"&pswd="+pswd);
 				}else if(postStatus==2){
 					inputData.write("token="+name);
 				}else if (postStatus==3){
@@ -226,6 +239,7 @@ public class Send implements Runnable{
 				Data.close();
 				InputStream in=link.getInputStream();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(link.getInputStream(),"utf-8"));
+				value=new StringBuffer("");
     		    while ((lines = reader.readLine()) != null){
     	        	lines = new String(lines.getBytes(), "utf-8");
     	        	value.append(lines);

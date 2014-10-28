@@ -30,7 +30,6 @@ public class AnalyzeUserspce {
 			pamsStr=new String[lengthPam];
 			chromosomeStr=new String[lengthchromosome];
 			for(int j=0;j<lengthPam;j++){
-				System.out.println(j);
 				pamsStr[j]=PAMs.getJSONObject(j).getString("PAM");
 			}
 			

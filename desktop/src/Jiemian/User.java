@@ -85,6 +85,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 //	
 //	}
 	public User(){
+		System.out.print(files[0][0]);
 		kaisi();
 	}
 	public void kaisi(){
@@ -308,7 +309,6 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 			}else{
 				new BulidJson(fileNames,PAM,fileNum,genename);
 				JSONObject fliesImport=new BulidJson().Json();
-				System.out.println(fliesImport.toString());
 				new Send().importFile(fliesImport);
 				try {
 					new Send(5);

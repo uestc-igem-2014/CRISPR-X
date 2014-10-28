@@ -12,7 +12,6 @@ public class AnalyzeUserFiles {
 	}
 	
 	public String[][] Analyze(String files) throws JSONException{
-		System.out.println(files);
 		JSONArray filesname=new JSONArray(files);
 		int length=filesname.length();
 		filesStr=new String[length][2];
