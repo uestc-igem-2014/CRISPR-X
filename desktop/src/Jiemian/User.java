@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -149,7 +150,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 		help.setOpaque(true);
 		help.setBackground(new Color(231,240,226));
 		help.setForeground(new Color(143,196,31));
-		username=new JLabel("username",JLabel.CENTER);
+		username=new JLabel("LOGOUT",JLabel.CENTER);
 		username.setFont(fontcaidan);
 		username.setOpaque(true);
 		username.setBackground(new Color(231,240,226));
@@ -345,7 +346,20 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO 自动生成的方法存根
+		if(e.getSource()==username){
+			 int rv = JOptionPane.showConfirmDialog(null, "Cancellation of your account", "inform",
+		                JOptionPane.YES_NO_OPTION);
+			  if (rv == JOptionPane.YES_OPTION) {
+				  System.out.println("sadfas");
+				  new Send().key=null;
+				  histroy=null;
+				  files=null;
+				  user.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				  user.setVisible(false);
+		        } else if (rv == JOptionPane.NO_OPTION) {
+		            
+		        }
+		}
 		
 	}
 	@Override

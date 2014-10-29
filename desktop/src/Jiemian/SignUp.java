@@ -77,6 +77,12 @@ public class SignUp extends JFrame implements ActionListener {
 			String email=inputEmail.getText();
 			System.out.println(nameStr+":"+pswdStr+":"+email);
 			String value=new Send().Send(nameStr, pswdStr, email);
+			if(value.equals("Sign In Succeed")){
+				javax.swing.JOptionPane.showMessageDialog(null,"signup was successful");
+				this.setVisible(false);
+			}else{
+				javax.swing.JOptionPane.showMessageDialog(null,"signup failure");
+			}
 		}
 		
 	}

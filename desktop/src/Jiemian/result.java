@@ -189,7 +189,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		mb2.add(help);
 		logolabel.setBounds(0, 0, 200, 65);
 		result.setBounds(498, 0, 100, 65);
-		result.setBackground(new Color(231,240,226));
+		result.setBackground(new Color(46,48,45));
 		result.setForeground(new Color(143,196,31));
 		history.setBounds(598, 0, 100, 65);
 		history.setBackground(new Color(231,240,226));
@@ -355,7 +355,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-		result.setBackground(new Color(231,240,226));
+//		result.setBackground(new Color(231,240,226));
 		history.setBackground(new Color(231,240,226));
 		about.setBackground(new Color(231,240,226));
 		help.setBackground(new Color(231,240,226));

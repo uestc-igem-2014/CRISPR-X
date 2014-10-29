@@ -32,13 +32,13 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 import org.json.JSONException;
 public class Intex extends JFrame implements ActionListener,ItemListener,MouseMotionListener,MouseListener
 {
-	JTextField inputId,helplabel;
+	JTextField inputId;
 	JTextField inputPosition;
 	JPanel panel1,panel2,panelabout,panelhelp;
 	
 	static JComboBox<String> germ,PAMbox;
 	static JButton submit=null,upLoad,advanced,history;
-	JLabel TargetGenome,ID,PAM,logolabel,aboutlJLabel;
+	JLabel TargetGenome,ID,PAM,logolabel,aboutlJLabel,helplabel;
 	JLabel Position,Sequence,tisiSequence;
 	JTextArea inputSequence; 
 	JScrollPane gd;
@@ -90,8 +90,7 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 		panelabout=new JPanel(null);
 		panel2.setBackground(new Color(231,240,226));
 		
-		helplabel=new JTextField("help");
-		helplabel.setEditable(false);
+		helplabel=new JLabel("help");
 		helplabel.setBorder(null);
 		
 		aboutlJLabel=new JLabel("<html><a href='http://2014.igem.org/Team:UESTC-Software'>our wiki</a></html>");
@@ -352,7 +351,7 @@ public class Intex extends JFrame implements ActionListener,ItemListener,MouseMo
 				Thread sendkais=new Thread(send);
 				sendkais.start();
 			}else{
-				javax.swing.JOptionPane.showMessageDialog(null,"Do you have a parameter is not filled锟斤拷");
+				javax.swing.JOptionPane.showMessageDialog(null,"Do you have a parameter is not filled");
 			}
 		}
 		if(e.getSource()==advanced){
