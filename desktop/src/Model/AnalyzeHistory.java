@@ -38,13 +38,20 @@ public class AnalyzeHistory implements Runnable{
 		   historyStr=new String[length][2];
 		   for(int i=0;i<length;i++){
 			   historyStr[i][0]=datahistory.getJSONObject(i).getString("request_id");
-			   historyStr[i][1]=datahistory.getJSONObject(i).getString("status");
+			   historyStr[i][1]=checkstates(datahistory.getJSONObject(i).getString("status"));
 			   
 		   }
 		   BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
 		   new User(historyStr,files);
 	   }
 
+	public String checkstates(String states){
+		if(states.equals("0")){
+			return "finsh";
+		}else{
+			return "not finsh";
+		}
+	}
 	@Override
 	public void run() {
 		try {
@@ -61,7 +68,7 @@ public class AnalyzeHistory implements Runnable{
 		   for(int i=0;i<length;i++){
 			   statusY[i]=datahistory.getJSONObject(i).getString("status");
 			   if(statusY[i].equals(historyStr[i][1])){
-				   System.out.print(historyStr[i][0]+"ÒÑÍê³É");
+				   System.out.print(historyStr[i][0]+"ï¿½ï¿½ï¿½ï¿½ï¿½");
 			   }else{
 				   status[i]=statusY[i];
 			   }

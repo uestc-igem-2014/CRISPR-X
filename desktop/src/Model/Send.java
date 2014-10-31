@@ -90,7 +90,6 @@ public class Send implements Runnable{
     	}
     	public Send(String ID){
     		this.IDStr=ID;
-    		System.out.println(IDStr);
     	}
     	public String Send(String name,String pswd,String email){
     		this.name=name;

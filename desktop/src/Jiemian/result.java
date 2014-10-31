@@ -42,6 +42,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 	JTable tableKey;
 	JTable tableOfftarget;
 	
+	JLabel INTERGENIC,INTERGENIC_C,UTR,UTR_C,EXON,EXON_C,INTRON,INTRON_C;
 	JTableHeader keyHeader;
 	JPanel mb1,mb2;
 	JButton drawImage,MoreInfo;
@@ -111,6 +112,29 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		
 		tableKey.setFont(fonttable);
 		
+		INTERGENIC=new JLabel("INTERGENIC :");
+		INTERGENIC.setFont(fonttable);
+		UTR=new JLabel("UTR :");
+		UTR.setFont(fonttable);
+		EXON=new JLabel("EXON :");
+		EXON.setFont(fonttable);
+		INTRON=new JLabel("INTRON :");
+		INTRON.setFont(fonttable);
+		INTERGENIC_C=new JLabel();
+		INTERGENIC_C.setOpaque(true);
+		INTERGENIC_C.setBackground(Color.black);
+		UTR_C=new JLabel();
+		UTR_C.setOpaque(true);
+		UTR_C.setBackground(Color.yellow);
+		EXON_C=new JLabel();
+		EXON_C.setOpaque(true);
+		EXON_C.setBackground(Color.BLUE);
+		INTRON_C=new JLabel();
+		INTRON_C.setOpaque(true);
+		INTRON_C.setBackground(Color.GREEN);
+		
+		
+		
 		logolabel=new JLabel(new ImageIcon("image/logo.png"));
 		result=new JLabel("RESULT",JLabel.CENTER);
 		result.setFont(fontcaidan);
@@ -160,9 +184,27 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		};
 		image.setLayout(null);
 		
+		mb1.add(INTERGENIC);
+		mb1.add(INTERGENIC_C);
+		mb1.add(UTR);
+		mb1.add(UTR_C);
+		mb1.add(EXON);
+		mb1.add(EXON_C);
+		mb1.add(INTRON);
+		mb1.add(INTRON_C);
+		INTERGENIC.setBounds(500,10, 100,30);
+		INTERGENIC_C.setBounds(576,18, 30, 15);
+		UTR.setBounds(610, 10, 60, 30);
+		UTR_C.setBounds(645, 18, 30, 15);
+		EXON.setBounds(690, 10, 80, 30);
+		EXON_C.setBounds(735, 18, 30, 15);
+		INTRON.setBounds(785, 10, 80, 30);
+		INTRON_C.setBounds(840, 18, 30, 15);
+		
+		
 		//tableKey
 		TableColumn firsetColumn = tableKey.getColumnModel().getColumn(0);
-		firsetColumn.setPreferredWidth(29);//ÉèÖÃµÚÒ»ÐÐ¿í¶È
+		firsetColumn.setPreferredWidth(29);//ï¿½ï¿½ï¿½Ãµï¿½Ò»ï¿½Ð¿ï¿½ï¿½
 		TableColumn secondColumn = tableKey.getColumnModel().getColumn(1);
 		secondColumn.setPreferredWidth(180);
 		TableColumn thirdColumn = tableKey.getColumnModel().getColumn(2);
@@ -173,7 +215,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		
 //		tableKey.setOpaque(false);
 		final JScrollPane pane1 = new JScrollPane (tableKey);
-//		pane1.setOpaque(false);                                            /*±ß¿òÍ¸Ã÷Ð§¹û*/
+//		pane1.setOpaque(false);                                            /*ï¿½ß¿ï¿½Í¸ï¿½ï¿½Ð§ï¿½ï¿½*/
 		pane1.setBorder(new CompoundBorder(new TitledBorder(""),
                 new EmptyBorder(8, 8, 8, 8)));
 		pane1.setBounds(20,45,345,300);
@@ -221,8 +263,8 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 		MoreInfo.addActionListener(this);
 		
 		tableKey.addMouseListener(new java.awt.event.MouseAdapter(){
-             public void mouseClicked(MouseEvent e) {//½öµ±Êó±êµ¥»÷Ê±ÏìÓ¦
-                //µÃµ½Ñ¡ÖÐµÄÐÐÁÐµÄË÷ÒýÖµ
+             public void mouseClicked(MouseEvent e) {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½êµ¥ï¿½ï¿½Ê±ï¿½ï¿½Ó¦
+                //ï¿½Ãµï¿½Ñ¡ï¿½Ðµï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 //            	 try {
 // 					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
 // 				} catch (Exception e1) {
@@ -234,7 +276,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 //               System.out.println(r+":"+c);
                String positon= (String) tableKey.getValueAt(r,2);
                
-               //µÃµ½Ñ¡ÖÐµÄµ¥Ôª¸ñµÄÖµ£¬±í¸ñÖÐ¶¼ÊÇ×Ö·û´®
+               //ï¿½Ãµï¿½Ñ¡ï¿½ÐµÄµï¿½Ôªï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
 //               Object value= tableKey.getValueAt(r, c);
                int length=dataofftarget[r].length;
               dataofftargetx=new String[length][6];
@@ -246,7 +288,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 //               System.out.println(dataofftargetx[0][1]);
               tableModel = new DefaultTableModel(dataofftargetx,coloumnSonNames){ public boolean isCellEditable(int row, int column) { return false; }};
               tableOfftarget=new JTable(tableModel);
-              tableModel.fireTableStructureChanged();// JTableË¢ÐÂ½á¹¹
+              tableModel.fireTableStructureChanged();// JTableË¢ï¿½Â½á¹¹
               tableModel.fireTableDataChanged();
               tableOfftarget.clearSelection();
                JScrollPane pane2 = new JScrollPane (tableOfftarget);
@@ -263,7 +305,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
        			mb1.add(pane2);
                pane2.setBounds(360,45, 520, 300);
 //             pane2.setOpaque(false);
-//            String info=r+"ÐÐ"+c+"ÁÐÖµ : "+value.toString();
+//            String info=r+"ï¿½ï¿½"+c+"ï¿½ï¿½Öµ : "+value.toString();
             //javax.swing.JOptionPane.showMessageDialog(null,info);
                wei=image.MapImage1(positon, "+");
                image.repaint();
@@ -314,7 +356,7 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
@@ -335,22 +377,22 @@ public class result extends JFrame implements ActionListener,MouseMotionListener
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override

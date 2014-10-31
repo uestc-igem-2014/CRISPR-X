@@ -62,8 +62,8 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	DefaultTableModel dtm = null;
 	
 	static String[][] histroy={{"0","1"},{"0","1"},{"0","1"}};
-	static String[][] files={{"ÉÏ´«ÎÄ¼þ","±¸×¢"}};
-	static String[][] files1={{"ÉÏ´«ÎÄ¼þ","±¸×¢"}};
+	static String[][] files={{"1","1"}};
+	static String[][] files1={{"upload filename","note"}};
 	public static void main(String[] args) {
 		try{
 			UIManager.put("RootPane.setupButtonVisible",false);
@@ -237,7 +237,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 		
 		
 		user.setSize(800,550);
-		user.setTitle("ÓÃ»§´°¿Ú");
+		user.setTitle("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½");
 		 user.setIconImage((new ImageIcon("image/qq.jpg")).getImage());
 		user.setLocation(300,120);
 		 user.setResizable(false);
@@ -246,7 +246,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==importFile){
-			/*ÎÄ¼þ¹ýÂËÆ÷*/
+			/*ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 			final List list=new ArrayList();
 			list.add("fna");
 			geneImportW.setFileFilter(new javax.swing.filechooser.FileFilter() {
@@ -263,7 +263,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	                return "fna files";
 	            }
 	});
-		/*ÎÄ¼þ¹ýÂËÆ÷*/
+		/*ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 			geneImportW.setMultiSelectionEnabled(true);
 			geneImportW.showSaveDialog(user);
 			geneFile=geneImportW.getSelectedFiles();			
@@ -299,7 +299,10 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 			else{
 				javax.swing.JOptionPane.showMessageDialog(null,"Files is null");
 			}
-			submit.setVisible(true);
+			if(false){
+				upload.setVisible(false);
+				submit.setVisible(true);
+			}
 		}
 		if(e.getSource()==submit){
 //			String[] kc=fileNames[1][0];		
@@ -321,7 +324,7 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
@@ -364,17 +367,17 @@ public class User implements ActionListener,MouseListener,MouseMotionListener{
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	@Override
